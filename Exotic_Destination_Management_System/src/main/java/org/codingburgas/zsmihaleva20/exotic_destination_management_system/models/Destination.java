@@ -18,14 +18,11 @@ public class Destination {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @ElementCollection
-    @CollectionTable(name = "destination_images", joinColumns = @JoinColumn(name = "destination_id"))
     @Column(nullable = false, name = "image_url")
-    private List<String> imageUrls = new ArrayList<>();
+    private String imageUrl;
 
     @Column(nullable = false)
     private double price;
-
 
     public Long getId() {
         return id;
@@ -51,12 +48,12 @@ public class Destination {
         this.description = description;
     }
 
-    public List<String> getImageUrls() {
-        return imageUrls;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageUrls(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public double getPrice() {

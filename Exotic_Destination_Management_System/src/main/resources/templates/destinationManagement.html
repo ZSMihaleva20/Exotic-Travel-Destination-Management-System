@@ -17,7 +17,7 @@
         <th>Name</th>
         <th>Description</th>
         <th>Price</th>
-        <th>Images</th>
+        <th>Image</th>
         <th>Actions</th>
     </tr>
     </thead>
@@ -26,11 +26,7 @@
         <td th:text="${destination.name}"></td>
         <td th:text="${destination.description}"></td>
         <td th:text="${destination.price}"></td>
-        <td>
-            <div th:each="image : ${destination.imageUrls}">
-                <img th:src="@{'/uploads/' + ${image}}" alt="Image" style="width: 100px; height: auto;">
-            </div>
-        </td>
+        <td><img th:src="@{'/uploads/' + ${destination.imageUrl}}" alt="Image" style="width: 100px;"></td>
         <td>
             <a th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
             <form th:action="@{'/delete/' + ${destination.id}}" method="post" style="display:inline;">
@@ -40,6 +36,5 @@
     </tr>
     </tbody>
 </table>
-
 </body>
 </html>

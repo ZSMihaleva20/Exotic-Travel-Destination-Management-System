@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class DestinationManagementController {
@@ -26,11 +24,9 @@ public class DestinationManagementController {
 
     @GetMapping("/destinationManagement")
     public String destinationManagementList(Model model) {
-        List<Destination> destinations = destinationService.getAllDestinations();
-        model.addAttribute("destinations", destinations);
+        model.addAttribute("destinations", destinationService.getAllDestinations());
         return "destinationManagement";
     }
-
 
     @GetMapping("/addDestination")
     public String addDestinationForm(Model model) {
@@ -39,63 +35,42 @@ public class DestinationManagementController {
     }
 
     @PostMapping("/addDestination")
-    public String saveDestination(@ModelAttribute Destination destination, @RequestParam("images") MultipartFile[] imageFiles) {
-        List<String> imageUrls = new ArrayList<>();
-        for (MultipartFile file : imageFiles) {
-            if (!file.isEmpty()) {
-                try {
-                    String fileName = file.getOriginalFilename();
-                    Path uploadDir = Paths.get("uploads");
-                    if (!Files.exists(uploadDir)) {
-                        Files.createDirectories(uploadDir);
-                    }
-                    assert fileName != null;
-                    Files.copy(file.getInputStream(), uploadDir.resolve(fileName));
-                    imageUrls.add(fileName);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+    public String saveDestination(@ModelAttribute Destination destination, @RequestParam("image") MultipartFile file) {
+        if (!file.isEmpty()) {
+            String fileName = file.getOriginalFilename();
+            Path uploadPath = Paths.get("photos").resolve(fileName);
+            if (!Files.exists(uploadPath)) {
+                throw new RuntimeException("File not found in photos directory: " + fileName);
             }
+            destination.setImageUrl(fileName);
         }
-        destination.setImageUrls(imageUrls);
         destinationService.saveDestination(destination);
         return "redirect:/destinationManagement";
     }
 
     @GetMapping("/editDestination/{id}")
-    public String editDestinationForm(@PathVariable int id, Model model) {
+    public String editDestinationForm(@PathVariable Long id, Model model) {
         model.addAttribute("destination", destinationService.getDestination(id));
         return "editDestination";
     }
 
     @PostMapping("/editDestination/{id}")
-    public String updateDestination(@PathVariable Long id, @ModelAttribute Destination destinationDetails, @RequestParam("images") MultipartFile[] imageFiles) {
+    public String updateDestination(@PathVariable Long id, @ModelAttribute Destination destinationDetails, @RequestParam("image") MultipartFile file) {
         Destination destination = destinationService.getDestination(id);
         destination.setName(destinationDetails.getName());
         destination.setDescription(destinationDetails.getDescription());
         destination.setPrice(destinationDetails.getPrice());
-
-        List<String> imageUrls = new ArrayList<>(destination.getImageUrls());
-        for (MultipartFile file : imageFiles) {
-            if (!file.isEmpty()) {
-                try {
-                    String fileName = file.getOriginalFilename();
-                    Path uploadDir = Paths.get("uploads");
-                    if (!Files.exists(uploadDir)) {
-                        Files.createDirectories(uploadDir);
-                    }
-                    Files.copy(file.getInputStream(), uploadDir.resolve(fileName));
-                    imageUrls.add(fileName);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+        if (!file.isEmpty()) {
+            String fileName = file.getOriginalFilename();
+            Path uploadPath = Paths.get("photos", fileName);
+            if (!Files.exists(uploadPath)) {
+                throw new RuntimeException("File not found in photos directory: " + fileName);
             }
+            destination.setImageUrl(fileName);
         }
-        destination.setImageUrls(imageUrls);
         destinationService.saveDestination(destination);
         return "redirect:/destinationManagement";
     }
-
 
     @PostMapping("/delete/{id}")
     public String deleteDestination(@PathVariable Long id) {
@@ -103,3 +78,4 @@ public class DestinationManagementController {
         return "redirect:/destinationManagement";
     }
 }
+
