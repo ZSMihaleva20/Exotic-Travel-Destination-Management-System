@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destination Management</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link th:href="@{../static/css/style.css}" rel="stylesheet" />
+</head>
+<body>
+<h1>Tourist Destinations</h1>
+<a href="/addDestination">Add New Destination</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Images</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="destination : ${destinations}">
+        <td th:text="${destination.name}"></td>
+        <td th:text="${destination.description}"></td>
+        <td th:text="${destination.price}"></td>
+        <td>
+            <div th:each="image : ${destination.imageUrls}">
+                <img th:src="@{'/uploads/' + ${image}}" alt="Image" style="width: 100px; height: auto;">
+            </div>
+        </td>
+        <td>
+            <a th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
+            <form th:action="@{'/delete/' + ${destination.id}}" method="post" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
