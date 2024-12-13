@@ -1,7 +1,10 @@
 package org.codingburgas.zsmihaleva20.exotic_destination_management_system.config;
 
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,15 +21,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/signUp", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers( "/css/**", "/js/**", "/images/**", "/destinationManagement").hasRole("MANAGER")
-                        .requestMatchers("/adminProfiles", "/css/**", "/js/**", "/images/**").hasRole("ADMIN")
+                        .requestMatchers("/register", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/destinationManagement").hasAuthority("MANAGER")
+                        .requestMatchers("/adminProfiles").hasAuthority("ADMIN")
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/home",true)
+                        .defaultSuccessUrl("/home", true)
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutRequestMatcher(AntPathRequestMatcher.antMatcher("/logout"))
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                         .permitAll()
                 )
                 .csrf(csrf -> csrf
@@ -60,12 +70,13 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    public void addUser(String username, String password, String... roles) {
-        userDetailsManager.createUser(User.builder()
-                .username(username)
-                .password(passwordEncoder().encode(password))
-                .roles(roles)
-                .build());
+    @Bean
+    public AuthenticationProvider authenticationProvider(UserService userService){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
     }
+
 }
 
