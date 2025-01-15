@@ -3,6 +3,10 @@ package org.codingburgas.zsmihaleva20.exotic_destination_management_system.contr
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Destination;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.DestinationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +19,7 @@ import java.nio.file.Paths;
 
 @Controller
 public class DestinationManagementController {
+
     @Autowired
     private final DestinationService destinationService;
 
@@ -34,13 +39,26 @@ public class DestinationManagementController {
         return "addDestination";
     }
 
+    @GetMapping(value = "/uploaded-image/{name}")
+    public ResponseEntity<Resource> getImage(@PathVariable String name) throws IOException {
+        MediaType mediaType = MediaType.IMAGE_JPEG;
+        if (name.endsWith(".png")) {
+            mediaType = MediaType.IMAGE_PNG;
+        }
+
+        Path uploadPath = Paths.get("photos").resolve(name);
+        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(uploadPath));
+        return ResponseEntity.ok().contentType(mediaType).body(resource);
+    }
+
     @PostMapping("/addDestination")
-    public String saveDestination(@ModelAttribute Destination destination, @RequestParam("image") MultipartFile file) {
+    public String saveDestination(@ModelAttribute Destination destination, @RequestParam("image") MultipartFile file) throws IOException {
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
             Path uploadPath = Paths.get("photos").resolve(fileName);
             if (!Files.exists(uploadPath)) {
-                throw new RuntimeException("File not found in photos directory: " + fileName);
+                Files.write(uploadPath, file.getBytes());
+                //throw new RuntimeException("File not found in photos directory: " + fileName);
             }
             destination.setImageUrl(fileName);
         }
@@ -55,7 +73,7 @@ public class DestinationManagementController {
     }
 
     @PostMapping("/editDestination/{id}")
-    public String updateDestination(@PathVariable Long id, @ModelAttribute Destination destinationDetails, @RequestParam("image") MultipartFile file) {
+    public String updateDestination(@PathVariable Long id, @ModelAttribute Destination destinationDetails, @RequestParam("image") MultipartFile file) throws IOException {
         Destination destination = destinationService.getDestination(id);
         destination.setName(destinationDetails.getName());
         destination.setDescription(destinationDetails.getDescription());
@@ -64,7 +82,7 @@ public class DestinationManagementController {
             String fileName = file.getOriginalFilename();
             Path uploadPath = Paths.get("photos", fileName);
             if (!Files.exists(uploadPath)) {
-                throw new RuntimeException("File not found in photos directory: " + fileName);
+                Files.write(uploadPath, file.getBytes());
             }
             destination.setImageUrl(fileName);
         }

@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ExoticDestinationManagementSystemApplication {
+public class    ExoticDestinationManagementSystemApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ExoticDestinationManagementSystemApplication.class, args);
