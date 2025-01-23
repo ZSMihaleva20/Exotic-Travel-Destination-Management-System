@@ -28,20 +28,31 @@ public class User implements UserDetails {
     @Column(name = "Role")
     private String role;
 
+    @Column(name = "FirstName")
+    private String firstName;
+
+    @Column(name = "LastName")
+    private String lastName;
+
     public User() {
         this.userID = 0;
         this.username = "";
         this.password = "";
         this.email = "";
         this.role = "USER";
+        this.firstName = "";
+        this.lastName = "";
     }
 
-    public User(String username, String password, String email, String role) {
+    public User(String username, String password, String email, String role, String firstName, String lastName) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
+
 
     public int getUserID() {
         return userID;
@@ -82,6 +93,22 @@ public class User implements UserDetails {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override

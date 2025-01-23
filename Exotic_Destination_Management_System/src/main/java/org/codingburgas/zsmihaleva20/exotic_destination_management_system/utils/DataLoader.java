@@ -20,7 +20,7 @@ public class DataLoader {
     }
 
     private void createAdmin() {
-        userRepository.save(new User("admin", passwordEncoder.encode("admin"), "admin@email.com", "ADMIN"));
-        userRepository.save(new User("manager", passwordEncoder.encode("manager"), "manager@email.com", "MANAGER"));
+        userRepository.save(new User("admin", passwordEncoder.encode("admin"), "admin@email.com", "ADMIN", "AdminFirstName", "AdminLastName"));
+        userRepository.save(new User("manager", passwordEncoder.encode("manager"), "manager@email.com", "MANAGER", "ManagerFirstName", "ManagerLastName"));
     }
 }
