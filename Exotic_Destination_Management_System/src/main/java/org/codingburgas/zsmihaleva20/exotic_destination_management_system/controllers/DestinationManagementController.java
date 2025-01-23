@@ -98,14 +98,14 @@ public class DestinationManagementController {
     }
 
 
-    /*@PostMapping("/requestEdit/{id}")
-    public String requestEditDestination(@PathVariable Long id, @ModelAttribute Destination destinationDetails, @RequestParam("image") MultipartFile file) throws IOException {
+    @PostMapping("/requestEdit/{id}")
+    public String requestEditDestination(@PathVariable Long id) {
         Destination destination = destinationService.getDestination(id);
         destination.setPendingApproval(true);
-        destination.setRequestedAction("EDIT");
+        destination.setStatus("PENDING-EDIT");
         destinationService.saveDestination(destination);
         return "redirect:/destinationManagement";
-    }*/
+    }
 
     @PostMapping("/requestDelete/{id}")
     public String requestDeleteDestination(@PathVariable Long id) {
@@ -121,8 +121,12 @@ public class DestinationManagementController {
         Destination destination = destinationService.getDestination(id);
         if (Objects.equals(destination.getStatus(), "PENDING-DELETE")) {
             destinationService.deleteDestination(id);
-        }
-        else {
+        } else if (Objects.equals(destination.getStatus(), "PENDING-EDIT")) {
+            destination.setEditApproved(true);
+            destination.setPendingApproval(false);
+            destination.setStatus("ACCEPTED");
+            destinationService.saveDestination(destination);
+        } else {
             destination.setStatus("ACCEPTED");
             destinationService.saveDestination(destination);
         }

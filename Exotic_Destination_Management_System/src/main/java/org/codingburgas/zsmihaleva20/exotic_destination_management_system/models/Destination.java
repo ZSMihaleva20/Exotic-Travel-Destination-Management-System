@@ -22,13 +22,21 @@ public class Destination {
     private double price;
 
     @Column(nullable = false)
-    private String status = "PENDING";
+    private String status = "PENDING-ACCEPT";
 
     @Column(nullable = false)
     private boolean pendingApproval = false; // Indicates if a request is pending approval
 
-    @Column
-    private String requestedAction;
+    @Column(nullable = false)
+    private boolean editApproved = false;
+
+    public boolean isEditApproved() {
+        return editApproved;
+    }
+
+    public void setEditApproved(boolean editApproved) {
+        this.editApproved = editApproved;
+    }
 
     public boolean isPendingApproval() {
         return pendingApproval;
@@ -36,14 +44,6 @@ public class Destination {
 
     public void setPendingApproval(boolean pendingApproval) {
         this.pendingApproval = pendingApproval;
-    }
-
-    public String getRequestedAction() {
-        return requestedAction;
-    }
-
-    public void setRequestedAction(String requestedAction) {
-        this.requestedAction = requestedAction;
     }
 
     public String getStatus() {
@@ -69,7 +69,7 @@ public class Destination {
         this.description = null;
         this.imageUrl = null;
         this.price = 0;
-        this.status = "Pending";
+        this.status = "PENDING-ACCEPT";
     }
 
     public Long getId() {

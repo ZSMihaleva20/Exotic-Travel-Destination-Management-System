@@ -62,10 +62,16 @@
         <td th:text="${destination.status}"></td>
         <td>
             <div sec:authorize="hasAuthority('ADMIN')">
-                <form th:action="@{'/approveRequest/' + ${destination.id}}" method="post" style="display:inline;">
-                    <button type="submit">Approve</button>
+                <form th:if="${destination.status == 'PENDING-ACCEPT' || destination.status == 'PENDING-EDIT' || destination.status == 'PENDING-DELETE'}"
+                      th:action="@{'/approveRequest/' + ${destination.id}}"
+                      method="post"
+                      style="display:inline;">
+                    <button type="submit">Accept</button>
                 </form>
-                <form th:action="@{'/declineRequest/' + ${destination.id}}" method="post" style="display:inline;">
+                <form th:if="${destination.status == 'PENDING-ACCEPT' || destination.status == 'PENDING-EDIT' || destination.status == 'PENDING-DELETE'}"
+                      th:action="@{'/declineRequest/' + ${destination.id}}"
+                      method="post"
+                      style="display:inline;">
                     <button type="submit">Decline</button>
                 </form>
                 <a th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
@@ -74,9 +80,12 @@
                 </form>
             </div>
             <div sec:authorize="hasAuthority('MANAGER')">
-                <a th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
+                <a th:if="${destination.editApproved}" th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
+                <form th:if="${!destination.editApproved}" th:action="@{'/requestEdit/' + ${destination.id}}" method="post" style="display:inline;">
+                    <button type="submit">Request Edit</button>
+                </form>
                 <form th:action="@{'/requestDelete/' + ${destination.id}}" method="post" style="display:inline;">
-                    <button type="submit">Request delete</button>
+                    <button type="submit">Request Delete</button>
                 </form>
             </div>
         </td>
