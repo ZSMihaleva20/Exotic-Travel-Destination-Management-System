@@ -2,9 +2,6 @@ package org.codingburgas.zsmihaleva20.exotic_destination_management_system.model
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 public class Destination {
 
@@ -23,6 +20,57 @@ public class Destination {
 
     @Column(nullable = false)
     private double price;
+
+    @Column(nullable = false)
+    private String status = "PENDING";
+
+    @Column(nullable = false)
+    private boolean pendingApproval = false; // Indicates if a request is pending approval
+
+    @Column
+    private String requestedAction;
+
+    public boolean isPendingApproval() {
+        return pendingApproval;
+    }
+
+    public void setPendingApproval(boolean pendingApproval) {
+        this.pendingApproval = pendingApproval;
+    }
+
+    public String getRequestedAction() {
+        return requestedAction;
+    }
+
+    public void setRequestedAction(String requestedAction) {
+        this.requestedAction = requestedAction;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Destination(Long id, String name, String description, String imageUrl, double price, String status) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.price = price;
+        this.status = status;
+    }
+
+    public Destination() {
+        this.id = null;
+        this.name = null;
+        this.description = null;
+        this.imageUrl = null;
+        this.price = 0;
+        this.status = "Pending";
+    }
 
     public Long getId() {
         return id;

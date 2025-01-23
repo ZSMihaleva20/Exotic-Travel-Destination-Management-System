@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 @Controller
 public class DestinationManagementController {
@@ -93,6 +94,53 @@ public class DestinationManagementController {
     @PostMapping("/delete/{id}")
     public String deleteDestination(@PathVariable Long id) {
         destinationService.deleteDestination(id);
+        return "redirect:/destinationManagement";
+    }
+
+
+    /*@PostMapping("/requestEdit/{id}")
+    public String requestEditDestination(@PathVariable Long id, @ModelAttribute Destination destinationDetails, @RequestParam("image") MultipartFile file) throws IOException {
+        Destination destination = destinationService.getDestination(id);
+        destination.setPendingApproval(true);
+        destination.setRequestedAction("EDIT");
+        destinationService.saveDestination(destination);
+        return "redirect:/destinationManagement";
+    }*/
+
+    @PostMapping("/requestDelete/{id}")
+    public String requestDeleteDestination(@PathVariable Long id) {
+        Destination destination = destinationService.getDestination(id);
+        destination.setPendingApproval(true);
+        destination.setStatus("PENDING-DELETE");
+        destinationService.saveDestination(destination);
+        return "redirect:/destinationManagement";
+    }
+
+    @PostMapping("/approveRequest/{id}")
+    public String approveRequest(@PathVariable Long id) {
+        Destination destination = destinationService.getDestination(id);
+        if (Objects.equals(destination.getStatus(), "PENDING-DELETE")) {
+            destinationService.deleteDestination(id);
+        }
+        else {
+            destination.setStatus("ACCEPTED");
+            destinationService.saveDestination(destination);
+        }
+        return "redirect:/destinationManagement";
+    }
+
+    @PostMapping("/declineRequest/{id}")
+    public String declineRequest(@PathVariable Long id) {
+        Destination destination = destinationService.getDestination(id);
+        if (Objects.equals(destination.getStatus(), "PENDING-DELETE")) {
+            destination.setStatus("ACCEPTED");
+            destinationService.saveDestination(destination);
+        }
+        else {
+            destination.setStatus("DECLINED");
+            destination.setPendingApproval(false);
+            destinationService.deleteDestination(id);
+        }
         return "redirect:/destinationManagement";
     }
 }

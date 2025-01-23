@@ -22,8 +22,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register", "/css/**", "/js/**", "/images/**", "/", "/uploaded-image/**").permitAll()
-                        .requestMatchers("/destinationManagement").hasAuthority("MANAGER")
-                        .requestMatchers("/adminProfiles").hasAuthority("ADMIN")
+                        .requestMatchers("/destinationManagement").hasAnyAuthority("ADMIN", "MANAGER") // Allow both ADMIN and MANAGER
+                        .requestMatchers("/profilesManagement").hasAuthority("ADMIN") // Only ADMIN for adminProfiles
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
         return http.build();
     }
+
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {

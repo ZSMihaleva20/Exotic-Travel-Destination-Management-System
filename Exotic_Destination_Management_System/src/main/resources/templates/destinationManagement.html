@@ -1,11 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Destination Management</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <link th:href="@{../static/css/style.css}" rel="stylesheet" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f4f4f4;
+        }
+
+        a {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
 <h1>Tourist Destinations</h1>
@@ -18,6 +47,7 @@
         <th>Description</th>
         <th>Price</th>
         <th>Image</th>
+        <th>Status</th>
         <th>Actions</th>
     </tr>
     </thead>
@@ -26,12 +56,29 @@
         <td th:text="${destination.name}"></td>
         <td th:text="${destination.description}"></td>
         <td th:text="${destination.price}"></td>
-        <td><img th:src="@{'/uploaded-image/' + ${destination.imageUrl}}" alt="Image" style="width: 100px;"></td>
         <td>
-            <a th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
-            <form th:action="@{'/delete/' + ${destination.id}}" method="post" style="display:inline;">
-                <button type="submit">Delete</button>
-            </form>
+            <img th:src="@{'/uploaded-image/' + ${destination.imageUrl}}" alt="Image" style="width: 100px;">
+        </td>
+        <td th:text="${destination.status}"></td>
+        <td>
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <form th:action="@{'/approveRequest/' + ${destination.id}}" method="post" style="display:inline;">
+                    <button type="submit">Approve</button>
+                </form>
+                <form th:action="@{'/declineRequest/' + ${destination.id}}" method="post" style="display:inline;">
+                    <button type="submit">Decline</button>
+                </form>
+                <a th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
+                <form th:action="@{'/delete/' + ${destination.id}}" method="post" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+            <div sec:authorize="hasAuthority('MANAGER')">
+                <a th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
+                <form th:action="@{'/requestDelete/' + ${destination.id}}" method="post" style="display:inline;">
+                    <button type="submit">Request delete</button>
+                </form>
+            </div>
         </td>
     </tr>
     </tbody>
