@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Destinations</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<header>
+  <h1>Destinations</h1>
+  <a href="/home">Back to Home</a>
+</header>
+<main>
+  <div>
+    <ul>
+      <th:block th:each="destination : ${acceptedDestinations}">
+        <li>
+          <h2 th:text="${destination.name}"></h2>
+          <p th:text="${destination.description}"></p>
+          <img th:src="'/uploaded-image/' + ${destination.imageUrl}" alt="Destination Image" style="width: 200px; height: auto;">
+          <p>Price: <span th:text="${destination.price}"></span> lv.</p>
+        </li>
+      </th:block>
+    </ul>
+  </div>
+</main>
+</body>
+</html>

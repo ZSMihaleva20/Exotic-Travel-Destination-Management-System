@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -146,6 +147,19 @@ public class DestinationManagementController {
             destinationService.deleteDestination(id);
         }
         return "redirect:/destinationManagement";
+    }
+
+    @GetMapping("/destinations")
+    public String viewAcceptedDestinations(Model model) {
+        // Retrieve all destinations with status "ACCEPTED"
+        List<Destination> acceptedDestinations = destinationService.getAllDestinations()
+                .stream()
+                .filter(destination -> "ACCEPTED".equals(destination.getStatus()))
+                .toList();
+
+        // Add the list to the model
+        model.addAttribute("acceptedDestinations", acceptedDestinations);
+        return "destinations";
     }
 }
 
