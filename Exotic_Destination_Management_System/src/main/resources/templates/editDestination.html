@@ -20,6 +20,8 @@
   <label for="price">Price:</label>
   <input type="number" step="0.01" id="price" name="price" th:value="${destination.price}" required>
 
+  <label for="limitedPeople">Max number of people:</label>
+  <input type="number" id="limitedPeople" name="limitedPeople" th:value="${destination.limitedPeople}" required>
 
   <img th:src="@{'/uploaded-image/' + ${destination.imageUrl}}" width="100" />
 

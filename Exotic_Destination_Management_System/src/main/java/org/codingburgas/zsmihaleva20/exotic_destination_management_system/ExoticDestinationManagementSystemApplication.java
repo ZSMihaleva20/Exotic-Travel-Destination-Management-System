@@ -37,6 +37,7 @@ public class    ExoticDestinationManagementSystemApplication {
             destination.setImageUrl("photoTwo.jpg");
             destination.setPrice(1000);
             destination.setStatus("ACCEPTED");
+            destination.setLimitedPeople(28);
             destinationRepository.save(destination);
         };
     }

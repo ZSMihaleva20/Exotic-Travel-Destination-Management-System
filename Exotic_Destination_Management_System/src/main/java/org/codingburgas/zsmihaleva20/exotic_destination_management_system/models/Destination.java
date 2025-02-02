@@ -22,6 +22,9 @@ public class Destination {
     private double price;
 
     @Column(nullable = false)
+    private int limitedPeople;
+
+    @Column(nullable = false)
     private String status = "PENDING-ACCEPT";
 
     @Column(nullable = false)
@@ -54,12 +57,13 @@ public class Destination {
         this.status = status;
     }
 
-    public Destination(Long id, String name, String description, String imageUrl, double price, String status) {
+    public Destination(Long id, String name, String description, String imageUrl, double price, int limitedPeople, String status) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
         this.price = price;
+        this.limitedPeople = limitedPeople;
         this.status = status;
     }
 
@@ -69,7 +73,17 @@ public class Destination {
         this.description = null;
         this.imageUrl = null;
         this.price = 0;
+        this.limitedPeople = 0;
         this.status = "PENDING-ACCEPT";
+    }
+
+
+    public int getLimitedPeople() {
+        return limitedPeople;
+    }
+
+    public void setLimitedPeople(int limitedPeople) {
+        this.limitedPeople = limitedPeople;
     }
 
     public Long getId() {

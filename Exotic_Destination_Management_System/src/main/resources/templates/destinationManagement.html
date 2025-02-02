@@ -46,6 +46,7 @@
         <th>Name</th>
         <th>Description</th>
         <th>Price</th>
+        <th>Max people</th>
         <th>Image</th>
         <th>Status</th>
         <th>Actions</th>
@@ -56,6 +57,7 @@
         <td th:text="${destination.name}"></td>
         <td th:text="${destination.description}"></td>
         <td th:text="${destination.price}"></td>
+        <td th:text="${destination.limitedPeople}"></td>
         <td>
             <img th:src="@{'/uploaded-image/' + ${destination.imageUrl}}" alt="Image" style="width: 100px;">
         </td>

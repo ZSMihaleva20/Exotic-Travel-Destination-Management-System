@@ -54,16 +54,16 @@ public class DestinationManagementController {
     }
 
     @PostMapping("/addDestination")
-    public String saveDestination(@ModelAttribute Destination destination, @RequestParam("image") MultipartFile file) throws IOException {
+    public String saveDestination(@ModelAttribute Destination destination, @RequestParam("image") MultipartFile file, @RequestParam("limitedPeople") int limitedPeople) throws IOException {
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
             Path uploadPath = Paths.get("photos").resolve(fileName);
             if (!Files.exists(uploadPath)) {
                 Files.write(uploadPath, file.getBytes());
-                //throw new RuntimeException("File not found in photos directory: " + fileName);
             }
             destination.setImageUrl(fileName);
         }
+        destination.setLimitedPeople(limitedPeople);
         destinationService.saveDestination(destination);
         return "redirect:/destinationManagement";
     }
@@ -75,11 +75,13 @@ public class DestinationManagementController {
     }
 
     @PostMapping("/editDestination/{id}")
-    public String updateDestination(@PathVariable Long id, @ModelAttribute Destination destinationDetails, @RequestParam("image") MultipartFile file) throws IOException {
+    public String updateDestination(@PathVariable Long id, @ModelAttribute Destination destinationDetails, @RequestParam("image") MultipartFile file, @RequestParam("limitedPeople") int limitedPeople) throws IOException {
         Destination destination = destinationService.getDestination(id);
         destination.setName(destinationDetails.getName());
         destination.setDescription(destinationDetails.getDescription());
         destination.setPrice(destinationDetails.getPrice());
+        destination.setLimitedPeople(limitedPeople);  // Update limited persons
+
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
             Path uploadPath = Paths.get("photos", fileName);
@@ -88,6 +90,7 @@ public class DestinationManagementController {
             }
             destination.setImageUrl(fileName);
         }
+
         destinationService.saveDestination(destination);
         return "redirect:/destinationManagement";
     }

@@ -17,6 +17,7 @@
           <h2 th:text="${destination.name}"></h2>
           <p th:text="${destination.description}"></p>
           <img th:src="'/uploaded-image/' + ${destination.imageUrl}" alt="Destination Image" style="width: 200px; height: auto;">
+          <p>Max people: <span th:text="${destination.limitedPeople}"></span></p>
           <p>Price: <span th:text="${destination.price}"></span> lv.</p>
         </li>
       </th:block>
