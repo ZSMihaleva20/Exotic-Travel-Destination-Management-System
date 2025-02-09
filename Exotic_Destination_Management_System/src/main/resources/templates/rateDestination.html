@@ -12,7 +12,8 @@
         <th>Submit</th>
     </tr>
     <th:block th:each="reservation : ${reservations}">
-        <tr>
+        <!-- Display only reservations with status "BOOKED" -->
+        <tr th:if="${reservation.status == 'BOOKED'}">
             <td th:text="${reservation.destination.name}"></td>
             <td>
                 <form th:action="@{/rateDestination}" method="post">
