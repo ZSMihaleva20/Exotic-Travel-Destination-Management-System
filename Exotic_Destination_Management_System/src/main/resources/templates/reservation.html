@@ -20,11 +20,11 @@
     <input type="hidden" id="pricePerPerson" th:value="${destination.price}">
 
     <label>Name:</label>
-    <input type="text" name="name" required>
+    <input type="text" name="name" th:value="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}" readonly>
     <br><br>
 
     <label>Email:</label>
-    <input type="email" name="email" required>
+    <input type="email" name="email" th:value="${#authentication.principal.email}" readonly>
     <br><br>
 
     <label>Number of People:</label>
@@ -46,7 +46,7 @@
     <input type="text" name="cvc" required>
     <br><br>
 
-    <h3>Total Price: <span id="totalPrice" >0.00 lv.</span></h3>  <!-- Dynamic Price Update -->
+    <h3>Total Price: <span id="totalPrice">0.00 lv.</span></h3>  <!-- Dynamic Price Update -->
 
     <button type="submit">Finish Reservation</button>
 </form>

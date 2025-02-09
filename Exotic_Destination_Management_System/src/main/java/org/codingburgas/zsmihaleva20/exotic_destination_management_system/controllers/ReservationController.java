@@ -2,8 +2,11 @@ package org.codingburgas.zsmihaleva20.exotic_destination_management_system.contr
 
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Destination;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Reservation;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.User;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.DestinationRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.ReservationRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,13 +36,9 @@ public class ReservationController {
 
     @PostMapping("/destinations")
     public String submitReservation(@RequestParam Long destinationId,
-                                    @RequestParam String name,
-                                    @RequestParam String email,
-                                    @RequestParam int numberOfPeople,
-                                    @RequestParam String cardName,
-                                    @RequestParam String cardNumber,
-                                    @RequestParam String expiryDate,
-                                    @RequestParam String cvc)  {
+                                    @RequestParam int numberOfPeople) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal(); // Get the logged-in user
 
         Destination destination = destinationRepository.findById(destinationId).orElseThrow();
 
@@ -49,18 +48,13 @@ public class ReservationController {
 
         Reservation reservation = new Reservation();
         reservation.setDestination(destination);
-        reservation.setName(name);
-        reservation.setEmail(email);
+        reservation.setUser(user);  // Associate reservation with logged-in user
         reservation.setNumberOfPeople(numberOfPeople);
-        /*reservation.setCardName(cardName);
-        reservation.setCardNumber(cardNumber);
-        reservation.setExpiryDate(expiryDate);
-        reservation.setCvc(cvc);*/
+        reservation.setTotalPrice(destination.getPrice() * numberOfPeople);
         reservation.setStatus("BOOKED");
 
         reservationRepository.save(reservation);
-        double totalPrice = destination.getPrice() * numberOfPeople;
-        reservation.setTotalPrice(totalPrice);
+
         destination.incrementPopularity(numberOfPeople);
         destination.setRemainingPeople(destination.getRemainingPeople() - numberOfPeople);
         destinationRepository.save(destination);
@@ -83,8 +77,12 @@ public class ReservationController {
 
     @GetMapping("/myReservations")
     public String viewUserReservations(Model model) {
-        List<Reservation> reservations = reservationRepository.findAll();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal(); // Get the logged-in user
+
+        List<Reservation> reservations = reservationRepository.findByUser(user);
         model.addAttribute("reservations", reservations);
+
         return "myReservations";
     }
 

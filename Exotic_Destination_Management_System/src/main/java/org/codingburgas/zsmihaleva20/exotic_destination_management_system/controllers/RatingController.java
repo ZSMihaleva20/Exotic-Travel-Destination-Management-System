@@ -31,8 +31,12 @@ public class RatingController {
 
     @GetMapping("/rateDestination")
     public String showRatingPage(Model model) {
-        List<Reservation> reservations = reservationRepository.findAll(); // Filter by user later
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal(); // Get the logged-in user
+
+        List<Reservation> reservations = reservationRepository.findByUser(user);
         model.addAttribute("reservations", reservations);
+
         return "rateDestination";
     }
 

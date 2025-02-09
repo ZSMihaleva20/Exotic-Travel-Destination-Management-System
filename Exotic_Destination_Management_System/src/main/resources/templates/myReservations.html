@@ -10,14 +10,17 @@
         <th>Destination</th>
         <th>Number of People</th>
         <th>Total Price</th>
+        <th>Status</th>
         <th>Action</th>
     </tr>
     <th:block th:each="reservation : ${reservations}">
         <tr>
             <td th:text="${reservation.destination.name}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
-            <td th:text="${reservation.totalPrice} + ' lv.'"></td> <!-- Total Price -->
+            <td th:text="${reservation.totalPrice} + ' lv.'"></td>
+            <td th:text="${reservation.status}"></td> <!-- Display status -->
             <td>
+                <!-- If reservation is still 'BOOKED', show cancel button -->
                 <form th:action="@{/cancel-reservation/{id}(id=${reservation.id})}" method="post">
                     <button type="submit" th:if="${reservation.status == 'BOOKED'}">Cancel</button>
                 </form>

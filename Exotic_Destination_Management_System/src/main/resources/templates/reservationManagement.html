@@ -7,7 +7,6 @@
 <h1>Booked Reservations</h1>
 <table>
     <tr>
-        <th>ID</th>
         <th>Name</th>
         <th>Email</th>
         <th>Destination</th>
@@ -17,9 +16,8 @@
     </tr>
     <th:block th:each="reservation : ${reservations}">
         <tr>
-            <td th:text="${reservation.id}"></td>
-            <td th:text="${reservation.name}"></td>
-            <td th:text="${reservation.email}"></td>
+            <td th:text="${reservation.user.fullName}"></td>  <!-- Updated -->
+            <td th:text="${reservation.user.email}"></td>
             <td th:text="${reservation.destination.name}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
             <td th:text="${reservation.totalPrice}"></td>

@@ -14,12 +14,6 @@ public class Reservation {
     private Destination destination;
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-    private String email;
-
-    @Column(nullable = false)
     private int numberOfPeople;
 
     @Column(nullable = false)
@@ -40,27 +34,31 @@ public class Reservation {
     @Column(nullable = false)
     private String status = "PENDING";
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private User user;
+
+
+
     public Reservation() {
         this.id = null;
         this.destination = null;
-        this.name = "name";
-        this.email = "email@email.com";
         this.numberOfPeople = 0;
         this.status = "PENDING";
         this.totalPrice = 0;
+        this.user = null;
         /*this.cardName = "CardName";
         this.cardNumber = "CardNumber";
         this.expiryDate = "ExpiryDate";
         this.cvc = "cvc";*/
     }
 
-    public Reservation(Long id, Destination destination, String name, String email, int numberOfPeople, double totalPrice /*String cardName String cardNumber, String expiryDate, String cvc, String status*/) {
+    public Reservation(Long id, Destination destination, User user, int numberOfPeople, double totalPrice /*String cardName String cardNumber, String expiryDate, String cvc, String status*/) {
         this.id = id;
         this.destination = destination;
-        this.name = name;
-        this.email = email;
         this.numberOfPeople = numberOfPeople;
         this.totalPrice = totalPrice;
+        this.user = user;
         /*this.cardName = cardName;
         this.cardNumber = cardNumber;
         this.expiryDate = expiryDate;
@@ -68,10 +66,9 @@ public class Reservation {
         this.status = status;
     }
 
-    public Reservation(Destination destination, String name, String email, int numberOfPeople, double totalPrice) {
+    public Reservation(Destination destination, User user, int numberOfPeople, double totalPrice) {
         this.destination = destination;
-        this.name = name;
-        this.email = email;
+        this.user = user;
         this.numberOfPeople = numberOfPeople;
         this.totalPrice = totalPrice;
         this.status = "PENDING";
@@ -96,22 +93,6 @@ public class Reservation {
         this.destination = destination;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public int getNumberOfPeople() {
         return numberOfPeople;
     }
@@ -120,6 +101,13 @@ public class Reservation {
         this.numberOfPeople = numberOfPeople;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
     /*
     public String getCardName() {
         return cardName;
