@@ -64,6 +64,7 @@ public class DestinationManagementController {
             destination.setImageUrl(fileName);
         }
         destination.setLimitedPeople(limitedPeople);
+        destination.setRemainingPeople(limitedPeople);
         destinationService.saveDestination(destination);
         return "redirect:/destinationManagement";
     }
@@ -80,7 +81,8 @@ public class DestinationManagementController {
         destination.setName(destinationDetails.getName());
         destination.setDescription(destinationDetails.getDescription());
         destination.setPrice(destinationDetails.getPrice());
-        destination.setLimitedPeople(limitedPeople);  // Update limited persons
+        destination.setLimitedPeople(limitedPeople);
+        destination.setRemainingPeople(limitedPeople);// Update limited persons
 
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();

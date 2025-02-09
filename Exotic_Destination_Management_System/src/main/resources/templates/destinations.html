@@ -18,7 +18,11 @@
           <p th:text="${destination.description}"></p>
           <img th:src="'/uploaded-image/' + ${destination.imageUrl}" alt="Destination Image" style="width: 200px; height: auto;">
           <p>Max people: <span th:text="${destination.limitedPeople}"></span></p>
-          <p>Price: <span th:text="${destination.price}"></span> lv.</p>
+          <p>Remaining spots: <span th:text="${destination.remainingPeople}"></span></p>
+          <p>Price for 1 person: <span th:text="${destination.price}"></span> lv.</p>
+          <a th:href="@{/reservation/{id}(id=${destination.id})}">
+            <button th:disabled="${destination.remainingPeople == 0}">Make a Reservation</button>
+          </a>
         </li>
       </th:block>
     </ul>

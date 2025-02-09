@@ -11,35 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
-public class    ExoticDestinationManagementSystemApplication {
-
+public class ExoticDestinationManagementSystemApplication {
     public static void main(String[] args) {
         SpringApplication.run(ExoticDestinationManagementSystemApplication.class, args);
     }
-
-    @Bean
-    CommandLineRunner commandLineRunner(UserRepository userRepository, PasswordEncoder passwordEncoder, DestinationRepository destinationRepository) {
-        return args -> {
-            User userOne = new User();
-            Destination destination = new Destination();
-
-            userOne.setFirstName("John");
-            userOne.setLastName("Smith");
-            userOne.setEmail("john.smith@gmail.com");
-            userOne.setPassword(passwordEncoder.encode("password"));
-            userOne.setRole("USER");
-            userOne.setUsername("john");
-
-            userRepository.save(userOne);
-
-            destination.setName("Turciq");
-            destination.setDescription("Destinaciq");
-            destination.setImageUrl("photoTwo.jpg");
-            destination.setPrice(1000);
-            destination.setStatus("ACCEPTED");
-            destination.setLimitedPeople(28);
-            destinationRepository.save(destination);
-        };
-    }
-
 }

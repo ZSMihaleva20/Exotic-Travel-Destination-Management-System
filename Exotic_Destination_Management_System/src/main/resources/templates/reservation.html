@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Make Reservation</title>
+    <script>
+        function updateTotalPrice() {
+            let numberOfPeople = document.getElementById("numberOfPeople").value;
+            let pricePerPerson = document.getElementById("pricePerPerson").value;
+            let totalPrice = numberOfPeople * pricePerPerson;
+            document.getElementById("totalPrice").innerText = totalPrice.toFixed(2) + " lv.";
+        }
+    </script>
+</head>
+<body>
+<h1>Make Reservation</h1>
+<br>
+<form th:action="@{/destinations}" method="post">
+    <input type="hidden" name="destinationId" th:value="${destination.id}">
+    <input type="hidden" id="pricePerPerson" th:value="${destination.price}">
+
+    <label>Name:</label>
+    <input type="text" name="name" required>
+    <br><br>
+
+    <label>Email:</label>
+    <input type="email" name="email" required>
+    <br><br>
+
+    <label>Number of People:</label>
+    <input type="number" id="numberOfPeople" name="numberOfPeople" required min="1"
+           th:max="${destination.remainingPeople}" oninput="updateTotalPrice()">
+    <br><br>
+
+    <h3>Payment Information</h3>
+    <label>Cardholder Name:</label>
+    <input type="text" name="cardName" required>
+    <label>Card Number:</label>
+    <input type="text" name="cardNumber" required>
+    <br><br>
+
+    <label>Expiry Date:</label>
+    <input type="text" name="expiryDate" required>
+
+    <label>CVC:</label>
+    <input type="text" name="cvc" required>
+    <br><br>
+
+    <h3>Total Price: <span id="totalPrice" >0.00 lv.</span></h3>  <!-- Dynamic Price Update -->
+
+    <button type="submit">Finish Reservation</button>
+</form>
+</body>
+</html>

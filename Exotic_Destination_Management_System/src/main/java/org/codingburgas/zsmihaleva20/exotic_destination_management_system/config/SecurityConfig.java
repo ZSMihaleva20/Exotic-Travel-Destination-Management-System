@@ -22,10 +22,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register", "/css/**", "/js/**", "/images/**", "/", "/uploaded-image/**").permitAll()
-                        .requestMatchers("/destinationManagement").hasAnyAuthority("ADMIN", "MANAGER") // Allow both ADMIN and MANAGER
+                        .requestMatchers("/destinationManagement", "reservationManagement").hasAnyAuthority("ADMIN", "MANAGER") // Allow both ADMIN and MANAGER
                         .requestMatchers("/profilesManagement").hasAuthority("ADMIN") // Only ADMIN for adminProfiles
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-                        .requestMatchers("/destinations").authenticated()
+                        .requestMatchers("/destinations", "myReservations", "reservation").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -42,7 +42,9 @@ public class SecurityConfig {
                 )
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")))
+
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
+
         return http.build();
     }
 

@@ -25,6 +25,9 @@ public class Destination {
     private int limitedPeople;
 
     @Column(nullable = false)
+    private int remainingPeople;
+
+    @Column(nullable = false)
     private String status = "PENDING-ACCEPT";
 
     @Column(nullable = false)
@@ -57,7 +60,7 @@ public class Destination {
         this.status = status;
     }
 
-    public Destination(Long id, String name, String description, String imageUrl, double price, int limitedPeople, String status) {
+    public Destination(Long id, String name, String description, String imageUrl, double price, int limitedPeople, String status, int remainingPeople) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -65,6 +68,7 @@ public class Destination {
         this.price = price;
         this.limitedPeople = limitedPeople;
         this.status = status;
+        this.remainingPeople = remainingPeople;
     }
 
     public Destination() {
@@ -75,6 +79,7 @@ public class Destination {
         this.price = 0;
         this.limitedPeople = 0;
         this.status = "PENDING-ACCEPT";
+        this.remainingPeople = 0;
     }
 
 
@@ -124,5 +129,13 @@ public class Destination {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public int getRemainingPeople() {
+        return remainingPeople;
+    }
+
+    public void setRemainingPeople(int remainingPeople) {
+        this.remainingPeople = remainingPeople;
     }
 }
