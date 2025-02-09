@@ -7,6 +7,8 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -54,7 +56,9 @@ public class DestinationManagementController {
     }
 
     @PostMapping("/addDestination")
-    public String saveDestination(@ModelAttribute Destination destination, @RequestParam("image") MultipartFile file, @RequestParam("limitedPeople") int limitedPeople) throws IOException {
+    public String saveDestination(@ModelAttribute Destination destination,
+                                  @RequestParam("image") MultipartFile file,
+                                  @RequestParam("limitedPeople") int limitedPeople) throws IOException {
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
             Path uploadPath = Paths.get("photos").resolve(fileName);
@@ -63,8 +67,18 @@ public class DestinationManagementController {
             }
             destination.setImageUrl(fileName);
         }
+
         destination.setLimitedPeople(limitedPeople);
         destination.setRemainingPeople(limitedPeople);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"))) {
+            destination.setStatus("ACCEPTED");
+        } else {
+            destination.setStatus("PENDING-ACCEPT");
+        }
+
         destinationService.saveDestination(destination);
         return "redirect:/destinationManagement";
     }
