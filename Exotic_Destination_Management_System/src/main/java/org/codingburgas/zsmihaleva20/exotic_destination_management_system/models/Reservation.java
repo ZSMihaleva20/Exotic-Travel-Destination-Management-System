@@ -68,6 +68,18 @@ public class Reservation {
         this.status = status;
     }
 
+    public Reservation(Destination destination, String name, String email, int numberOfPeople, double totalPrice) {
+        this.destination = destination;
+        this.name = name;
+        this.email = email;
+        this.numberOfPeople = numberOfPeople;
+        this.totalPrice = totalPrice;
+        this.status = "PENDING";
+
+        // Update popularity with the number of people
+        this.destination.incrementPopularity(numberOfPeople);
+    }
+
     public Long getId() {
         return id;
     }

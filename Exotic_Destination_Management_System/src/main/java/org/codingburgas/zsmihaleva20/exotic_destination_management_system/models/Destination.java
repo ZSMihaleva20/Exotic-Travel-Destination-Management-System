@@ -36,6 +36,40 @@ public class Destination {
     @Column(nullable = false)
     private boolean editApproved = false;
 
+    @Column(nullable = false)
+    private int ratingSum = 0;
+
+    @Column(nullable = false)
+    private int ratingCount = 0;
+
+    @Column(nullable = false)
+    private int popularity = 0; // Number of reservations
+
+    public double getAverageRating() {
+        return ratingCount == 0 ? 0 : (double) ratingSum / ratingCount;
+    }
+
+    public void addRating(int rating) {
+        this.ratingSum += rating;
+        this.ratingCount++;
+    }
+
+    public int getPopularity() {
+        return popularity;
+    }
+
+    public void incrementPopularity(int numberOfPeople) {
+        this.popularity += numberOfPeople;
+    }
+
+    public void decrementPopularity(int numberOfPeople) {
+        this.popularity -= numberOfPeople;
+        if (this.popularity < 0) {
+            this.popularity = 0; // Ensure it doesn't go negative
+        }
+    }
+
+
     public boolean isEditApproved() {
         return editApproved;
     }
@@ -60,7 +94,7 @@ public class Destination {
         this.status = status;
     }
 
-    public Destination(Long id, String name, String description, String imageUrl, double price, int limitedPeople, String status, int remainingPeople) {
+    public Destination(Long id, String name, String description, String imageUrl, double price, int limitedPeople, String status, int remainingPeople, int ratingSum, int ratingCount, int popularity) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -69,6 +103,9 @@ public class Destination {
         this.limitedPeople = limitedPeople;
         this.status = status;
         this.remainingPeople = remainingPeople;
+        this.ratingSum = ratingSum;
+        this.ratingCount = ratingCount;
+        this.popularity = popularity;
     }
 
     public Destination() {
@@ -80,6 +117,9 @@ public class Destination {
         this.limitedPeople = 0;
         this.status = "PENDING-ACCEPT";
         this.remainingPeople = 0;
+        this.ratingSum = 0;
+        this.ratingCount = 0;
+        this.popularity = 0;
     }
 
 

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Rate Your Destinations</title>
+</head>
+<body>
+<h1>Rate Your Visited Destinations</h1>
+<table>
+    <tr>
+        <th>Destination</th>
+        <th>Rate</th>
+        <th>Submit</th>
+    </tr>
+    <th:block th:each="reservation : ${reservations}">
+        <tr>
+            <td th:text="${reservation.destination.name}"></td>
+            <td>
+                <form th:action="@{/rateDestination}" method="post">
+                    <input type="hidden" name="destinationId" th:value="${reservation.destination.id}">
+                    <select name="stars" required>
+                        <option value="1">&#11088;</option>
+                        <option value="2">&#11088;&#11088;</option>
+                        <option value="3">&#11088;&#11088;&#11088;</option>
+                        <option value="4">&#11088;&#11088;&#11088;&#11088;</option>
+                        <option value="5">&#11088;&#11088;&#11088;&#11088;&#11088;</option>
+                    </select>
+                    <button type="submit">Rate</button>
+                </form>
+            </td>
+        </tr>
+    </th:block>
+</table>
+<a href="/home">Back to Home</a>
+</body>
+</html>

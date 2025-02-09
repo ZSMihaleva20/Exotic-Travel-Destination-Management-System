@@ -25,7 +25,7 @@ public class SecurityConfig {
                         .requestMatchers("/destinationManagement", "reservationManagement").hasAnyAuthority("ADMIN", "MANAGER") // Allow both ADMIN and MANAGER
                         .requestMatchers("/profilesManagement").hasAuthority("ADMIN") // Only ADMIN for adminProfiles
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-                        .requestMatchers("/destinations", "myReservations", "reservation").authenticated()
+                        .requestMatchers("/destinations", "myReservations", "reservation", "/rateDestination").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

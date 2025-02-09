@@ -61,7 +61,7 @@ public class ReservationController {
         reservationRepository.save(reservation);
         double totalPrice = destination.getPrice() * numberOfPeople;
         reservation.setTotalPrice(totalPrice);
-
+        destination.incrementPopularity(numberOfPeople);
         destination.setRemainingPeople(destination.getRemainingPeople() - numberOfPeople);
         destinationRepository.save(destination);
 
@@ -74,6 +74,7 @@ public class ReservationController {
 
         reservation.setStatus("CANCELED");
         Destination destination = reservation.getDestination();
+        destination.decrementPopularity(reservation.getNumberOfPeople());
         destination.setRemainingPeople(destination.getRemainingPeople() + reservation.getNumberOfPeople());
         destinationRepository.save(destination);
 

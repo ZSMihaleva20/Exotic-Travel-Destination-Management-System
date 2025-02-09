@@ -20,6 +20,8 @@
           <p>Max people: <span th:text="${destination.limitedPeople}"></span></p>
           <p>Remaining spots: <span th:text="${destination.remainingPeople}"></span></p>
           <p>Price for 1 person: <span th:text="${destination.price}"></span> lv.</p>
+          <p>Average Rating: <span th:text="${destination.getAverageRating()}"></span> &#11088;</p>
+          <p>Popularity: <span th:text="${destination.getPopularity()}"></span> people reserved</p>
           <a th:href="@{/reservation/{id}(id=${destination.id})}">
             <button th:disabled="${destination.remainingPeople == 0}">Make a Reservation</button>
           </a>
@@ -28,5 +30,8 @@
     </ul>
   </div>
 </main>
+<br>
+<a href="/myReservations">My reservations</a><br><br>
+<a href="/rateDestination">Rate Your Destinations</a>
 </body>
 </html>
