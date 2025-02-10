@@ -8,17 +8,22 @@
 <table>
     <tr>
         <th>Destination</th>
+        <th>Your Rating</th>
         <th>Rate</th>
-        <th>Submit</th>
     </tr>
     <th:block th:each="reservation : ${reservations}">
-        <!-- Display only reservations with status "BOOKED" -->
         <tr th:if="${reservation.status == 'BOOKED'}">
             <td th:text="${reservation.destination.name}"></td>
-            <td>
+
+            <!-- Display stars dynamically -->
+            <td th:if="${reservation.isDestinationRated()}" th:utext="${'&#11088;'.repeat(reservation.destinationRating)}"></td>
+
+            <!-- Show rating form if not yet rated -->
+            <td th:if="${!reservation.isDestinationRated()}">
                 <form th:action="@{/rateDestination}" method="post">
                     <input type="hidden" name="destinationId" th:value="${reservation.destination.id}">
                     <select name="stars" required>
+                        <option>Choose rating</option>
                         <option value="1">&#11088;</option>
                         <option value="2">&#11088;&#11088;</option>
                         <option value="3">&#11088;&#11088;&#11088;</option>

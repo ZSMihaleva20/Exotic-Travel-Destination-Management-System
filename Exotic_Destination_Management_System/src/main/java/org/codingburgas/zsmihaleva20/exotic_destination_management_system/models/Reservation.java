@@ -38,7 +38,11 @@ public class Reservation {
     @JoinColumn(nullable = false)
     private User user;
 
+    @Column(nullable = false)
+    private boolean isDestinationRated = false;
 
+    @Column(nullable = false)
+    private int destinationRating = 0;
 
     public Reservation() {
         this.id = null;
@@ -47,31 +51,37 @@ public class Reservation {
         this.status = "PENDING";
         this.totalPrice = 0;
         this.user = null;
+        this.isDestinationRated = false;
+        this.destinationRating = 0;
         /*this.cardName = "CardName";
         this.cardNumber = "CardNumber";
         this.expiryDate = "ExpiryDate";
         this.cvc = "cvc";*/
     }
 
-    public Reservation(Long id, Destination destination, User user, int numberOfPeople, double totalPrice /*String cardName String cardNumber, String expiryDate, String cvc, String status*/) {
+    public Reservation(Long id, Destination destination, User user, int numberOfPeople, double totalPrice, boolean isDestinationRated, String status, int destinationRating /*String cardName String cardNumber, String expiryDate, String cvc, String status*/) {
         this.id = id;
         this.destination = destination;
         this.numberOfPeople = numberOfPeople;
         this.totalPrice = totalPrice;
         this.user = user;
+        this.isDestinationRated = isDestinationRated;
         /*this.cardName = cardName;
         this.cardNumber = cardNumber;
         this.expiryDate = expiryDate;
         this.cvc = cvc;*/
         this.status = status;
+        this.destinationRating = 0;
     }
 
-    public Reservation(Destination destination, User user, int numberOfPeople, double totalPrice) {
+    public Reservation(Destination destination, User user, int numberOfPeople, double totalPrice, String status, int destinationRating, boolean isDestinationRated) {
         this.destination = destination;
         this.user = user;
         this.numberOfPeople = numberOfPeople;
         this.totalPrice = totalPrice;
-        this.status = "PENDING";
+        this.status = status;
+        this.isDestinationRated = isDestinationRated;
+        this.destinationRating = destinationRating;
 
         // Update popularity with the number of people
         this.destination.incrementPopularity(numberOfPeople);
@@ -157,5 +167,21 @@ public class Reservation {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public boolean isDestinationRated() {
+        return isDestinationRated;
+    }
+
+    public void setDestinationRated(boolean destinationRated) {
+        isDestinationRated = destinationRated;
+    }
+
+    public int getDestinationRating() {
+        return destinationRating;
+    }
+
+    public void setDestinationRating(int destinationRating) {
+        this.destinationRating = destinationRating;
     }
 }

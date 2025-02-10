@@ -34,6 +34,9 @@ public class User implements UserDetails {
     @Column(name = "LastName")
     private String lastName;
 
+    @OneToMany(mappedBy = "user")
+    private List<Reservation> reservations;
+
     public User() {
         this.userID = 0;
         this.username = "";

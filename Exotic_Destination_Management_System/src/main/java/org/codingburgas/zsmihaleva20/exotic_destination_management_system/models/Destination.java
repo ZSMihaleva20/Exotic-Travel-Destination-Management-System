@@ -43,15 +43,20 @@ public class Destination {
     private int ratingCount = 0;
 
     @Column(nullable = false)
+    private double averageRating = 0;
+
+    @Column(nullable = false)
     private int popularity = 0; // Number of reservations
 
     public double getAverageRating() {
-        return ratingCount == 0 ? 0 : (double) ratingSum / ratingCount;
+        this.averageRating = ratingCount == 0 ? 0 : Math.round((double) ratingSum / ratingCount * 10.0) / 10.0;
+        return this.averageRating;
     }
 
     public void addRating(int rating) {
         this.ratingSum += rating;
         this.ratingCount++;
+        getAverageRating(); // Automatically updates the average rating field
     }
 
     public int getPopularity() {
@@ -68,7 +73,6 @@ public class Destination {
             this.popularity = 0; // Ensure it doesn't go negative
         }
     }
-
 
     public boolean isEditApproved() {
         return editApproved;
@@ -94,7 +98,7 @@ public class Destination {
         this.status = status;
     }
 
-    public Destination(Long id, String name, String description, String imageUrl, double price, int limitedPeople, String status, int remainingPeople, int ratingSum, int ratingCount, int popularity) {
+    public Destination(Long id, String name, String description, String imageUrl, double price, int limitedPeople, String status, int remainingPeople, int ratingSum, int ratingCount, int popularity, double averageRating) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -106,6 +110,8 @@ public class Destination {
         this.ratingSum = ratingSum;
         this.ratingCount = ratingCount;
         this.popularity = popularity;
+        this.averageRating = averageRating;
+
     }
 
     public Destination() {
@@ -120,6 +126,7 @@ public class Destination {
         this.ratingSum = 0;
         this.ratingCount = 0;
         this.popularity = 0;
+        this.averageRating = 0;
     }
 
 

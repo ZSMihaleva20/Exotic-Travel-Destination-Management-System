@@ -42,12 +42,26 @@ public class RatingController {
 
     @PostMapping("/rateDestination")
     public String rateDestination(@RequestParam Long destinationId, @RequestParam int stars) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
         Destination destination = destinationRepository.findById(destinationId).orElse(null);
 
         if (destination != null) {
-            destination.addRating(stars);
-            destinationRepository.save(destination);
+            List<Reservation> reservations = reservationRepository.findByUser(user);
+            for (Reservation reservation : reservations) {
+                if (reservation.getDestination().equals(destination) && !reservation.isDestinationRated()) {
+                    reservation.setDestinationRated(true);
+                    reservation.setDestinationRating(stars);
+                    reservationRepository.save(reservation);
+
+                    destination.addRating(stars);
+                    destinationRepository.save(destination);
+                    break;
+                }
+            }
         }
+
         return "redirect:/rateDestination";
     }
 }
