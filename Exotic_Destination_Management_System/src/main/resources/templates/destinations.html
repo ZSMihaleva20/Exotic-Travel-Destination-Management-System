@@ -3,20 +3,212 @@
 <head>
   <title>Destinations</title>
   <link rel="stylesheet" href="/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      position: relative;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    /* User Icon */
+    .user-menu {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+    }
+
+    .user-icon {
+      font-size: 40px;
+      cursor: pointer;
+      color: white;
+      transition: transform 0.3s;
+    }
+
+    .user-icon:hover {
+      transform: scale(1.1);
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 150px;
+      overflow: hidden;
+      z-index: 1000;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 10px;
+      text-decoration: none;
+      color: #333;
+      transition: background 0.3s;
+    }
+
+    .dropdown-menu a:hover {
+      background: #f8c291;
+    }
+
+    /* Navigation Links */
+    .nav-links {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .nav-link {
+      display: inline-block;
+      text-decoration: none;
+      color: white;
+      background: linear-gradient(90deg, #ff7e5f, #feb47b);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
+      margin: 10px;
+    }
+
+    .nav-link:hover {
+      background: linear-gradient(90deg, #feb47b, #ff7e5f);
+      transform: scale(1.05);
+    }
+
+    /* Main Content */
+    main {
+      width: 80%;
+      margin: auto;
+      padding: 20px;
+    }
+
+    /* Sort Form */
+    form {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    select, button {
+      font-size: 16px;
+      padding: 8px 15px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    select {
+      background: #fff;
+      color: #333;
+      cursor: pointer;
+    }
+
+    button {
+      background: #f8c291;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #e17055;
+    }
+
+    /* Destinations List */
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+      transition: transform 0.3s ease-in-out;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    li:hover {
+      transform: scale(1.03);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    img {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 10px;
+      display: block;
+      margin: 10px auto;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      main {
+        width: 95%;
+      }
+    }
+  </style>
 </head>
 <body>
 <header>
   <h1>Destinations</h1>
-  <a href="/home">Back to Home</a>
+  <div class="user-menu">
+    <span class="material-symbols-outlined user-icon">account_circle</span>
+    <div class="dropdown-menu" id="dropdownMenu">
+      <a href="/profile">Profile</a>
+      <a href="/myReservations">My reservations</a>
+      <a href="/rateDestination">Rate your destinations</a>
+      <a href="/logout">Log out</a>
+    </div>
+  </div>
 </header>
+
 <main>
   <div>
+    <form action="/destinations" method="get">
+      <label for="sortOptions">Sort by:</label>
+      <select id="sortOptions" name="sortBy">
+        <option value="price" th:selected="${currentSort == 'price'}">Price</option>
+        <option value="popularity" th:selected="${currentSort == 'popularity'}">Popularity</option>
+        <option value="rating" th:selected="${currentSort == 'rating'}">Rating</option>
+      </select>
+      <button type="submit">Sort</button>
+    </form>
     <ul>
       <th:block th:each="destination : ${acceptedDestinations}">
         <li>
           <h2 th:text="${destination.name}"></h2>
           <p th:text="${destination.description}"></p>
-          <img th:src="'/uploaded-image/' + ${destination.imageUrl}" alt="Destination Image" style="width: 200px; height: auto;">
+          <img th:src="'/uploaded-image/' + ${destination.imageUrl}" alt="Destination Image">
           <p>Max people: <span th:text="${destination.limitedPeople}"></span></p>
           <p>Remaining spots: <span th:text="${destination.remainingPeople}"></span></p>
           <p>Price for 1 person: <span th:text="${destination.price}"></span> lv.</p>
@@ -30,8 +222,44 @@
     </ul>
   </div>
 </main>
-<br>
-<a href="/myReservations">My reservations</a><br><br>
-<a href="/rateDestination">Rate Your Destinations</a>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const listItems = document.querySelectorAll("li");
+
+    // Animation on load
+    listItems.forEach((item, index) => {
+      setTimeout(() => {
+        item.style.opacity = "1";
+        item.style.transform = "translateY(0)";
+      }, index * 100);
+    });
+
+    // Highlight buttons on hover
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach(button => {
+      button.addEventListener("mouseover", () => {
+        button.style.transform = "scale(1.1)";
+      });
+
+      button.addEventListener("mouseleave", () => {
+        button.style.transform = "scale(1)";
+      });
+    });
+
+    // Dropdown functionality
+    const userIcon = document.querySelector(".user-icon");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+
+    userIcon.addEventListener("click", function () {
+      dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!userIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+        dropdownMenu.style.display = "none";
+      }
+    });
+  });
+</script>
 </body>
 </html>

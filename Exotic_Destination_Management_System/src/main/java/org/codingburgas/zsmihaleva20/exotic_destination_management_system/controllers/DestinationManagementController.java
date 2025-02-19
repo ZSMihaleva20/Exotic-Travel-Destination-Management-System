@@ -169,15 +169,14 @@ public class DestinationManagementController {
     }
 
     @GetMapping("/destinations")
-    public String viewAcceptedDestinations(Model model) {
-        // Retrieve all destinations with status "ACCEPTED"
-        List<Destination> acceptedDestinations = destinationService.getAllDestinations()
+    public String viewAcceptedDestinations(@RequestParam(value = "sortBy", required = false, defaultValue = "price") String sortBy, Model model) {
+        List<Destination> acceptedDestinations = destinationService.getSortedDestinations(sortBy)
                 .stream()
                 .filter(destination -> "ACCEPTED".equals(destination.getStatus()))
                 .toList();
 
-        // Add the list to the model
         model.addAttribute("acceptedDestinations", acceptedDestinations);
+        model.addAttribute("currentSort", sortBy);
         return "destinations";
     }
 }

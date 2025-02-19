@@ -5,6 +5,7 @@ import org.codingburgas.zsmihaleva20.exotic_destination_management_system.reposi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,5 +36,66 @@ public class DestinationService {
 
     public List<Destination> getAllDestinations() {
         return destinationRepository.findAll();
+    }
+
+    public List<Destination> getSortedDestinations(String sortBy) {
+        List<Destination> destinations = getAllDestinations();
+        return mergeSort(destinations, sortBy);
+    }
+
+    private List<Destination> mergeSort(List<Destination> list, String sortBy) {
+        if (list.size() <= 1) {
+            return list;
+        }
+
+        int mid = list.size() / 2;
+        List<Destination> left = new ArrayList<>(list.subList(0, mid));
+        List<Destination> right = new ArrayList<>(list.subList(mid, list.size()));
+
+        left = mergeSort(left, sortBy);
+        right = mergeSort(right, sortBy);
+
+        return merge(left, right, sortBy);
+    }
+
+    private List<Destination> merge(List<Destination> left, List<Destination> right, String sortBy) {
+        List<Destination> mergedList = new ArrayList<>();
+        int i = 0, j = 0;
+
+        while (i < left.size() && j < right.size()) {
+            boolean condition = false;
+
+            switch (sortBy) {
+                case "price":
+                    condition = left.get(i).getPrice() < right.get(j).getPrice();
+                    break;
+                case "popularity":
+                    condition = left.get(i).getPopularity() > right.get(j).getPopularity();
+                    break;
+                case "rating":
+                    condition = left.get(i).getAverageRating() > right.get(j).getAverageRating();
+                    break;
+            }
+
+            if (condition) {
+                mergedList.add(left.get(i));
+                i++;
+            } else {
+                mergedList.add(right.get(j));
+                j++;
+            }
+        }
+
+        while (i < left.size()) {
+            mergedList.add(left.get(i));
+            i++;
+        }
+
+        while (j < right.size()) {
+            mergedList.add(right.get(j));
+            j++;
+        }
+
+        return mergedList;
     }
 }
