@@ -169,14 +169,24 @@ public class DestinationManagementController {
     }
 
     @GetMapping("/destinations")
-    public String viewAcceptedDestinations(@RequestParam(value = "sortBy", required = false, defaultValue = "price") String sortBy, Model model) {
-        List<Destination> acceptedDestinations = destinationService.getSortedDestinations(sortBy)
-                .stream()
-                .filter(destination -> "ACCEPTED".equals(destination.getStatus()))
-                .toList();
+    public String viewAcceptedDestinations(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "minPrice", required = false) Double minPrice,
+            @RequestParam(value = "maxPrice", required = false) Double maxPrice,
+            @RequestParam(value = "minRating", required = false) Double minRating,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "none") String sortBy,
+            Model model) {
 
-        model.addAttribute("acceptedDestinations", acceptedDestinations);
+        List<Destination> filteredAndSortedDestinations = destinationService.getFilteredAndSortedDestinations(
+                keyword, minPrice, maxPrice, minRating, sortBy);
+
+        model.addAttribute("acceptedDestinations", filteredAndSortedDestinations);
         model.addAttribute("currentSort", sortBy);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("minRating", minRating);
+
         return "destinations";
     }
 }

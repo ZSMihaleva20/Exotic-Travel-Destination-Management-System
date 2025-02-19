@@ -101,12 +101,6 @@
       padding: 20px;
     }
 
-    /* Sort Form */
-    form {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
     select, button {
       font-size: 16px;
       padding: 8px 15px;
@@ -171,11 +165,67 @@
     }
 
     /* Responsive */
-    @media (max-width: 768px) {
+    @media screen and (width: 1920px) and (height: 1080px) {
       main {
-        width: 95%;
+        width: 70%;
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 20px;
       }
     }
+
+    /* Стилове за филтриращата форма */
+    form {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      display: inline-block;
+    }
+
+    form label {
+      font-weight: bold;
+      font-size: 16px;
+      color: #333;
+      margin: 0 5px;
+      vertical-align: middle;
+    }
+
+    form input[type="text"],
+    form input[type="number"] {
+      font-size: 16px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin: 0 10px 10px 0;
+      vertical-align: middle;
+      width: auto;
+      max-width: 200px;
+    }
+
+    /* Стил за placeholder */
+    form input::placeholder {
+      color: #aaa;
+    }
+
+    /* При нужда – стилизиране на бутоните */
+    form button {
+      font-size: 16px;
+      padding: 8px 15px;
+      border-radius: 8px;
+      border: none;
+      background: #f8c291;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    form button:hover {
+      background: #e17055;
+    }
+
   </style>
 </head>
 <body>
@@ -195,13 +245,27 @@
 <main>
   <div>
     <form action="/destinations" method="get">
+      <label for="search">Search:</label>
+      <input type="text" id="search" name="keyword" placeholder="Enter keyword..." th:value="${keyword}">
+
+      <label for="minPrice">Min Price:</label>
+      <input type="number" id="minPrice" name="minPrice" th:value="${minPrice}">
+
+      <label for="maxPrice">Max Price:</label>
+      <input type="number" id="maxPrice" name="maxPrice" th:value="${maxPrice}">
+
+      <label for="minRating">Min Rating:</label>
+      <input type="number" id="minRating" name="minRating" min="0" max="5" step="0.1" th:value="${minRating}">
+
       <label for="sortOptions">Sort by:</label>
       <select id="sortOptions" name="sortBy">
+        <option value="none" th:selected="${currentSort == 'none'}">Select</option>
         <option value="price" th:selected="${currentSort == 'price'}">Price</option>
         <option value="popularity" th:selected="${currentSort == 'popularity'}">Popularity</option>
         <option value="rating" th:selected="${currentSort == 'rating'}">Rating</option>
       </select>
-      <button type="submit">Sort</button>
+
+      <button type="submit">Filter & Sort</button>
     </form>
     <ul>
       <th:block th:each="destination : ${acceptedDestinations}">

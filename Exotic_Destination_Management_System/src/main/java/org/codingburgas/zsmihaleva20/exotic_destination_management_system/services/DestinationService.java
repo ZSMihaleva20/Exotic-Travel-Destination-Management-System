@@ -1,8 +1,11 @@
 package org.codingburgas.zsmihaleva20.exotic_destination_management_system.services;
 
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.Specifications.DestinationSpecifications;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Destination;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.DestinationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,9 +41,27 @@ public class DestinationService {
         return destinationRepository.findAll();
     }
 
-    public List<Destination> getSortedDestinations(String sortBy) {
-        List<Destination> destinations = getAllDestinations();
-        return mergeSort(destinations, sortBy);
+    public List<Destination> getFilteredAndSortedDestinations(String keyword, Double minPrice, Double maxPrice, Double minRating, String sortBy) {
+        Specification<Destination> spec = DestinationSpecifications.filterDestinations(keyword, minPrice, maxPrice, minRating);
+
+        // Определяне на сортирането според избрания критерий
+        Sort sort = sort = Sort.by(Sort.Direction.DESC, "id");;
+        switch (sortBy) {
+            case "popularity":
+                sort = Sort.by(Sort.Direction.DESC, "popularity");
+                break;
+            case "rating":
+                sort = Sort.by(Sort.Direction.DESC, "averageRating");
+                break;
+            case "price":
+                sort = Sort.by(Sort.Direction.ASC, "price");
+                break;
+            case "none": // price
+                sort = Sort.by(Sort.Direction.DESC, "id");
+                break;
+        }
+
+        return destinationRepository.findAll(spec, sort);
     }
 
     private List<Destination> mergeSort(List<Destination> list, String sortBy) {
