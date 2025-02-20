@@ -54,7 +54,7 @@ public class Destination {
     private LocalDate dateOfDeparture;
 
     @Column(nullable = false)
-    private LocalDate dateOfArrival;
+    private LocalDate dateOfReturn;
 
     public double getAverageRating() {
         this.averageRating = ratingCount == 0 ? 0 : Math.round((double) ratingSum / ratingCount * 10.0) / 10.0;
@@ -106,7 +106,7 @@ public class Destination {
         this.status = status;
     }
 
-    public Destination(Long id, String name, String description, String imageUrl, double price, int limitedPeople, String status, int remainingPeople, int ratingSum, int ratingCount, int popularity, double averageRating, LocalDate dateOfDeparture, LocalDate dateOfArrival) {
+    public Destination(Long id, String name, String description, String imageUrl, double price, int limitedPeople, String status, int remainingPeople, int ratingSum, int ratingCount, int popularity, double averageRating, LocalDate dateOfDeparture, LocalDate dateOfReturn) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -120,7 +120,7 @@ public class Destination {
         this.popularity = popularity;
         this.averageRating = averageRating;
         this.dateOfDeparture = dateOfDeparture;
-        this.dateOfArrival = dateOfArrival;
+        this.dateOfReturn = dateOfReturn;
     }
 
     public Destination() {
@@ -137,7 +137,7 @@ public class Destination {
         this.popularity = 0;
         this.averageRating = 0;
         this.dateOfDeparture = LocalDate.now();
-        this.dateOfArrival = LocalDate.now();
+        this.dateOfReturn = LocalDate.now();
     }
 
     // Add Getters and Setters
@@ -149,12 +149,12 @@ public class Destination {
         this.dateOfDeparture = dateOfDeparture;
     }
 
-    public LocalDate getDateOfArrival() {
-        return dateOfArrival;
+    public LocalDate getDateOfReturn() {
+        return dateOfReturn;
     }
 
-    public void setDateOfArrival(LocalDate dateOfArrival) {
-        this.dateOfArrival = dateOfArrival;
+    public void setDateOfReturn(LocalDate dateOfReturn) {
+        this.dateOfReturn = dateOfReturn;
     }
 
 

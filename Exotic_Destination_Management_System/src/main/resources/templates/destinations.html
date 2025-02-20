@@ -251,8 +251,8 @@
       <label for="startDate">Date of departure:</label>
       <input type="date" id="startDate" name="dateOfDeparture" th:value="${dateOfDeparture}">
 
-      <label for="endDate">Date of arrival:</label>
-      <input type="date" id="endDate" name="dateOfArrival" th:value="${dateOfArrival}">
+      <label for="endDate">Date of return:</label>
+      <input type="date" id="endDate" name="dateOfReturn" th:value="${dateOfReturn}">
 
       <br>
 
@@ -281,7 +281,7 @@
           <h2 th:text="${destination.name}"></h2>
           <p th:text="${destination.description}"></p>
           <p>Departure date: <span th:text="${destination.dateOfDeparture}"></span></p>
-          <p>Arrival date: <span th:text="${destination.dateOfArrival}"></span></p>
+          <p>Return date: <span th:text="${destination.dateOfReturn}"></span></p>
           <img th:src="'/uploaded-image/' + ${destination.imageUrl}" alt="Destination Image">
           <p>Max people: <span th:text="${destination.limitedPeople}"></span></p>
           <p>Remaining spots: <span th:text="${destination.remainingPeople}"></span></p>

@@ -62,7 +62,7 @@ public class DestinationManagementController {
                                   @RequestParam("image") MultipartFile file,
                                   @RequestParam("limitedPeople") int limitedPeople,
                                   @RequestParam("dateOfDeparture") String dateOfDeparture,
-                                  @RequestParam("dateOfArrival") String dateOfArrival) throws IOException {
+                                  @RequestParam("dateOfReturn") String dateOfReturn) throws IOException {
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
             Path uploadPath = Paths.get("photos").resolve(fileName);
@@ -75,7 +75,7 @@ public class DestinationManagementController {
         destination.setLimitedPeople(limitedPeople);
         destination.setRemainingPeople(limitedPeople);
         destination.setDateOfDeparture(LocalDate.parse(dateOfDeparture));
-        destination.setDateOfArrival(LocalDate.parse(dateOfArrival));
+        destination.setDateOfReturn(LocalDate.parse(dateOfReturn));
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getAuthorities().stream()
@@ -100,7 +100,7 @@ public class DestinationManagementController {
                                     @RequestParam("image") MultipartFile file,
                                     @RequestParam("limitedPeople") int limitedPeople,
                                     @RequestParam("dateOfDeparture") String dateOfDeparture,
-                                    @RequestParam("dateOfArrival") String dateOfArrival) throws IOException {
+                                    @RequestParam("dateOfReturn") String dateOfReturn) throws IOException {
         Destination destination = destinationService.getDestination(id);
         destination.setName(destinationDetails.getName());
         destination.setDescription(destinationDetails.getDescription());
@@ -108,7 +108,7 @@ public class DestinationManagementController {
         destination.setLimitedPeople(limitedPeople);
         destination.setRemainingPeople(limitedPeople);// Update limited persons
         destination.setDateOfDeparture(LocalDate.parse(dateOfDeparture));
-        destination.setDateOfArrival(LocalDate.parse(dateOfArrival));
+        destination.setDateOfReturn(LocalDate.parse(dateOfReturn));
 
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
@@ -188,11 +188,11 @@ public class DestinationManagementController {
             @RequestParam(value = "minRating", required = false) Double minRating,
             @RequestParam(value = "sortBy", required = false, defaultValue = "none") String sortBy,
             @RequestParam(value = "dateOfDeparture", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateOfDeparture,
-            @RequestParam(value = "dateOfArrival", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateOfArrival,
+            @RequestParam(value = "dateOfReturn", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateOfReturn,
             Model model) {
 
         List<Destination> filteredAndSortedDestinations = destinationService.getFilteredAndSortedDestinations(
-                keyword, minPrice, maxPrice, minRating, sortBy, dateOfDeparture, dateOfArrival);
+                keyword, minPrice, maxPrice, minRating, sortBy, dateOfDeparture, dateOfReturn);
 
         model.addAttribute("acceptedDestinations", filteredAndSortedDestinations);
         model.addAttribute("currentSort", sortBy);
@@ -201,7 +201,7 @@ public class DestinationManagementController {
         model.addAttribute("maxPrice", maxPrice);
         model.addAttribute("minRating", minRating);
         model.addAttribute("dateOfDeparture", dateOfDeparture);
-        model.addAttribute("dateOfArrival", dateOfArrival);
+        model.addAttribute("dateOfReturn", dateOfReturn);
 
         return "destinations";
     }

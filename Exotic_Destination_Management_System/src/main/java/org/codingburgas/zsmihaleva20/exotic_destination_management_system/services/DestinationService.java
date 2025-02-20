@@ -43,8 +43,8 @@ public class DestinationService {
     }
 
     public List<Destination> getFilteredAndSortedDestinations(String keyword, Double minPrice, Double maxPrice,
-                                                              Double minRating, String sortBy, LocalDate dateOfArrival, LocalDate dateOfDeparture) {
-        Specification<Destination> spec = DestinationSpecifications.filterDestinations(keyword, minPrice, maxPrice, minRating, dateOfArrival, dateOfDeparture);
+                                                              Double minRating, String sortBy, LocalDate dateOfReturn, LocalDate dateOfDeparture) {
+        Specification<Destination> spec = DestinationSpecifications.filterDestinations(keyword, minPrice, maxPrice, minRating, dateOfReturn, dateOfDeparture);
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
 
         switch (sortBy) {
@@ -59,7 +59,7 @@ public class DestinationService {
                 break;
         }
 
-        if (dateOfArrival == null && dateOfDeparture == null) {
+        if (dateOfReturn == null && dateOfDeparture == null) {
             spec = DestinationSpecifications.filterDestinations(keyword, minPrice, maxPrice, minRating, null, null);
         }
 

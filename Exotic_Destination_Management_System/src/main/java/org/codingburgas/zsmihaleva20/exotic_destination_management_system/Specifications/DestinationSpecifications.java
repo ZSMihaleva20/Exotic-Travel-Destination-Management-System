@@ -11,7 +11,7 @@ import java.util.List;
 public class DestinationSpecifications {
 
     public static Specification<Destination> filterDestinations(String keyword, Double minPrice, Double maxPrice,
-                                                                Double minRating, LocalDate dateOfArrival, LocalDate dateOfDeparture) {
+                                                                Double minRating, LocalDate dateOfReturn, LocalDate dateOfDeparture) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -36,12 +36,12 @@ public class DestinationSpecifications {
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("averageRating"), minRating));
             }
 
-            if (dateOfArrival != null) {
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dateOfDeparture"), dateOfArrival));
+            if (dateOfReturn != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dateOfDeparture"), dateOfReturn));
             }
 
             if (dateOfDeparture != null) {
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dateOfArrival"), dateOfDeparture));
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dateOfReturn"), dateOfDeparture));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
