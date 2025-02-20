@@ -2,6 +2,8 @@ package org.codingburgas.zsmihaleva20.exotic_destination_management_system.model
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 public class Destination {
 
@@ -47,6 +49,12 @@ public class Destination {
 
     @Column(nullable = false)
     private int popularity = 0; // Number of reservations
+
+    @Column(nullable = false)
+    private LocalDate dateOfDeparture;
+
+    @Column(nullable = false)
+    private LocalDate dateOfArrival;
 
     public double getAverageRating() {
         this.averageRating = ratingCount == 0 ? 0 : Math.round((double) ratingSum / ratingCount * 10.0) / 10.0;
@@ -98,7 +106,7 @@ public class Destination {
         this.status = status;
     }
 
-    public Destination(Long id, String name, String description, String imageUrl, double price, int limitedPeople, String status, int remainingPeople, int ratingSum, int ratingCount, int popularity, double averageRating) {
+    public Destination(Long id, String name, String description, String imageUrl, double price, int limitedPeople, String status, int remainingPeople, int ratingSum, int ratingCount, int popularity, double averageRating, LocalDate dateOfDeparture, LocalDate dateOfArrival) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -111,7 +119,8 @@ public class Destination {
         this.ratingCount = ratingCount;
         this.popularity = popularity;
         this.averageRating = averageRating;
-
+        this.dateOfDeparture = dateOfDeparture;
+        this.dateOfArrival = dateOfArrival;
     }
 
     public Destination() {
@@ -127,6 +136,25 @@ public class Destination {
         this.ratingCount = 0;
         this.popularity = 0;
         this.averageRating = 0;
+        this.dateOfDeparture = LocalDate.now();
+        this.dateOfArrival = LocalDate.now();
+    }
+
+    // Add Getters and Setters
+    public LocalDate getDateOfDeparture() {
+        return dateOfDeparture;
+    }
+
+    public void setDateOfDeparture(LocalDate dateOfDeparture) {
+        this.dateOfDeparture = dateOfDeparture;
+    }
+
+    public LocalDate getDateOfArrival() {
+        return dateOfArrival;
+    }
+
+    public void setDateOfArrival(LocalDate dateOfArrival) {
+        this.dateOfArrival = dateOfArrival;
     }
 
 

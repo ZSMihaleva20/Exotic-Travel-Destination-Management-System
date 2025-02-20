@@ -5,6 +5,7 @@ import org.codingburgas.zsmihaleva20.exotic_destination_management_system.servic
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,7 +60,9 @@ public class DestinationManagementController {
     @PostMapping("/addDestination")
     public String saveDestination(@ModelAttribute Destination destination,
                                   @RequestParam("image") MultipartFile file,
-                                  @RequestParam("limitedPeople") int limitedPeople) throws IOException {
+                                  @RequestParam("limitedPeople") int limitedPeople,
+                                  @RequestParam("dateOfDeparture") String dateOfDeparture,
+                                  @RequestParam("dateOfArrival") String dateOfArrival) throws IOException {
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
             Path uploadPath = Paths.get("photos").resolve(fileName);
@@ -70,6 +74,8 @@ public class DestinationManagementController {
 
         destination.setLimitedPeople(limitedPeople);
         destination.setRemainingPeople(limitedPeople);
+        destination.setDateOfDeparture(LocalDate.parse(dateOfDeparture));
+        destination.setDateOfArrival(LocalDate.parse(dateOfArrival));
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getAuthorities().stream()
@@ -90,13 +96,19 @@ public class DestinationManagementController {
     }
 
     @PostMapping("/editDestination/{id}")
-    public String updateDestination(@PathVariable Long id, @ModelAttribute Destination destinationDetails, @RequestParam("image") MultipartFile file, @RequestParam("limitedPeople") int limitedPeople) throws IOException {
+    public String updateDestination(@PathVariable Long id, @ModelAttribute Destination destinationDetails,
+                                    @RequestParam("image") MultipartFile file,
+                                    @RequestParam("limitedPeople") int limitedPeople,
+                                    @RequestParam("dateOfDeparture") String dateOfDeparture,
+                                    @RequestParam("dateOfArrival") String dateOfArrival) throws IOException {
         Destination destination = destinationService.getDestination(id);
         destination.setName(destinationDetails.getName());
         destination.setDescription(destinationDetails.getDescription());
         destination.setPrice(destinationDetails.getPrice());
         destination.setLimitedPeople(limitedPeople);
         destination.setRemainingPeople(limitedPeople);// Update limited persons
+        destination.setDateOfDeparture(LocalDate.parse(dateOfDeparture));
+        destination.setDateOfArrival(LocalDate.parse(dateOfArrival));
 
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
@@ -175,10 +187,12 @@ public class DestinationManagementController {
             @RequestParam(value = "maxPrice", required = false) Double maxPrice,
             @RequestParam(value = "minRating", required = false) Double minRating,
             @RequestParam(value = "sortBy", required = false, defaultValue = "none") String sortBy,
+            @RequestParam(value = "dateOfDeparture", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateOfDeparture,
+            @RequestParam(value = "dateOfArrival", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateOfArrival,
             Model model) {
 
         List<Destination> filteredAndSortedDestinations = destinationService.getFilteredAndSortedDestinations(
-                keyword, minPrice, maxPrice, minRating, sortBy);
+                keyword, minPrice, maxPrice, minRating, sortBy, dateOfDeparture, dateOfArrival);
 
         model.addAttribute("acceptedDestinations", filteredAndSortedDestinations);
         model.addAttribute("currentSort", sortBy);
@@ -186,8 +200,11 @@ public class DestinationManagementController {
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
         model.addAttribute("minRating", minRating);
+        model.addAttribute("dateOfDeparture", dateOfDeparture);
+        model.addAttribute("dateOfArrival", dateOfArrival);
 
         return "destinations";
     }
+
 }
 

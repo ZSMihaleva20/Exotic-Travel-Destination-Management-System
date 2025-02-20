@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +42,11 @@ public class DestinationService {
         return destinationRepository.findAll();
     }
 
-    public List<Destination> getFilteredAndSortedDestinations(String keyword, Double minPrice, Double maxPrice, Double minRating, String sortBy) {
-        Specification<Destination> spec = DestinationSpecifications.filterDestinations(keyword, minPrice, maxPrice, minRating);
+    public List<Destination> getFilteredAndSortedDestinations(String keyword, Double minPrice, Double maxPrice,
+                                                              Double minRating, String sortBy, LocalDate dateOfArrival, LocalDate dateOfDeparture) {
+        Specification<Destination> spec = DestinationSpecifications.filterDestinations(keyword, minPrice, maxPrice, minRating, dateOfArrival, dateOfDeparture);
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
 
-        // Определяне на сортирането според избрания критерий
-        Sort sort = sort = Sort.by(Sort.Direction.DESC, "id");;
         switch (sortBy) {
             case "popularity":
                 sort = Sort.by(Sort.Direction.DESC, "popularity");
@@ -56,13 +57,15 @@ public class DestinationService {
             case "price":
                 sort = Sort.by(Sort.Direction.ASC, "price");
                 break;
-            case "none": // price
-                sort = Sort.by(Sort.Direction.DESC, "id");
-                break;
+        }
+
+        if (dateOfArrival == null && dateOfDeparture == null) {
+            spec = DestinationSpecifications.filterDestinations(keyword, minPrice, maxPrice, minRating, null, null);
         }
 
         return destinationRepository.findAll(spec, sort);
     }
+
 
     private List<Destination> mergeSort(List<Destination> list, String sortBy) {
         if (list.size() <= 1) {

@@ -45,6 +45,8 @@
     <tr>
         <th>Name</th>
         <th>Description</th>
+        <th>Date of departure</th>
+        <th>Date of arrival</th>
         <th>Price</th>
         <th>Max people</th>
         <th>Image</th>
@@ -56,6 +58,8 @@
     <tr th:each="destination : ${destinations}">
         <td th:text="${destination.name}"></td>
         <td th:text="${destination.description}"></td>
+        <td th:text="${destination.dateOfDeparture}"></td>
+        <td th:text="${destination.dateOfArrival}"></td>
         <td th:text="${destination.price}"></td>
         <td th:text="${destination.limitedPeople}"></td>
         <td>
