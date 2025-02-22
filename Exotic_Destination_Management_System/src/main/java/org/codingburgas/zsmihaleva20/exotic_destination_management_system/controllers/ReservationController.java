@@ -1,10 +1,12 @@
 package org.codingburgas.zsmihaleva20.exotic_destination_management_system.controllers;
 
+import jakarta.mail.MessagingException;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Destination;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Reservation;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.User;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.DestinationRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.ReservationRepository;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.MailService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -21,10 +24,12 @@ public class ReservationController {
 
     private final ReservationRepository reservationRepository;
     private final DestinationRepository destinationRepository;
+    private final MailService mailService;
 
-    public ReservationController(ReservationRepository reservationRepository, DestinationRepository destinationRepository) {
+    public ReservationController(ReservationRepository reservationRepository, DestinationRepository destinationRepository, MailService mailService) {
         this.reservationRepository = reservationRepository;
         this.destinationRepository = destinationRepository;
+        this.mailService = mailService;
     }
 
     @GetMapping("/reservation/{id}")
@@ -59,18 +64,37 @@ public class ReservationController {
         destination.setRemainingPeople(destination.getRemainingPeople() - numberOfPeople);
         destinationRepository.save(destination);
 
+        try {
+            mailService.sendConfirmationMail(reservation, user);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         return "redirect:/destinations";
     }
 
     @PostMapping("/cancel-reservation/{id}")
     public String cancelReservation(@PathVariable Long id) {
         Reservation reservation = reservationRepository.findById(id).orElseThrow();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
 
+        reservation.setUser(user);
         reservation.setStatus("CANCELED");
         Destination destination = reservation.getDestination();
         destination.decrementPopularity(reservation.getNumberOfPeople());
         destination.setRemainingPeople(destination.getRemainingPeople() + reservation.getNumberOfPeople());
         destinationRepository.save(destination);
+
+        try {
+            mailService.sendCancelationMail(reservation, user);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return "redirect:/myReservations";
     }
