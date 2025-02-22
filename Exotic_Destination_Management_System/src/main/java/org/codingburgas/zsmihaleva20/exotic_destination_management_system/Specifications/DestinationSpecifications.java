@@ -16,6 +16,8 @@ public class DestinationSpecifications {
             List<Predicate> predicates = new ArrayList<>();
 
             predicates.add(criteriaBuilder.equal(root.get("status"), "ACCEPTED"));
+            predicates.add(criteriaBuilder.greaterThan(root.get("dateOfDeparture"), LocalDate.now()));
+            predicates.add(criteriaBuilder.notEqual(root.get("remainingPeople"), 0));
 
             if (keyword != null && !keyword.trim().isEmpty()) {
                 String keywordPattern = "%" + keyword.toLowerCase() + "%";

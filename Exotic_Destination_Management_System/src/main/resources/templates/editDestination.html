@@ -12,27 +12,27 @@
 
 <form th:action="@{'/editDestination/' + ${destination.id}}" method="post" enctype="multipart/form-data">
   <label for="name">Name:</label>
-  <input type="text" id="name" name="name" th:value="${destination.name}" required>
+  <input type="text" id="name" name="name" th:value="${destination.name}" required><br><br>
 
   <label for="description">Description:</label>
-  <textarea id="description" name="description" th:text="${destination.description}" required></textarea>
+  <textarea id="description" name="description" th:text="${destination.description}" required></textarea><br><br>
 
   <label for="dateOfDeparture">Date of departure:</label>
-  <input type="date" id="dateOfDeparture" name="dateOfDeparture" th:value="${destination.dateOfDeparture}" required>
+  <input type="date" id="dateOfDeparture" name="dateOfDeparture" th:value="${destination.dateOfDeparture}" required><br><br>
 
   <label for="dateOfReturn">Date of return:</label>
-  <input type="date" id="dateOfReturn" name="dateOfReturn" th:value="${destination.dateOfReturn}" required>
+  <input type="date" id="dateOfReturn" name="dateOfReturn" th:value="${destination.dateOfReturn}" required><br><br>
 
   <label for="price">Price:</label>
-  <input type="number" step="0.01" id="price" name="price" th:value="${destination.price}" required>
+  <input type="number" step="0.01" id="price" name="price" th:value="${destination.price}" required><br><br>
 
   <label for="limitedPeople">Max number of people:</label>
-  <input type="number" id="limitedPeople" name="limitedPeople" th:value="${destination.limitedPeople}" required>
-
-  <img th:src="@{'/uploaded-image/' + ${destination.imageUrl}}" width="100" />
+  <input type="number" id="limitedPeople" name="limitedPeople" th:value="${destination.limitedPeople}" required><br><br>
 
   <label for="image">Change image:</label>
   <input type="file" id="image" name="image" accept="image/*">
+
+  <img th:src="@{'/uploaded-image/' + ${destination.imageUrl}}" width="100" /><br><br>
 
   <button type="submit">Edit</button>
 </form>
