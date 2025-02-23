@@ -26,7 +26,7 @@ public class DataLoader {
 
             userOne.setFirstName("Zhasmina");
             userOne.setLastName("Mihaleva");
-            userOne.setEmail("jasminamihaleva2006@gmail.com");
+            userOne.setEmail("robocrforbulgaria@gmail.com");
             userOne.setPassword(passwordEncoder.encode("zhasmina"));
             userOne.setRole("USER");
             userOne.setUsername("zhasmina");

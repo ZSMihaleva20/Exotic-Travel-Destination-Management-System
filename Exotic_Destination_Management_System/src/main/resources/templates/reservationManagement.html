@@ -2,9 +2,50 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>All Reservations</title>
+    <meta charset="utf-8">
 </head>
 <body>
 <h1>Booked Reservations</h1>
+
+<!-- Display all destinations -->
+<th:block th:each="destination : ${allDestinations}">
+    <br>
+    <h2 th:text="${destination.name}"></h2>
+
+    <th:block th:if="${reservationsByDestination.containsKey(destination)}">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Number of People</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+            <th:block th:each="reservation : ${reservationsByDestination.get(destination)}">
+                <tr>
+                    <td th:text="${reservation.user.fullName}"></td>
+                    <td th:text="${reservation.user.email}"></td>
+                    <td th:text="${reservation.numberOfPeople}"></td>
+                    <td th:text="${reservation.totalPrice}"></td>
+                    <td>
+                        <form th:action="@{'/cancelReservation/' + ${reservation.id}}" method="post">
+                            <button type="submit">Cancel</button>
+                        </form>
+                    </td>
+                </tr>
+            </th:block>
+        </table>
+    </th:block>
+
+    <!-- If no reservations exist -->
+    <th:block th:if="${!reservationsByDestination.containsKey(destination)}">
+        <p>Няма резервации</p>
+    </th:block>
+</th:block>
+
+<br>
+<br>
+<h1>Canceled Reservations</h1>
 <table>
     <tr>
         <th>Name</th>
@@ -12,21 +53,14 @@
         <th>Destination</th>
         <th>Number of People</th>
         <th>Price</th>
-        <th>Status</th>
     </tr>
-    <th:block th:each="reservation : ${reservations}">
+    <th:block th:each="reservation : ${canceledReservations}">
         <tr>
-            <td th:text="${reservation.user.fullName}"></td>  <!-- Updated -->
+            <td th:text="${reservation.user.fullName}"></td>
             <td th:text="${reservation.user.email}"></td>
             <td th:text="${reservation.destination.name}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
             <td th:text="${reservation.totalPrice}"></td>
-            <td th:text="${reservation.status}"></td>
-            <td>
-                <form th:action="@{'/cancel-reservation/' + ${reservation.id}}" method="post">
-                    <button type="submit">Cancel</button>
-                </form>
-            </td>
         </tr>
     </th:block>
 </table>
