@@ -78,10 +78,7 @@ public class ReservationController {
     @PostMapping("/cancel-reservation/{id}")
     public String cancelReservation(@PathVariable Long id) {
         Reservation reservation = reservationRepository.findById(id).orElseThrow();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
 
-        reservation.setUser(user);
         reservation.setStatus("CANCELED");
         Destination destination = reservation.getDestination();
         destination.decrementPopularity(reservation.getNumberOfPeople());
@@ -89,7 +86,7 @@ public class ReservationController {
         destinationRepository.save(destination);
 
         try {
-            mailService.sendCancelationMail(reservation, user);
+            mailService.sendCancelationMail(reservation, reservation.getUser());
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

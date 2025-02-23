@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Component
 public class DataLoader {
 
@@ -22,12 +24,12 @@ public class DataLoader {
 
             Destination destination = new Destination();
 
-            userOne.setFirstName("John");
-            userOne.setLastName("Smith");
-            userOne.setEmail("john.smith@gmail.com");
-            userOne.setPassword(passwordEncoder.encode("password"));
+            userOne.setFirstName("Zhasmina");
+            userOne.setLastName("Mihaleva");
+            userOne.setEmail("jasminamihaleva2006@gmail.com");
+            userOne.setPassword(passwordEncoder.encode("zhasmina"));
             userOne.setRole("USER");
-            userOne.setUsername("john");
+            userOne.setUsername("zhasmina");
 
             userRepository.save(userOne);
 
@@ -56,6 +58,8 @@ public class DataLoader {
             destination.setStatus("ACCEPTED");
             destination.setLimitedPeople(28);
             destination.setRemainingPeople(28);
+            destination.setDateOfDeparture(LocalDate.parse("2025-03-25"));
+            destination.setDateOfReturn(LocalDate.parse("2025-03-28"));
             destinationRepository.save(destination);
         };
     }

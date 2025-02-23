@@ -80,19 +80,23 @@
                       style="display:inline;">
                     <button type="submit">Decline</button>
                 </form>
-                <a th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
-                <form th:action="@{'/delete/' + ${destination.id}}" method="post" style="display:inline;">
-                    <button type="submit">Delete</button>
-                </form>
+                <th:block th:if="${destination.status != 'PENDING-ACCEPT' and destination.status != 'PENDING-DELETE' and destination.status != 'PENDING-EDIT'}">
+                    <a th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
+                    <form th:action="@{'/delete/' + ${destination.id}}" method="post" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </th:block>
             </div>
             <div sec:authorize="hasAuthority('MANAGER')">
-                <a th:if="${destination.editApproved}" th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
-                <form th:if="${!destination.editApproved}" th:action="@{'/requestEdit/' + ${destination.id}}" method="post" style="display:inline;">
-                    <button type="submit">Request Edit</button>
-                </form>
-                <form th:action="@{'/requestDelete/' + ${destination.id}}" method="post" style="display:inline;">
-                    <button type="submit">Request Delete</button>
-                </form>
+                <th:block th:if="${destination.status != 'PENDING-ACCEPT'}">
+                    <a th:if="${destination.editApproved}" th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
+                    <form th:if="${!destination.editApproved}" th:action="@{'/requestEdit/' + ${destination.id}}" method="post" style="display:inline;">
+                        <button type="submit">Request Edit</button>
+                    </form>
+                    <form th:action="@{'/requestDelete/' + ${destination.id}}" method="post" style="display:inline;">
+                        <button type="submit">Request Delete</button>
+                    </form>
+                </th:block>
             </div>
         </td>
     </tr>
