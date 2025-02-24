@@ -44,6 +44,9 @@ public class Reservation {
     @Column(nullable = false)
     private int destinationRating = 0;
 
+    @Column(columnDefinition = "TEXT") // Allow long comments
+    private String comment;
+
     public Reservation() {
         this.id = null;
         this.destination = null;
@@ -53,13 +56,14 @@ public class Reservation {
         this.user = null;
         this.isDestinationRated = false;
         this.destinationRating = 0;
+        this.comment = "";
         /*this.cardName = "CardName";
         this.cardNumber = "CardNumber";
         this.expiryDate = "ExpiryDate";
         this.cvc = "cvc";*/
     }
 
-    public Reservation(Long id, Destination destination, User user, int numberOfPeople, double totalPrice, boolean isDestinationRated, String status, int destinationRating /*String cardName String cardNumber, String expiryDate, String cvc, String status*/) {
+    public Reservation(Long id, Destination destination, User user, int numberOfPeople, double totalPrice, boolean isDestinationRated, String status, int destinationRating, String comment /*String cardName String cardNumber, String expiryDate, String cvc, String status*/) {
         this.id = id;
         this.destination = destination;
         this.numberOfPeople = numberOfPeople;
@@ -71,10 +75,11 @@ public class Reservation {
         this.expiryDate = expiryDate;
         this.cvc = cvc;*/
         this.status = status;
-        this.destinationRating = 0;
+        this.destinationRating = destinationRating;
+        this.comment = comment;
     }
 
-    public Reservation(Destination destination, User user, int numberOfPeople, double totalPrice, String status, int destinationRating, boolean isDestinationRated) {
+    public Reservation(Destination destination, User user, int numberOfPeople, double totalPrice, String status, int destinationRating, boolean isDestinationRated, String comment ) {
         this.destination = destination;
         this.user = user;
         this.numberOfPeople = numberOfPeople;
@@ -82,6 +87,7 @@ public class Reservation {
         this.status = status;
         this.isDestinationRated = isDestinationRated;
         this.destinationRating = destinationRating;
+        this.comment = comment;
 
         // Update popularity with the number of people
         this.destination.incrementPopularity(numberOfPeople);
@@ -183,5 +189,13 @@ public class Reservation {
 
     public void setDestinationRating(int destinationRating) {
         this.destinationRating = destinationRating;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

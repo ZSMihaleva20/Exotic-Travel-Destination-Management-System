@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Rating Management</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<h1>Destination Ratings</h1>
+
+<!-- Display all destinations and their ratings -->
+<th:block th:each="destination : ${allDestinations}">
+    <br>
+    <h2 th:text="${destination.name}"></h2>
+    <p>Departure Date: <span th:text="${destination.dateOfDeparture}"></span></p>
+    <p>Arrival Date: <span th:text="${destination.dateOfReturn}"></span></p>
+    <th:block th:if="${ratingsByDestination.containsKey(destination)}">
+        <table>
+            <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Rating</th>
+                <th>Comment</th>
+                <th>Rated At</th>
+            </tr>
+            <th:block th:each="rating : ${ratingsByDestination.get(destination)}">
+                <tr>
+                    <td th:text="${rating.user.fullName}"></td>
+                    <td th:text="${rating.user.email}"></td>
+                    <td th:utext="${'&#11088;'.repeat(rating.stars)}"></td>
+                    <td th:text="${rating.comment}"></td>
+                    <td th:text="${#temporals.format(rating.timestamp, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td>
+                        <!-- Add a delete button -->
+                        <form th:action="@{/deleteRating/{ratingId}(ratingId=${rating.id})}" method="post">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            </th:block>
+        </table>
+    </th:block>
+
+    <!-- If no ratings exist -->
+    <th:block th:if="${!ratingsByDestination.containsKey(destination)}">
+        <p>No ratings available</p>
+    </th:block>
+</th:block>
+
+<a href="/dashboard">Back</a>
+
+</body>
+</html>

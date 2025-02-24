@@ -3,6 +3,7 @@ package org.codingburgas.zsmihaleva20.exotic_destination_management_system.model
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Destination {
@@ -38,10 +39,8 @@ public class Destination {
     @Column(nullable = false)
     private boolean editApproved = false;
 
-    @Column(nullable = false)
     private int ratingSum = 0;
 
-    @Column(nullable = false)
     private int ratingCount = 0;
 
     @Column(nullable = false)
@@ -55,6 +54,9 @@ public class Destination {
 
     @Column(nullable = false)
     private LocalDate dateOfReturn;
+
+    @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL)
+    private List<Rating> ratings;
 
     public double getAverageRating() {
         this.averageRating = ratingCount == 0 ? 0 : Math.round((double) ratingSum / ratingCount * 10.0) / 10.0;
@@ -212,5 +214,37 @@ public class Destination {
 
     public void setRemainingPeople(int remainingPeople) {
         this.remainingPeople = remainingPeople;
+    }
+
+    public int getRatingSum() {
+        return ratingSum;
+    }
+
+    public void setRatingSum(int ratingSum) {
+        this.ratingSum = ratingSum;
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(int ratingCount) {
+        this.ratingCount = ratingCount;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public void setPopularity(int popularity) {
+        this.popularity = popularity;
+    }
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
     }
 }

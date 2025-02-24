@@ -2,6 +2,8 @@ package org.codingburgas.zsmihaleva20.exotic_destination_management_system.model
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class Rating {
 
@@ -20,12 +22,28 @@ public class Rating {
     @JoinColumn(nullable = false)
     private User user;
 
+    @Column(columnDefinition = "TEXT") // Allow long comments
+    private String comment;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime timestamp;
+
     public Rating() {}
 
-    public Rating(Destination destination, User user, int stars) {
+    public Rating(Destination destination, User user, int stars, String comment) {
         this.destination = destination;
         this.user = user;
         this.stars = stars;
+        this.comment = comment;
+        this.timestamp = LocalDateTime.now();
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
     public int getStars() {
@@ -58,5 +76,13 @@ public class Rating {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
