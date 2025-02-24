@@ -1,8 +1,10 @@
 package org.codingburgas.zsmihaleva20.exotic_destination_management_system.services;
 
+import jakarta.transaction.Transactional;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.Specifications.DestinationSpecifications;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Destination;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.DestinationRepository;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,6 +19,9 @@ public class DestinationService {
 
     @Autowired
     private DestinationRepository destinationRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     public DestinationService(DestinationRepository destinationRepository) {
         this.destinationRepository = destinationRepository;
@@ -34,7 +39,9 @@ public class DestinationService {
         destinationRepository.save(destination);
     }
 
+    @Transactional
     public void deleteDestination(Long id) {
+        reservationRepository.deleteByDestinationId(id); // Изтриване на всички резервации, свързани с дестинацията
         destinationRepository.deleteById(id);
     }
 

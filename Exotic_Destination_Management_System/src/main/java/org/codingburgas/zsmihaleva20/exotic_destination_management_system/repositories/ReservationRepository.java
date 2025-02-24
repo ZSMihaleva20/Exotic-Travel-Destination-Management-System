@@ -12,4 +12,6 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     List<Reservation> findByStatus(String status);
     List<Reservation> findByUser(User user);
+
+    void deleteByDestinationId(Long id);
 }

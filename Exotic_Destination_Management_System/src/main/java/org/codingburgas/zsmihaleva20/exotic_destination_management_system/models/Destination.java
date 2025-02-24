@@ -55,7 +55,7 @@ public class Destination {
     @Column(nullable = false)
     private LocalDate dateOfReturn;
 
-    @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rating> ratings;
 
     public double getAverageRating() {

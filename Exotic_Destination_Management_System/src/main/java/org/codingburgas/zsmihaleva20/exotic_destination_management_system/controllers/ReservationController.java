@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -99,10 +100,25 @@ public class ReservationController {
     @GetMapping("/myReservations")
     public String viewUserReservations(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal(); // Get the logged-in user
+        User user = (User) authentication.getPrincipal(); // Взимаме текущия потребител
 
-        List<Reservation> reservations = reservationRepository.findByUser(user);
-        model.addAttribute("reservations", reservations);
+        List<Reservation> allReservations = reservationRepository.findByUser(user);
+
+        List<Reservation> activeReservations = allReservations.stream()
+                .filter(res -> "BOOKED".equals(res.getStatus()) && res.getDestination().getDateOfDeparture().isBefore(LocalDate.now()))
+                .toList();
+
+        List<Reservation> canceledReservations = allReservations.stream()
+                .filter(res -> "CANCELED".equals(res.getStatus()))
+                .toList();
+
+        List<Reservation> pastReservations = allReservations.stream()
+                .filter(res -> "BOOKED".equals(res.getStatus()) && res.getDestination().getDateOfDeparture().isAfter(LocalDate.now()))
+                .toList();
+
+        model.addAttribute("activeReservations", activeReservations);
+        model.addAttribute("canceledReservations", canceledReservations);
+        model.addAttribute("pastReservations", pastReservations);
 
         return "myReservations";
     }
