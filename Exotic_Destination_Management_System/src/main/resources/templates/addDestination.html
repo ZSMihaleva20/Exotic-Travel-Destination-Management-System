@@ -8,6 +8,7 @@
     <link th:href="@{../static/css/style.css}" rel="stylesheet" />
 </head>
 <body>
+
 <h1>Add Destination</h1>
 <form th:action="@{/addDestination}" method="post" enctype="multipart/form-data">
     <label for="name">Name:</label>
@@ -20,7 +21,7 @@
     <input type="date" id="dateOfDeparture" name="dateOfDeparture" required><br><br>
 
     <label for="dateOfReturn">Date of Return:</label>
-    <input type="date" id="dateOfReturn" name="dateOfReturn" required><br><br>
+    <input type="date" id="dateOfReturn" name="dateOfReturn" disabled required><br><br>
 
     <label for="price">Price:</label>
     <input type="number" step="0.01" id="price" name="price" required><br><br>
@@ -34,6 +35,30 @@
     <button type="submit">Save</button>
 </form>
 <a href="/destinationManagement">Back</a>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let departureInput = document.getElementById("dateOfDeparture");
+        let returnInput = document.getElementById("dateOfReturn");
+
+        // Disable return date initially
+        returnInput.disabled = true;
+        returnInput.value = ""; // Ensure it starts empty
+
+        departureInput.addEventListener("change", function () {
+            returnInput.disabled = false; // Enable return date field
+            returnInput.min = departureInput.value; // Set return date min to departure date
+            returnInput.value = ""; // Reset return date when departure date changes
+        });
+
+        returnInput.addEventListener("change", function () {
+            if (returnInput.value <= departureInput.value) {
+                alert("Return date must be after the departure date!");
+                returnInput.value = ""; // Clear invalid selection
+            }
+        });
+    });
+</script>
 </body>
 </html>
 
