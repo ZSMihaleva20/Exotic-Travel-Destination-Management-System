@@ -21,7 +21,7 @@
   <input type="date" id="dateOfDeparture" name="dateOfDeparture" th:value="${destination.dateOfDeparture}" required><br><br>
 
   <label for="dateOfReturn">Date of return:</label>
-  <input type="date" id="dateOfReturn" name="dateOfReturn" th:value="${destination.dateOfReturn}" disabled required><br><br>
+  <input type="date" id="dateOfReturn" name="dateOfReturn" th:value="${destination.dateOfReturn}" required><br><br>
 
   <label for="price">Price:</label>
   <input type="number" step="0.01" id="price" name="price" th:value="${destination.price}" required><br><br>
@@ -43,20 +43,22 @@
     let departureInput = document.getElementById("dateOfDeparture");
     let returnInput = document.getElementById("dateOfReturn");
 
-    // Disable return date initially
-    returnInput.disabled = true;
-    returnInput.value = ""; // Ensure it starts empty
-
     departureInput.addEventListener("change", function () {
-      returnInput.disabled = false; // Enable return date field
-      returnInput.min = departureInput.value; // Set return date min to departure date
-      returnInput.value = ""; // Reset return date when departure date changes
+      if (departureInput.value) {
+        returnInput.min = departureInput.value; // Set return date min to departure date
+      }
+
+      // Check if departure date is after return date
+      if (returnInput.value && departureInput.value > returnInput.value) {
+        alert("Departure date cannot be after the return date!");
+        departureInput.value = ""; // Reset invalid departure date
+      }
     });
 
     returnInput.addEventListener("change", function () {
-      if (returnInput.value <= departureInput.value) {
+      if (departureInput.value && returnInput.value < departureInput.value) {
         alert("Return date must be after the departure date!");
-        returnInput.value = ""; // Clear invalid selection
+        returnInput.value = ""; // Reset invalid return date
       }
     });
   });

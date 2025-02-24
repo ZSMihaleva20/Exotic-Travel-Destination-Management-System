@@ -334,6 +334,28 @@
       }
     });
   });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    let departureInput = document.getElementById("startDate");
+    let returnInput = document.getElementById("endDate");
+
+    departureInput.addEventListener("change", function () {
+      if (departureInput.value) {
+        returnInput.min = departureInput.value; // Set return date min to departure date
+      }
+      if (returnInput.value && departureInput.value > returnInput.value) {
+        alert("Departure date cannot be after the return date!");
+        departureInput.value = ""; // Reset invalid departure date
+      }
+    });
+
+    returnInput.addEventListener("change", function () {
+      if (departureInput.value && returnInput.value < departureInput.value) {
+        alert("Return date must be after the departure date!");
+        returnInput.value = ""; // Reset invalid return date
+      }
+    });
+  });
 </script>
 </body>
 </html>
