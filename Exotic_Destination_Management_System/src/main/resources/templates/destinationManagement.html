@@ -60,7 +60,7 @@
         <td th:text="${destination.description}"></td>
         <td th:text="${destination.dateOfDeparture}"></td>
         <td th:text="${destination.dateOfReturn}"></td>
-        <td th:text="${destination.price}"></td>
+        <td th:text="${#numbers.formatDecimal(destination.price, 2, 2)} + ' lv.'"></td>
         <td th:text="${destination.limitedPeople}"></td>
         <td>
             <img th:src="@{'/uploaded-image/' + ${destination.imageUrl}}" alt="Image" style="width: 100px;">

@@ -122,8 +122,8 @@ public class RatingController {
             List<Reservation> reservations = reservationRepository.findByUser(user);
             for (Reservation reservation : reservations) {
                 if (reservation.getDestination().equals(destination) && reservation.isDestinationRated()) {
-                    reservation.setDestinationRated(false);
                     reservation.setDestinationRating(0);
+                    reservation.setComment("");
                     reservationRepository.save(reservation);
                     break;
                 }

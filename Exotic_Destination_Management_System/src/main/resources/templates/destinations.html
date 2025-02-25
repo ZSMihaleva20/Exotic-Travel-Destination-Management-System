@@ -285,7 +285,7 @@
           <img th:src="'/uploaded-image/' + ${destination.imageUrl}" alt="Destination Image">
           <p>Max people: <span th:text="${destination.limitedPeople}"></span></p>
           <p>Remaining spots: <span th:text="${destination.remainingPeople}"></span></p>
-          <p>Price for 1 person: <span th:text="${destination.price}"></span> lv.</p>
+          <p>Price for 1 person: <span th:text="${#numbers.formatDecimal(destination.price, 2, 2)}"></span> lv.</p>
           <p>Average Rating: <span th:text="${destination.getAverageRating()}"></span> &#11088;</p>
           <p>Popularity: <span th:text="${destination.getPopularity()}"></span> people reserved</p>
           <a th:href="@{/reservation/{id}(id=${destination.id})}">
