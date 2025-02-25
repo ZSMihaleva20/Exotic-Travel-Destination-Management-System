@@ -12,6 +12,8 @@
 <table>
     <tr>
         <th>Destination</th>
+        <th>Departure Date</th>
+        <th>Return Date</th>
         <th>Number of People</th>
         <th>Total Price</th>
         <th>Status</th>
@@ -20,6 +22,8 @@
     <th:block th:each="reservation : ${activeReservations}">
         <tr>
             <td th:text="${reservation.destination.name}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
             <td th:text="${reservation.totalPrice} + ' lv.'"></td>
             <td th:text="${reservation.status}"></td>
@@ -37,6 +41,8 @@
 <table>
     <tr>
         <th>Destination</th>
+        <th>Departure Date</th>
+        <th>Return Date</th>
         <th>Number of People</th>
         <th>Total Price</th>
         <th>Status</th>
@@ -44,6 +50,8 @@
     <th:block th:each="reservation : ${canceledReservations}">
         <tr>
             <td th:text="${reservation.destination.name}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
             <td th:text="${reservation.totalPrice} + ' lv.'"></td>
             <td th:text="${reservation.status}"></td>
@@ -56,6 +64,8 @@
 <table>
     <tr>
         <th>Destination</th>
+        <th>Departure Date</th>
+        <th>Return Date</th>
         <th>Number of People</th>
         <th>Total Price</th>
         <th>Status</th>
@@ -63,6 +73,9 @@
     <th:block th:each="reservation : ${pastReservations}">
         <tr>
             <td th:text="${reservation.destination.name}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
+            <td th:text="${reservation.destination.dateOfReturn}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
             <td th:text="${reservation.totalPrice} + ' lv.'"></td>
             <td>Past</td>

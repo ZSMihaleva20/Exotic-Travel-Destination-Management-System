@@ -11,8 +11,8 @@
 <th:block th:each="destination : ${allDestinations}">
     <br>
     <h2 th:text="${destination.name}"></h2>
-    <p>Departure Date: <span th:text="${destination.dateOfDeparture}"></span></p>
-    <p>Arrival Date: <span th:text="${destination.dateOfReturn}"></span></p>
+    <p>Departure date: <span th:text="${#temporals.format(destination.dateOfDeparture, 'dd MMMM yyyy')}"></span></p>
+    <p>Return date: <span th:text="${#temporals.format(destination.dateOfReturn, 'dd MMMM yyyy')}"></span></p>
     <th:block th:if="${ratingsByDestination.containsKey(destination)}">
         <table>
             <tr>

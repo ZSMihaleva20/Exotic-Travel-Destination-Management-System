@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -38,10 +39,14 @@ public class RatingController {
     public String showRatingPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal(); // Get the logged-in user
+        LocalDate now = LocalDate.now();
 
-        List<Reservation> reservations = reservationRepository.findByUser(user);
-        model.addAttribute("reservations", reservations);
+        List<Reservation> pastReservations = reservationRepository.findByUser(user).stream()
+                .filter(reservation -> reservation.getDestination().getDateOfReturn().isBefore(now) ||
+                        reservation.getDestination().getDateOfReturn().isEqual(now))
+                .toList();
 
+        model.addAttribute("reservations", pastReservations);
         return "rateDestination";
     }
 

@@ -15,6 +15,16 @@
 <body>
 <h1>Make Reservation</h1>
 <br>
+<div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 20px;">
+    <h2 th:text="${destination.name}">Destination Name</h2>
+    <img th:src="'/uploaded-image/' + ${destination.imageUrl}" alt="Destination Image">
+    <p><strong>Description:</strong> <span th:text="${destination.description}">Destination Description</span></p>
+    <p><strong>Departure date: </strong><span th:text="${#temporals.format(destination.dateOfDeparture, 'dd MMMM yyyy')}"></span></p>
+    <p><strong>Return date: </strong><span th:text="${#temporals.format(destination.dateOfReturn, 'dd MMMM yyyy')}"></span></p>
+    <p><strong>Price per person:</strong> <span th:text="${destination.price}"></span> lv.</p>
+    <p><strong>Available spots:</strong> <span th:text="${destination.remainingPeople}"></span></p>
+</div>
+
 <form th:action="@{/destinations}" method="post">
     <input type="hidden" name="destinationId" th:value="${destination.id}">
     <input type="hidden" id="pricePerPerson" th:value="${destination.price}">

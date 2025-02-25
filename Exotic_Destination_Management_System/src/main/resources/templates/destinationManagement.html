@@ -58,8 +58,8 @@
     <tr th:each="destination : ${destinations}">
         <td th:text="${destination.name}"></td>
         <td th:text="${destination.description}"></td>
-        <td th:text="${destination.dateOfDeparture}"></td>
-        <td th:text="${destination.dateOfReturn}"></td>
+        <td th:text="${#temporals.format(destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
+        <td th:text="${#temporals.format(destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
         <td th:text="${#numbers.formatDecimal(destination.price, 2, 2)} + ' lv.'"></td>
         <td th:text="${destination.limitedPeople}"></td>
         <td>

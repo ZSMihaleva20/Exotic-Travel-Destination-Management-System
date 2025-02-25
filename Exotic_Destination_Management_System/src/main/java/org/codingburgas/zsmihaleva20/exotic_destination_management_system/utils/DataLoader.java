@@ -79,8 +79,8 @@ public class DataLoader {
             destinationTwo.setStatus("ACCEPTED");
             destinationTwo.setLimitedPeople(20);
             destinationTwo.setRemainingPeople(20);
-            destinationTwo.setDateOfDeparture(LocalDate.parse("2025-04-10"));
-            destinationTwo.setDateOfReturn(LocalDate.parse("2025-04-16"));
+            destinationTwo.setDateOfDeparture(LocalDate.parse("2025-01-10"));
+            destinationTwo.setDateOfReturn(LocalDate.parse("2025-01-16"));
             destinationRepository.save(destinationTwo);
 
             destinationThree.setName("Albania");

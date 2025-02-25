@@ -18,8 +18,8 @@
     <th:block th:each="reservation : ${reservations}">
         <tr th:if="${reservation.status == 'BOOKED'}">
             <td th:text="${reservation.destination.name}"></td>
-            <td th:text="${reservation.destination.dateOfDeparture}"></td>  <!-- Departure Date -->
-            <td th:text="${reservation.destination.dateOfReturn}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
             <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' lv.'"></td>
 
             <!-- Display stars dynamically -->
