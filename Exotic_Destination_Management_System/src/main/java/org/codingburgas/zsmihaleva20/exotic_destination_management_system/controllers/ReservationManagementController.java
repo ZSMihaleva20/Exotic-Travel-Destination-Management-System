@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,20 +32,38 @@ public class ReservationManagementController {
 
     @GetMapping("/reservationManagement")
     public String viewAllReservations(Model model) {
-        List<Reservation> bookedReservations = reservationRepository.findByStatus("BOOKED");
-        List<Reservation> canceledReservations = reservationRepository.findByStatus("CANCELED");
-        List<Destination> allDestinations = destinationRepository.findAll(); // Fetch all destinations
+        List<Reservation> allReservations = reservationRepository.findAll();
+        LocalDate now = LocalDate.now();
 
-        // Group reservations by destination
-        Map<Destination, List<Reservation>> reservationsByDestination = bookedReservations.stream()
-                .collect(Collectors.groupingBy(Reservation::getDestination));
+        // Active Reservations: Both Departure AND Return Date are in the future
+        List<Reservation> activeReservations = allReservations.stream()
+                .filter(res -> "BOOKED".equals(res.getStatus()) &&
+                        res.getDestination().getDateOfDeparture().isAfter(now) &&
+                        res.getDestination().getDateOfReturn().isAfter(now))
+                .toList();
 
-        model.addAttribute("reservationsByDestination", reservationsByDestination);
+        // Canceled Reservations
+        List<Reservation> canceledReservations = allReservations.stream()
+                .filter(res -> "CANCELED".equals(res.getStatus()))
+                .toList();
+
+        // Past Reservations:
+        // - Both departure and return dates are before OR on today
+        // - OR only the departure date is before or on today
+        List<Reservation> pastReservations = allReservations.stream()
+                .filter(res -> "BOOKED".equals(res.getStatus()) &&
+                        (res.getDestination().getDateOfDeparture().isBefore(now) ||
+                                (res.getDestination().getDateOfDeparture().isEqual(now) &&
+                                        res.getDestination().getDateOfReturn().isBefore(now))))
+                .toList();
+
+        model.addAttribute("activeReservations", activeReservations);
         model.addAttribute("canceledReservations", canceledReservations);
-        model.addAttribute("allDestinations", allDestinations); // Add all destinations
+        model.addAttribute("pastReservations", pastReservations);
 
         return "reservationManagement";
     }
+
 
 
     @PostMapping("/cancelReservation/{id}")

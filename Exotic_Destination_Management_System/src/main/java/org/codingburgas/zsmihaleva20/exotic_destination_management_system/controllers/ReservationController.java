@@ -100,20 +100,29 @@ public class ReservationController {
     @GetMapping("/myReservations")
     public String viewUserReservations(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal(); // Взимаме текущия потребител
+        User user = (User) authentication.getPrincipal(); // Get current user
 
         List<Reservation> allReservations = reservationRepository.findByUser(user);
+        LocalDate now = LocalDate.now();
 
+        // Active Reservations: Departure AND Return Date are BOTH after today
         List<Reservation> activeReservations = allReservations.stream()
-                .filter(res -> "BOOKED".equals(res.getStatus()) && res.getDestination().getDateOfDeparture().isBefore(LocalDate.now()))
+                .filter(res -> "BOOKED".equals(res.getStatus()) &&
+                        res.getDestination().getDateOfDeparture().isAfter(now) &&
+                        res.getDestination().getDateOfReturn().isAfter(now))
                 .toList();
 
+        // Canceled Reservations
         List<Reservation> canceledReservations = allReservations.stream()
                 .filter(res -> "CANCELED".equals(res.getStatus()))
                 .toList();
 
+        // Past Reservations: Departure and Return Date are BOTH before today OR ONLY Departure is before today
         List<Reservation> pastReservations = allReservations.stream()
-                .filter(res -> "BOOKED".equals(res.getStatus()) && res.getDestination().getDateOfDeparture().isAfter(LocalDate.now()))
+                .filter(res -> "BOOKED".equals(res.getStatus()) &&
+                        (res.getDestination().getDateOfDeparture().isBefore(now) ||
+                                (res.getDestination().getDateOfDeparture().isEqual(now) &&
+                                        res.getDestination().getDateOfReturn().isBefore(now))))
                 .toList();
 
         model.addAttribute("activeReservations", activeReservations);
@@ -122,5 +131,6 @@ public class ReservationController {
 
         return "myReservations";
     }
+
 
 }
