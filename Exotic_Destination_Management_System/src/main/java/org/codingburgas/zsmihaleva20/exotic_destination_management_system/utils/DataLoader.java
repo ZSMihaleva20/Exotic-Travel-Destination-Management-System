@@ -1,11 +1,14 @@
 package org.codingburgas.zsmihaleva20.exotic_destination_management_system.utils;
 
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Destination;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Promotion;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Reservation;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.User;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.DestinationRepository;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.PromotionRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.ReservationRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.UserRepository;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.PromotionService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +20,7 @@ import java.time.LocalDate;
 public class DataLoader {
 
     @Bean
-    CommandLineRunner commandLineRunner(UserRepository userRepository, PasswordEncoder passwordEncoder, DestinationRepository destinationRepository, ReservationRepository reservationRepository) {
+    CommandLineRunner commandLineRunner(UserRepository userRepository, PasswordEncoder passwordEncoder, DestinationRepository destinationRepository, ReservationRepository reservationRepository, PromotionService promotionService) {
         return args -> {
             User userOne = new User();
             User admin = new User();
@@ -26,6 +29,11 @@ public class DataLoader {
             Destination destinationOne = new Destination();
             Destination destinationTwo = new Destination();
             Destination destinationThree = new Destination();
+            Destination destinationFour = new Destination();
+            Destination destinationFive = new Destination();
+            Destination destinationSix = new Destination();
+            Destination destinationSeven = new Destination();
+            Destination destinationEight = new Destination();
 
             Reservation reservationOne = new Reservation();
             Reservation reservationTwo = new Reservation();
@@ -33,6 +41,10 @@ public class DataLoader {
             Reservation reservationFour = new Reservation();
             Reservation reservationFive = new Reservation();
             Reservation reservationSix = new Reservation();
+
+            Promotion promotionOne = new Promotion();
+            Promotion promotionTwo = new Promotion();
+            Promotion promotionThree = new Promotion();
 
             userOne.setFirstName("Zhasmina");
             userOne.setLastName("Mihaleva");
@@ -62,7 +74,9 @@ public class DataLoader {
             userRepository.save(manager);
 
             destinationOne.setName("Turciq");
-            destinationOne.setDescription("Destinaciq");
+            destinationOne.setDescription("Насладете се на уникалната турска култура, вкусна храна и красиви плажове. " +
+                    "Пакетът включва самолетни билети, настаняване в Istanbul Grand Hotel, както и закуска и вечеря. " +
+                    "Очакват ви незабравими преживявания като обиколка на историческите забележителности и разходка с лодка по Босфора.");
             destinationOne.setImageUrl("photoTwo.jpg");
             destinationOne.setPrice(1000);
             destinationOne.setStatus("ACCEPTED");
@@ -73,7 +87,9 @@ public class DataLoader {
             destinationRepository.save(destinationOne);
 
             destinationTwo.setName("Gurciq");
-            destinationTwo.setDescription("Destinaciq");
+            destinationTwo.setDescription("Райски острови с бели плажове, кристално синя вода и луксозни курорти. " +
+                    "Пакетът включва самолетни билети, настаняване в Maldives Paradise Resort и All-Inclusive изхранване (закуска, обяд, вечеря). " +
+                    "Ще можете да се насладите на гмуркане с шнорхел, разходка с яхта и спа процедури.");
             destinationTwo.setImageUrl("photoOne.jpg");
             destinationTwo.setPrice(200);
             destinationTwo.setStatus("ACCEPTED");
@@ -84,7 +100,10 @@ public class DataLoader {
             destinationRepository.save(destinationTwo);
 
             destinationThree.setName("Albania");
-            destinationThree.setDescription("Destinaciq");
+            destinationThree.setDescription("Потопете се в италианската култура, насладете се на пица, паста и невероятна архитектура. " +
+                    "Пакетът включва самолетни билети и настаняване в Rome Luxury Hotel. " +
+                    "Храната не е включена, за да имате свободата да опитате местни ресторанти. " +
+                    "Посетете Колизеума, Ватикана и Фонтан ди Треви.");
             destinationThree.setImageUrl("photoThree.jpg");
             destinationThree.setPrice(500);
             destinationThree.setStatus("ACCEPTED");
@@ -93,6 +112,78 @@ public class DataLoader {
             destinationThree.setDateOfDeparture(LocalDate.parse("2025-05-12"));
             destinationThree.setDateOfReturn(LocalDate.parse("2025-05-15"));
             destinationRepository.save(destinationThree);
+
+
+            destinationFour.setName("Egypt");
+            destinationFour.setDescription("Experience the wonder of ancient Egypt. Explore the pyramids, the Great Sphinx, and the Valley of the Kings. " +
+                    "This package includes round-trip flights, a stay at the Luxor Royal Hotel, and guided tours to iconic sites. " +
+                    "Relax by the Nile and enjoy traditional Egyptian cuisine.");
+            destinationFour.setImageUrl("photoFour.jpg");
+            destinationFour.setPrice(1200);
+            destinationFour.setStatus("ACCEPTED");
+            destinationFour.setLimitedPeople(25);
+            destinationFour.setRemainingPeople(25);
+            destinationFour.setDateOfDeparture(LocalDate.parse("2025-06-01"));
+            destinationFour.setDateOfReturn(LocalDate.parse("2025-06-10"));
+            destinationRepository.save(destinationFour);
+
+            // Destination 5 - Japan
+
+            destinationFive.setName("Japan");
+            destinationFive.setDescription("Immerse yourself in the rich culture of Japan. From bustling Tokyo to serene Kyoto, experience the best of both worlds. " +
+                    "The package includes flights, hotel stays, and a guided tour to visit the temples, Mount Fuji, and Tokyo Disneyland. " +
+                    "Enjoy sushi, ramen, and the beauty of cherry blossoms during your stay.");
+            destinationFive.setImageUrl("photoFive.jpg");
+            destinationFive.setPrice(1800);
+            destinationFive.setStatus("ACCEPTED");
+            destinationFive.setLimitedPeople(30);
+            destinationFive.setRemainingPeople(30);
+            destinationFive.setDateOfDeparture(LocalDate.parse("2025-07-15"));
+            destinationFive.setDateOfReturn(LocalDate.parse("2025-07-25"));
+            destinationRepository.save(destinationFive);
+
+            // Destination 6 - Australia
+
+            destinationSix.setName("Australia");
+            destinationSix.setDescription("Discover the wonders of Australia – from the Great Barrier Reef to the Outback. This package includes flights, accommodations at a 5-star resort, and snorkeling tours. " +
+                    "Explore the vibrant cities of Sydney and Melbourne, and enjoy the amazing wildlife and nature of the land down under.");
+            destinationSix.setImageUrl("photoSix.jpg");
+            destinationSix.setPrice(2500);
+            destinationSix.setStatus("ACCEPTED");
+            destinationSix.setLimitedPeople(35);
+            destinationSix.setRemainingPeople(35);
+            destinationSix.setDateOfDeparture(LocalDate.parse("2025-08-01"));
+            destinationSix.setDateOfReturn(LocalDate.parse("2025-08-15"));
+            destinationRepository.save(destinationSix);
+
+            // Destination 7 - Thailand
+
+            destinationSeven.setName("Thailand");
+            destinationSeven.setDescription("Escape to the tropical paradise of Thailand. Enjoy beautiful beaches, vibrant markets, and rich history. " +
+                    "This package includes flights, stays at luxury resorts in Phuket and Bangkok, and cultural tours. " +
+                    "Indulge in traditional Thai massages and explore ancient temples.");
+            destinationSeven.setImageUrl("photoSeven.jpg");
+            destinationSeven.setPrice(1500);
+            destinationSeven.setStatus("ACCEPTED");
+            destinationSeven.setLimitedPeople(40);
+            destinationSeven.setRemainingPeople(40);
+            destinationSeven.setDateOfDeparture(LocalDate.parse("2025-09-05"));
+            destinationSeven.setDateOfReturn(LocalDate.parse("2025-09-12"));
+            destinationRepository.save(destinationSeven);
+
+            // Destination 8 - Brazil
+
+            destinationEight.setName("Brazil");
+            destinationEight.setDescription("Visit the vibrant cities of Rio de Janeiro and São Paulo, explore the Amazon rainforest, and enjoy world-class beaches. " +
+                    "The package includes flights, hotel accommodations, and an unforgettable experience during the Carnival season in Rio.");
+            destinationEight.setImageUrl("photoEight.jpg");
+            destinationEight.setPrice(2200);
+            destinationEight.setStatus("ACCEPTED");
+            destinationEight.setLimitedPeople(20);
+            destinationEight.setRemainingPeople(20);
+            destinationEight.setDateOfDeparture(LocalDate.parse("2025-10-10"));
+            destinationEight.setDateOfReturn(LocalDate.parse("2025-10-20"));
+            destinationRepository.save(destinationEight);
 
             reservationOne.setDestination(destinationOne);
             reservationOne.setUser(userOne);
@@ -147,6 +238,12 @@ public class DataLoader {
             reservationSix.setStatus("BOOKED");
 
             reservationRepository.save(reservationSix);
+
+            promotionService.createPromotion(destinationSeven.getId(), 20.00);
+            promotionService.createPromotion(destinationSix.getId(), 10.00);
+            promotionService.createPromotion(destinationEight.getId(), 15.00);
+
+
         };
     }
 }

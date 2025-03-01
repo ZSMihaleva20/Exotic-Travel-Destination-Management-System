@@ -58,6 +58,12 @@ public class Destination {
     @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rating> ratings;
 
+    @Column(nullable = false)
+    private boolean isOnPromotion = false;
+
+    @OneToOne(mappedBy = "destination", cascade = CascadeType.ALL)
+    private Promotion promotion;
+
     public double getAverageRating() {
         this.averageRating = ratingCount == 0 ? 0 : Math.round((double) ratingSum / ratingCount * 10.0) / 10.0;
         return this.averageRating;
@@ -108,7 +114,7 @@ public class Destination {
         this.status = status;
     }
 
-    public Destination(Long id, String name, String description, String imageUrl, double price, int limitedPeople, String status, int remainingPeople, int ratingSum, int ratingCount, int popularity, double averageRating, LocalDate dateOfDeparture, LocalDate dateOfReturn) {
+    public Destination(Long id, String name, String description, String imageUrl, double price, int limitedPeople, String status, int remainingPeople, int ratingSum, int ratingCount, int popularity, double averageRating, LocalDate dateOfDeparture, LocalDate dateOfReturn, boolean isOnPromotion) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -123,6 +129,7 @@ public class Destination {
         this.averageRating = averageRating;
         this.dateOfDeparture = dateOfDeparture;
         this.dateOfReturn = dateOfReturn;
+        this.isOnPromotion = isOnPromotion;
     }
 
     public Destination() {
@@ -140,6 +147,7 @@ public class Destination {
         this.averageRating = 0;
         this.dateOfDeparture = LocalDate.now();
         this.dateOfReturn = LocalDate.now();
+        this.isOnPromotion = false;
     }
 
     // Add Getters and Setters
@@ -246,5 +254,13 @@ public class Destination {
 
     public void setRatings(List<Rating> ratings) {
         this.ratings = ratings;
+    }
+
+    public boolean isOnPromotion() {
+        return isOnPromotion;
+    }
+
+    public void setOnPromotion(boolean onPromotion) {
+        isOnPromotion = onPromotion;
     }
 }

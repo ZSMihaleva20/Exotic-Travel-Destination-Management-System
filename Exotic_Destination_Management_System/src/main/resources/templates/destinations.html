@@ -226,6 +226,17 @@
       background: #e17055;
     }
 
+    /* Specific styles for the destination description list */
+    .destination-description-list {
+      list-style: none;
+    }
+
+    .destination-description-list li::before {
+      content: "📍";
+      font-size: 18px;
+      margin-right: 10px;
+    }
+
   </style>
 </head>
 <body>
@@ -277,9 +288,12 @@
     </form>
     <ul>
       <th:block th:each="destination : ${acceptedDestinations}">
+        <th:block th:if="${!destination.isOnPromotion}">
         <li>
           <h2 th:text="${destination.name}"></h2>
-          <p th:text="${destination.description}"></p>
+          <ul class="destination-description-list"
+              th:utext="${#strings.listJoin(#strings.arraySplit(destination.description, '\\.'), '</li><li>') + '.'}">
+          </ul>
           <p>Departure date: <span th:text="${#temporals.format(destination.dateOfDeparture, 'dd MMMM yyyy')}"></span></p>
           <p>Return date: <span th:text="${#temporals.format(destination.dateOfReturn, 'dd MMMM yyyy')}"></span></p>
           <img th:src="'/uploaded-image/' + ${destination.imageUrl}" alt="Destination Image">
@@ -292,6 +306,7 @@
             <button th:disabled="${destination.remainingPeople == 0}">Make a Reservation</button>
           </a>
         </li>
+      </th:block>
       </th:block>
     </ul>
   </div>

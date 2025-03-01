@@ -85,6 +85,7 @@ public class DestinationManagementController {
             destination.setStatus("PENDING-ACCEPT");
         }
 
+
         destinationService.saveDestination(destination);
         return "redirect:/destinationManagement";
     }
