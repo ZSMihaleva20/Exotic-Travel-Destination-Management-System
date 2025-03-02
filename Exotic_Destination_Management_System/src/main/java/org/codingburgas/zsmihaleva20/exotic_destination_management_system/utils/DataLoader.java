@@ -42,10 +42,6 @@ public class DataLoader {
             Reservation reservationFive = new Reservation();
             Reservation reservationSix = new Reservation();
 
-            Promotion promotionOne = new Promotion();
-            Promotion promotionTwo = new Promotion();
-            Promotion promotionThree = new Promotion();
-
             userOne.setFirstName("Zhasmina");
             userOne.setLastName("Mihaleva");
             userOne.setEmail("robocrforbulgaria@gmail.com");
@@ -191,8 +187,11 @@ public class DataLoader {
             reservationOne.setDestinationRated(false);
             reservationOne.setTotalPrice(10000);
             reservationOne.setStatus("BOOKED");
+            destinationOne.setRemainingPeople(destinationOne.getRemainingPeople() - reservationOne.getNumberOfPeople());
+            destinationOne.setPopularity(destinationOne.getPopularity() + reservationOne.getNumberOfPeople());
 
             reservationRepository.save(reservationOne);
+            destinationRepository.save(destinationOne);
 
             reservationTwo.setDestination(destinationTwo);
             reservationTwo.setUser(userOne);
@@ -200,8 +199,11 @@ public class DataLoader {
             reservationTwo.setDestinationRated(false);
             reservationTwo.setTotalPrice(344);
             reservationTwo.setStatus("BOOKED");
+            destinationTwo.setRemainingPeople(destinationTwo.getRemainingPeople() - reservationTwo.getNumberOfPeople());
+            destinationTwo.setPopularity(destinationTwo.getPopularity() + reservationTwo.getNumberOfPeople());
 
             reservationRepository.save(reservationTwo);
+            destinationRepository.save(destinationTwo);
 
             reservationThree.setDestination(destinationThree);
             reservationThree.setUser(userOne);
@@ -209,8 +211,11 @@ public class DataLoader {
             reservationThree.setDestinationRated(false);
             reservationThree.setTotalPrice(1500);
             reservationThree.setStatus("BOOKED");
+            destinationThree.setRemainingPeople(destinationThree.getRemainingPeople() - reservationThree.getNumberOfPeople());
+            destinationThree.setPopularity(destinationThree.getPopularity() + reservationThree.getNumberOfPeople());
 
             reservationRepository.save(reservationThree);
+            destinationRepository.save(destinationThree);
 
             reservationFour.setDestination(destinationOne);
             reservationFour.setUser(userOne);
@@ -218,8 +223,11 @@ public class DataLoader {
             reservationFour.setDestinationRated(false);
             reservationFour.setTotalPrice(1500);
             reservationFour.setStatus("BOOKED");
+            destinationOne.setRemainingPeople(destinationOne.getRemainingPeople() - reservationFour.getNumberOfPeople());
+            destinationOne.setPopularity(destinationOne.getPopularity() + reservationFour.getNumberOfPeople());
 
             reservationRepository.save(reservationFour);
+            destinationRepository.save(destinationOne);
 
             reservationFive.setDestination(destinationTwo);
             reservationFive.setUser(userOne);
@@ -227,8 +235,11 @@ public class DataLoader {
             reservationFive.setDestinationRated(false);
             reservationFive.setTotalPrice(1400);
             reservationFive.setStatus("BOOKED");
+            destinationTwo.setRemainingPeople(destinationTwo.getRemainingPeople() - reservationFive.getNumberOfPeople());
+            destinationTwo.setPopularity(destinationTwo.getPopularity() + reservationFive.getNumberOfPeople());
 
             reservationRepository.save(reservationFive);
+            destinationRepository.save(destinationTwo);
 
             reservationSix.setDestination(destinationThree);
             reservationSix.setUser(userOne);
@@ -236,8 +247,11 @@ public class DataLoader {
             reservationSix.setDestinationRated(false);
             reservationSix.setTotalPrice(1500);
             reservationSix.setStatus("BOOKED");
+            destinationThree.setRemainingPeople(destinationThree.getRemainingPeople() - reservationSix.getNumberOfPeople());
+            destinationThree.setPopularity(destinationThree.getPopularity() + reservationSix.getNumberOfPeople());
 
             reservationRepository.save(reservationSix);
+            destinationRepository.save(destinationThree);
 
             promotionService.createPromotion(destinationSeven.getId(), 20.00);
             promotionService.createPromotion(destinationSix.getId(), 10.00);
