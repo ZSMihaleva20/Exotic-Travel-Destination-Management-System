@@ -1,9 +1,17 @@
 package org.codingburgas.zsmihaleva20.exotic_destination_management_system.services;
 
+
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.borders.SolidBorder;
+import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeBodyPart;
@@ -14,6 +22,8 @@ import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Properties;
 
 @Service
@@ -111,21 +121,91 @@ public class MailService {
         Transport.send(message);
     }
 
-    private File generateReservationPdf(Reservation reservation, User user) throws MessagingException, IOException {
+
+    public byte[] generateReservationPdf(Reservation reservation, User user) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
-        Document document = new Document(new PdfDocument(writer));
-        document.add(new Paragraph("Reservation Confirmation"));
-        document.add(new Paragraph("Client: " + user.getFirstName() + " " + user.getLastName()));
-        document.add(new Paragraph("Email: " + user.getEmail()));
-        document.add(new Paragraph("Destination: " + reservation.getDestination().getName()));
-        document.add(new Paragraph("Number of people: " + reservation.getNumberOfPeople()));
-        document.add(new Paragraph("Price: " + reservation.getTotalPrice() + "lv"));
+        PdfDocument pdfDocument = new PdfDocument(writer);
+        Document document = new Document(pdfDocument);
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.forLanguageTag("bg"));
+
+        // Load font that supports UTF-8 and Cyrillic (Noto Sans recommended)
+        PdfFont utf8Font = PdfFontFactory.createFont("C:/Windows/Fonts/times.ttf");
+
+        // Define colors
+        DeviceRgb beigeColor = new DeviceRgb(245, 245, 220);
+        DeviceRgb blackColor = new DeviceRgb(0, 0, 0);
+
+        // Header
+        document.add(new Paragraph("Информация за резервацията")  // Bulgarian text for "Reservation Information"
+                .setFont(utf8Font)
+                .setFontSize(18)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setMarginBottom(20));
+
+        // Client Information
+        Table clientTable = new Table(UnitValue.createPercentArray(new float[]{1, 2}))
+                .useAllAvailableWidth()
+                .setMarginBottom(10);
+
+        clientTable.addCell(new Cell().add(new Paragraph("Клиент:").setFont(utf8Font)).setBorder(Border.NO_BORDER));
+        clientTable.addCell(new Cell().add(new Paragraph(user.getFirstName() + " " + user.getLastName()).setFont(utf8Font)).setBorder(Border.NO_BORDER));
+
+        clientTable.addCell(new Cell().add(new Paragraph("Имейл:").setFont(utf8Font)).setBorder(Border.NO_BORDER));
+        clientTable.addCell(new Cell().add(new Paragraph(user.getEmail()).setFont(utf8Font)).setBorder(Border.NO_BORDER));
+
+        document.add(clientTable);
+
+        // Reservation Details
+        Table detailsTable = new Table(UnitValue.createPercentArray(new float[]{1, 2}))
+                .useAllAvailableWidth()
+                .setBorder(new SolidBorder(blackColor, 1))
+                .setMarginBottom(20);
+
+        detailsTable.addCell(new Cell().add(new Paragraph("Дестинация:").setFont(utf8Font)).setBackgroundColor(beigeColor).setBorder(new SolidBorder(blackColor, 1)));
+        detailsTable.addCell(new Cell().add(new Paragraph(reservation.getDestination().getName()).setFont(utf8Font)).setBorder(new SolidBorder(blackColor, 1)));
+
+        detailsTable.addCell(new Cell().add(new Paragraph("Брой хора:").setFont(utf8Font)).setBackgroundColor(beigeColor).setBorder(new SolidBorder(blackColor, 1)));
+        detailsTable.addCell(new Cell().add(new Paragraph(String.valueOf(reservation.getNumberOfPeople())).setFont(utf8Font)).setBorder(new SolidBorder(blackColor, 1)));
+
+        detailsTable.addCell(new Cell().add(new Paragraph("Цена:").setFont(utf8Font)).setBackgroundColor(beigeColor).setBorder(new SolidBorder(blackColor, 1)));
+        detailsTable.addCell(new Cell().add(new Paragraph(reservation.getTotalPrice() + " лв").setFont(utf8Font)).setBorder(new SolidBorder(blackColor, 1)));
+
+        detailsTable.addCell(new Cell().add(new Paragraph("Дата на заминаване:").setFont(utf8Font)).setBackgroundColor(beigeColor).setBorder(new SolidBorder(blackColor, 1)));
+        detailsTable.addCell(new Cell().add(new Paragraph(reservation.getDestination().getDateOfDeparture().format(dateFormatter)).setFont(utf8Font)).setBorder(new SolidBorder(blackColor, 1)));
+
+        detailsTable.addCell(new Cell().add(new Paragraph("Дата на връщане:").setFont(utf8Font)).setBackgroundColor(beigeColor).setBorder(new SolidBorder(blackColor, 1)));
+        detailsTable.addCell(new Cell().add(new Paragraph(reservation.getDestination().getDateOfReturn().format(dateFormatter)).setFont(utf8Font)).setBorder(new SolidBorder(blackColor, 1)));
+
+        document.add(detailsTable);
+
+        // Description with Bullet Points (Ensuring Bulgarian characters work)
+        if (reservation.getDestination().getDescription() != null && !reservation.getDestination().getDescription().isEmpty()) {
+            document.add(new Paragraph("Описание:").setFont(utf8Font).setMarginBottom(5));
+
+            List descriptionList = new List();
+            String[] bulletPoints = reservation.getDestination().getDescription().split("\\.");
+            for (String point : bulletPoints) {
+                if (!point.trim().isEmpty()) {
+                    descriptionList.add((ListItem) new ListItem(point.trim() + ".").setFont(utf8Font));
+                }
+            }
+            document.add(descriptionList);
+        }
+
+        // Footer
+        document.add(new Paragraph("Благодарим Ви, че направихте резервация при нас!")  // "Thank you for booking with us!"
+                .setFont(utf8Font)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setMarginTop(20));
+
         document.close();
-        File file = new File(String.format("reservation_%d.pdf", reservation.getId())); // save it somewhere else...
-        byteArrayOutputStream.writeTo(new FileOutputStream(file));
-        return file;
+
+        // Save file
+        return byteArrayOutputStream.toByteArray();
     }
+
 
     private Properties getMailProperties() {
         Properties prop = new Properties();

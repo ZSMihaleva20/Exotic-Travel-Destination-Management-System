@@ -18,6 +18,7 @@
         <th>Total Price</th>
         <th>Status</th>
         <th>Action</th>
+        <th></th>
     </tr>
     <th:block th:each="reservation : ${activeReservations}">
         <tr>
@@ -30,6 +31,11 @@
             <td>
                 <form th:action="@{/cancel-reservation/{id}(id=${reservation.id})}" method="post">
                     <button type="submit">Cancel</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{/download-reservation/{id}(id=${reservation.id})}" method="get">
+                    <button type="submit">Download PDF</button>
                 </form>
             </td>
         </tr>

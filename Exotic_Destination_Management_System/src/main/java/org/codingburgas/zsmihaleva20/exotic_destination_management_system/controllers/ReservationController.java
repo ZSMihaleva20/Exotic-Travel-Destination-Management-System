@@ -7,6 +7,11 @@ import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.DestinationRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.ReservationRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.MailService;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,6 +21,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -130,6 +137,24 @@ public class ReservationController {
         model.addAttribute("pastReservations", pastReservations);
 
         return "myReservations";
+    }
+
+    @GetMapping("/download-reservation/{id}")
+    public ResponseEntity<Resource> downloadReservationPdf(@PathVariable Long id) throws IOException, MessagingException {
+        Reservation reservation = reservationRepository.findById(id).orElseThrow();
+        User user = reservation.getUser();
+
+        // Generate the PDF as a byte array (not saved to file)
+        byte[] pdfBytes = mailService.generateReservationPdf(reservation, user);
+
+        // Create a resource from the byte array
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(pdfBytes));
+
+        // Return the PDF as a downloadable file
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=reservation_" + id + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(resource);
     }
 
 
