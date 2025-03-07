@@ -8,6 +8,7 @@ import org.codingburgas.zsmihaleva20.exotic_destination_management_system.reposi
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.RatingRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.ReservationRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.UserRepository;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +35,9 @@ public class RatingController {
 
     @Autowired
     private RatingRepository ratingRepository;
+
+    @Autowired
+    private RatingService ratingService;
 
     @GetMapping("/rateDestination")
     public String showRatingPage(Model model) {
@@ -68,9 +72,7 @@ public class RatingController {
 
                     Rating rating = new Rating(destination, user, stars, comment);
                     rating.setTimestamp(LocalDateTime.now());
-                    ratingRepository.save(rating);
-
-                    destination.addRating(stars);
+                    ratingService.saveRating(rating);
                     destinationRepository.save(destination);
                     break;
                 }
@@ -107,18 +109,17 @@ public class RatingController {
             Rating rating = ratingOpt.get();
             Destination destination = rating.getDestination();
             User user = rating.getUser();
-
-            // Remove rating from the destination
-            destination.setRatingSum(destination.getRatingSum() - rating.getStars());
-            destination.setRatingCount(destination.getRatingCount() - 1);
-
-            // Ensure rating count doesn't go negative
-            if (destination.getRatingCount() < 0) {
-                destination.setRatingCount(0);
-            }
+//
+//            // Remove rating from the destination
+//            destination.setRatingSum(destination.getRatingSum() - rating.getStars());
+//            destination.setRatingCount(destination.getRatingCount() - 1);
+//
+//            // Ensure rating count doesn't go negative
+//            if (destination.getRatingCount() < 0) {
+//                destination.setRatingCount(0);
+//            }
 
             // Recalculate the average rating
-            destination.getAverageRating();
 
             // Save the updated destination
             destinationRepository.save(destination);
@@ -136,6 +137,11 @@ public class RatingController {
 
             // Delete the rating from the database
             ratingRepository.delete(rating);
+
+            var averageRatings = ratingRepository.getAverageRatingByDestination(destination.getId());
+
+            destination.setAverageRating(averageRatings == null ? 0 : averageRatings);
+            destinationRepository.save(destination);
         }
 
         return "redirect:/ratingManagement";

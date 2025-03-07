@@ -1,6 +1,7 @@
 package org.codingburgas.zsmihaleva20.exotic_destination_management_system.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CurrentTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -27,6 +28,7 @@ public class Rating {
     private String comment;
 
     @Column(nullable = false, updatable = false)
+    @CurrentTimestamp
     private LocalDateTime timestamp;
 
     public Rating() {}

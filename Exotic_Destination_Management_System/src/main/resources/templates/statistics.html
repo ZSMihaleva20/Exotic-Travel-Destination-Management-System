@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Statistics</title>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -207,6 +208,21 @@
         </div>
     </div>
 </header>
+
+<div>
+    <canvas id="demo-chart"></canvas>
+</div>
+<script th:inline="javascript">
+    const destinationRatings = /*[[${destinationRatings}]]*/{};
+    const destinationLabels = destinationRatings.map(d => {
+        return d.name;
+    });
+
+    const ratings = destinationRatings.map(d => {
+        return d.rating;
+    });
+</script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const listItems = document.querySelectorAll("li");
@@ -246,27 +262,27 @@
         });
     });
 
-    document.addEventListener("DOMContentLoaded", function () {
-        let departureInput = document.getElementById("startDate");
-        let returnInput = document.getElementById("endDate");
+    // charts
+    const ctx = document.getElementById('demo-chart');
 
-        departureInput.addEventListener("change", function () {
-            if (departureInput.value) {
-                returnInput.min = departureInput.value; // Set return date min to departure date
-            }
-            if (returnInput.value && departureInput.value > returnInput.value) {
-                alert("Departure date cannot be after the return date!");
-                departureInput.value = ""; // Reset invalid departure date
-            }
-        });
-
-        returnInput.addEventListener("change", function () {
-            if (departureInput.value && returnInput.value < departureInput.value) {
-                alert("Return date must be after the departure date!");
-                returnInput.value = ""; // Reset invalid return date
-            }
-        });
-    });
+    new Chart(ctx, {
+    type: 'bar',
+    data: {
+    labels: destinationLabels,
+    datasets: [{
+    label: '# of Votes',
+    data: ratings,
+    borderWidth: 1
+}]
+},
+    options: {
+    scales: {
+    y: {
+    beginAtZero: true
+}
+}
+}
+});
 </script>
 </body>
 </html>

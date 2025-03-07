@@ -3,6 +3,7 @@ package org.codingburgas.zsmihaleva20.exotic_destination_management_system.model
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,11 +41,7 @@ public class Destination {
     @Column(nullable = false)
     private boolean editApproved = false;
 
-    private int ratingSum = 0;
-
-    private int ratingCount = 0;
-
-    @Column(nullable = false)
+    @Column()
     private double averageRating = 0;
 
     @Column(nullable = false)
@@ -57,7 +54,7 @@ public class Destination {
     private LocalDate dateOfReturn;
 
     @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Rating> ratings;
+    private List<Rating> ratings = new ArrayList<>();
 
     @Column(nullable = false)
     private boolean isOnPromotion = false;
@@ -66,14 +63,7 @@ public class Destination {
     private Promotion promotion;
 
     public double getAverageRating() {
-        this.averageRating = ratingCount == 0 ? 0 : Math.round((double) ratingSum / ratingCount * 10.0) / 10.0;
         return this.averageRating;
-    }
-
-    public void addRating(int rating) {
-        this.ratingSum += rating;
-        this.ratingCount++;
-        getAverageRating(); // Automatically updates the average rating field
     }
 
     public int getPopularity() {
@@ -124,8 +114,6 @@ public class Destination {
         this.limitedPeople = limitedPeople;
         this.status = status;
         this.remainingPeople = remainingPeople;
-        this.ratingSum = ratingSum;
-        this.ratingCount = ratingCount;
         this.popularity = popularity;
         this.averageRating = averageRating;
         this.dateOfDeparture = dateOfDeparture;
@@ -142,8 +130,6 @@ public class Destination {
         this.limitedPeople = 0;
         this.status = "PENDING-ACCEPT";
         this.remainingPeople = 0;
-        this.ratingSum = 0;
-        this.ratingCount = 0;
         this.popularity = 0;
         this.averageRating = 0;
         this.dateOfDeparture = LocalDate.now();
@@ -225,21 +211,6 @@ public class Destination {
         this.remainingPeople = remainingPeople;
     }
 
-    public int getRatingSum() {
-        return ratingSum;
-    }
-
-    public void setRatingSum(int ratingSum) {
-        this.ratingSum = ratingSum;
-    }
-
-    public int getRatingCount() {
-        return ratingCount;
-    }
-
-    public void setRatingCount(int ratingCount) {
-        this.ratingCount = ratingCount;
-    }
 
     public void setAverageRating(double averageRating) {
         this.averageRating = averageRating;
@@ -249,19 +220,16 @@ public class Destination {
         this.popularity = popularity;
     }
 
-    public List<Rating> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(List<Rating> ratings) {
-        this.ratings = ratings;
-    }
-
     public boolean isOnPromotion() {
         return isOnPromotion;
     }
 
     public void setOnPromotion(boolean onPromotion) {
         isOnPromotion = onPromotion;
+    }
+
+    public void addRating(Rating rating) {
+        this.ratings.add(rating);
+        rating.setDestination(this);
     }
 }

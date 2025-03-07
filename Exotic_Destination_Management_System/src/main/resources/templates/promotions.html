@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Promotions and campaigns</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <style>
         /* Reuse general styles from destinations.html */
@@ -228,9 +228,15 @@
                     <p>Discount: <span th:text="${promotion.discountPercentage} + '%'"></span></p>
                     <p>Average Rating: <span th:text="${promotion.destination.getAverageRating()}"></span> &#11088;</p>
                     <p>Popularity: <span th:text="${promotion.destination.getPopularity()}"></span> people reserved</p>
-                    <a th:href="@{/reservation/{id}(id=${promotion.destination.id})}">
-                        <button th:disabled="${promotion.destination.remainingPeople == 0}">Make a Reservation</button>
-                    </a>
+                    <th:block th:if="${promotion.destination.remainingPeople == 0 or promotion.destination.dateOfReturn < T(java.time.LocalDate).now()}">
+                        <p style="color: red; font-weight: bold;">Reservation Closed</p>
+                    </th:block>
+                    <th:block th:unless="${promotion.destination.remainingPeople == 0 or promotion.destination.dateOfReturn < T(java.time.LocalDate).now()}">
+                        <a th:href="@{/reservation/{id}(id=${promotion.destination.id})}">
+                            <button class="reservation-button">Make reservation</button>
+                        </a>
+                    </th:block>
+
                 </li>
             </th:block>
         </th:block>

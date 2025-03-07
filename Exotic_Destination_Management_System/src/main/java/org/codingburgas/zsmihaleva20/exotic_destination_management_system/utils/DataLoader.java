@@ -1,14 +1,9 @@
 package org.codingburgas.zsmihaleva20.exotic_destination_management_system.utils;
 
-import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Destination;
-import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Promotion;
-import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Reservation;
-import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.User;
-import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.DestinationRepository;
-import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.PromotionRepository;
-import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.ReservationRepository;
-import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.UserRepository;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.*;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.*;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.PromotionService;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.RatingService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +15,7 @@ import java.time.LocalDate;
 public class DataLoader {
 
     @Bean
-    CommandLineRunner commandLineRunner(UserRepository userRepository, PasswordEncoder passwordEncoder, DestinationRepository destinationRepository, ReservationRepository reservationRepository, PromotionService promotionService) {
+    CommandLineRunner commandLineRunner(UserRepository userRepository, PasswordEncoder passwordEncoder, DestinationRepository destinationRepository, ReservationRepository reservationRepository, RatingRepository ratingRepository, PromotionService promotionService, RatingService ratingService) {
         return args -> {
             User userOne = new User();
             User admin = new User();
@@ -41,6 +36,8 @@ public class DataLoader {
             Reservation reservationFour = new Reservation();
             Reservation reservationFive = new Reservation();
             Reservation reservationSix = new Reservation();
+
+            Rating ratingOne = new Rating();
 
             userOne.setFirstName("Zhasmina");
             userOne.setLastName("Mihaleva");
@@ -78,8 +75,9 @@ public class DataLoader {
             destinationOne.setStatus("ACCEPTED");
             destinationOne.setLimitedPeople(28);
             destinationOne.setRemainingPeople(28);
-            destinationOne.setDateOfDeparture(LocalDate.parse("2025-03-25"));
-            destinationOne.setDateOfReturn(LocalDate.parse("2025-03-28"));
+            destinationOne.setDateOfDeparture(LocalDate.parse("2025-02-25"));
+            destinationOne.setDateOfReturn(LocalDate.parse("2025-02-28"));
+
             destinationRepository.save(destinationOne);
 
             destinationTwo.setName("Gurciq");
@@ -184,7 +182,7 @@ public class DataLoader {
             reservationOne.setDestination(destinationOne);
             reservationOne.setUser(userOne);
             reservationOne.setNumberOfPeople(5);
-            reservationOne.setDestinationRated(false);
+            reservationOne.setDestinationRated(true);
             reservationOne.setTotalPrice(10000);
             reservationOne.setStatus("BOOKED");
             destinationOne.setRemainingPeople(destinationOne.getRemainingPeople() - reservationOne.getNumberOfPeople());
@@ -258,6 +256,19 @@ public class DataLoader {
             promotionService.createPromotion(destinationEight.getId(), 15.00);
 
 
+            ratingOne.setStars(5);
+            ratingOne.setDestination(destinationOne);
+            ratingOne.setComment("Чудесно обслужване");
+
+            ratingOne.setUser(userOne);
+
+            reservationOne.setDestinationRating(ratingOne.getStars());
+            reservationOne.setComment(ratingOne.getComment());
+
+            reservationRepository.save(reservationOne);
+
+
+            ratingService.saveRating(ratingOne);
         };
     }
 }
