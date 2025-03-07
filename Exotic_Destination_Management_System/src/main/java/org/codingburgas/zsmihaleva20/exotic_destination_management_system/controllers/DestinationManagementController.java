@@ -1,7 +1,9 @@
 package org.codingburgas.zsmihaleva20.exotic_destination_management_system.controllers;
 
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Destination;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.User;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.DestinationService;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -9,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,9 +31,11 @@ public class DestinationManagementController {
 
     @Autowired
     private final DestinationService destinationService;
+    private final UserService userService;
 
-    public DestinationManagementController(DestinationService destinationService) {
+    public DestinationManagementController(DestinationService destinationService, UserService userService) {
         this.destinationService = destinationService;
+        this.userService = userService;
     }
 
     @GetMapping("/destinationManagement")
@@ -190,10 +195,12 @@ public class DestinationManagementController {
             @RequestParam(value = "sortBy", required = false, defaultValue = "none") String sortBy,
             @RequestParam(value = "dateOfDeparture", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateOfDeparture,
             @RequestParam(value = "dateOfReturn", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateOfReturn,
-            Model model) {
+            Model model, @AuthenticationPrincipal User user) {
 
         List<Destination> filteredAndSortedDestinations = destinationService.getFilteredAndSortedDestinations(
                 keyword, minPrice, maxPrice, minRating, sortBy, dateOfDeparture, dateOfReturn);
+
+        model.addAttribute("user", user);
 
         model.addAttribute("acceptedDestinations", filteredAndSortedDestinations);
         model.addAttribute("currentSort", sortBy);

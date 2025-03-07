@@ -29,7 +29,7 @@
             <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
             <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
-            <td th:text="${reservation.totalPrice} + ' lv.'"></td>
+            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 1, 2)} + ' lv.'"></td>
             <td th:text="${reservation.status}"></td>
             <td>
                 <form th:action="@{/cancelReservation/{id}(id=${reservation.id})}" method="post">
@@ -61,7 +61,7 @@
             <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
             <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
-            <td th:text="${reservation.totalPrice} + ' lv.'"></td>
+            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 1, 2)} + ' lv.'"></td>
             <td th:text="${reservation.status}"></td>
         </tr>
     </th:block>
@@ -88,7 +88,7 @@
             <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
             <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
-            <td th:text="${reservation.totalPrice} + ' lv.'"></td>
+            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 1, 2)} + ' lv.'"></td>
             <td>Past</td>
         </tr>
     </th:block>

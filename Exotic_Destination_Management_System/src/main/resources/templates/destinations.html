@@ -237,17 +237,63 @@
       margin-right: 10px;
     }
 
+    /* Top Navigation Styles */
+    .top-nav {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .top-nav a {
+      text-decoration: none;
+      color: white;
+      background: linear-gradient(90deg, #4facfe, #00f2fe);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
+      margin: 10px;
+      display: inline-block;
+    }
+
+    .top-nav a:hover {
+      background: linear-gradient(90deg, #00f2fe, #4facfe);
+      transform: scale(1.05);
+    }
+
+
   </style>
 </head>
 <body>
 <header>
   <h1>Destinations</h1>
+  <nav class="top-nav">
+    <a href="/destinations">Destinations</a>
+    <a href="/promotions">Promotions and Campaigns</a>
+    <a href="/statistics">Statistics</a>
+  </nav>
   <div class="user-menu">
     <span class="material-symbols-outlined user-icon">account_circle</span>
     <div class="dropdown-menu" id="dropdownMenu">
       <a href="/profile">Profile</a>
-      <a href="/myReservations">My reservations</a>
-      <a href="/rateDestination">Rate your destinations</a>
+
+      <!-- Admin & Manager -->
+      <th:block th:if="${#strings.equals(user.role, 'ADMIN') or #strings.equals(user.role, 'MANAGER')}">
+        <a href="/destinationManagement">Manage Destinations</a>
+        <a href="/ratingManagement">Manage Ratings</a>
+        <a href="/reservationManagement">Manage Reservations</a>
+      </th:block>
+
+      <!-- Admin Only -->
+      <th:block th:if="${#strings.equals(user.role, 'ADMIN')}">
+        <a href="/profilesManagement">Manage Profiles</a>
+      </th:block>
+
+      <!-- User Only -->
+      <th:block th:if="${#strings.equals(user.role, 'USER')}">
+        <a href="/myReservations">My Reservations</a>
+        <a href="/rateDestination">Rate Your Destinations</a>
+      </th:block>
+
       <a href="/logout">Log out</a>
     </div>
   </div>

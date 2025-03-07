@@ -4,14 +4,13 @@ import org.codingburgas.zsmihaleva20.exotic_destination_management_system.config
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.User;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AuthorizationController {
@@ -36,16 +35,7 @@ public class AuthorizationController {
 
     @GetMapping("/")
     public String index() {
-        return "index";
-    }
-
-    @GetMapping("/home")
-    public String home(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
-
-        model.addAttribute("user", userService.getUserByUsername(currentPrincipalName));
-        return "home";
+        return "login";
     }
 
     @GetMapping("/register")
@@ -64,4 +54,10 @@ public class AuthorizationController {
     public String login() {
         return "login";
     }
+    @GetMapping("/profile")
+    public String userProfile(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("user", user);
+        return "profile";
+    }
+
 }

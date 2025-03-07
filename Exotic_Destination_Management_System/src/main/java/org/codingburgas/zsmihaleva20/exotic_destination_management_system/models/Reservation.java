@@ -3,6 +3,7 @@ package org.codingburgas.zsmihaleva20.exotic_destination_management_system.model
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "Reservations")
 public class Reservation {
 
     @Id

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>Promotions and campaigns</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8">
+    <title>Statistics</title>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <style>
-        /* Reuse general styles from destinations.html */
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(to right, #74ebd5, #acb6e5);
@@ -135,7 +134,7 @@
             font-size: 18px;
             margin-right: 10px;
         }
-         button {
+        button {
             font-size: 16px;
             padding: 8px 15px;
             border-radius: 8px;
@@ -146,7 +145,7 @@
             transition: background 0.3s;
         }
 
-         button:hover {
+        button:hover {
             background: #e17055;
         }
 
@@ -175,7 +174,7 @@
 </head>
 <body>
 <header>
-    <h1>Promotions and Campaigns</h1>
+    <h1>Statistics</h1>
     <nav class="top-nav">
         <a href="/destinations">Destinations</a>
         <a href="/promotions">Promotions and Campaigns</a>
@@ -208,35 +207,6 @@
         </div>
     </div>
 </header>
-
-<main>
-    <ul>
-        <th:block th:each="promotion : ${promotions}">
-            <th:block th:if="${promotion.destination.isOnPromotion}">
-                <li>
-                    <h2 th:text="${promotion.destination.name}"></h2>
-                    <ul class="destination-description-list"
-                        th:utext="${#strings.listJoin(#strings.arraySplit(promotion.destination.description, '\\.'), '</li><li>') + '.'}">
-                    </ul>
-                    <p>Departure date: <span th:text="${#temporals.format(promotion.destination.dateOfDeparture, 'dd MMMM yyyy')}"></span></p>
-                    <p>Return date: <span th:text="${#temporals.format(promotion.destination.dateOfReturn, 'dd MMMM yyyy')}"></span></p>
-                    <img th:src="'/uploaded-image/' + ${promotion.destination.imageUrl}" alt="Destination Image">
-                    <p>Max people: <span th:text="${promotion.destination.limitedPeople}"></span></p>
-                    <p>Remaining spots: <span th:text="${promotion.destination.remainingPeople}"></span></p>
-                    <p>Old Price: <span th:text="${#numbers.formatDecimal(promotion.oldPrice, 2, 2)}"></span> lv.</p>
-                    <p>New Price: <span th:text="${#numbers.formatDecimal(promotion.newPrice, 2, 2)}"></span> lv.</p>
-                    <p>Discount: <span th:text="${promotion.discountPercentage} + '%'"></span></p>
-                    <p>Average Rating: <span th:text="${promotion.destination.getAverageRating()}"></span> &#11088;</p>
-                    <p>Popularity: <span th:text="${promotion.destination.getPopularity()}"></span> people reserved</p>
-                    <a th:href="@{/reservation/{id}(id=${promotion.destination.id})}">
-                        <button th:disabled="${promotion.destination.remainingPeople == 0}">Make a Reservation</button>
-                    </a>
-                </li>
-            </th:block>
-        </th:block>
-    </ul>
-</main>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const listItems = document.querySelectorAll("li");
@@ -247,6 +217,18 @@
                 item.style.opacity = "1";
                 item.style.transform = "translateY(0)";
             }, index * 100);
+        });
+
+        // Highlight buttons on hover
+        const buttons = document.querySelectorAll("button");
+        buttons.forEach(button => {
+            button.addEventListener("mouseover", () => {
+                button.style.transform = "scale(1.1)";
+            });
+
+            button.addEventListener("mouseleave", () => {
+                button.style.transform = "scale(1)";
+            });
         });
 
         // Dropdown functionality
@@ -263,7 +245,28 @@
             }
         });
     });
-</script>
 
+    document.addEventListener("DOMContentLoaded", function () {
+        let departureInput = document.getElementById("startDate");
+        let returnInput = document.getElementById("endDate");
+
+        departureInput.addEventListener("change", function () {
+            if (departureInput.value) {
+                returnInput.min = departureInput.value; // Set return date min to departure date
+            }
+            if (returnInput.value && departureInput.value > returnInput.value) {
+                alert("Departure date cannot be after the return date!");
+                departureInput.value = ""; // Reset invalid departure date
+            }
+        });
+
+        returnInput.addEventListener("change", function () {
+            if (departureInput.value && returnInput.value < departureInput.value) {
+                alert("Return date must be after the departure date!");
+                returnInput.value = ""; // Reset invalid return date
+            }
+        });
+    });
+</script>
 </body>
 </html>

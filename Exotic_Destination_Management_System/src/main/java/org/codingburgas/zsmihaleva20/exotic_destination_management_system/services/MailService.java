@@ -30,6 +30,7 @@ import java.util.Properties;
 public class MailService {
 
     private final static String MAIL_SERVER_PASSWORD = "i,YFfe7yh=jC";
+    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.forLanguageTag("bg"));
 
     Session session = Session.getInstance(getMailProperties(), new Authenticator() {
         @Override
@@ -45,24 +46,28 @@ public class MailService {
                 Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
         message.setSubject("RESERVATION CONFIRMATION");
 
+        // Format departure and return dates
+        String formattedDepartureDate = reservation.getDestination().getDateOfDeparture().format(dateFormatter);
+        String formattedReturnDate = reservation.getDestination().getDateOfReturn().format(dateFormatter);
+
         String msg = String.format("""
-        Hello %s, <br><br>
-        Your reservation has been confirmed! Here are the details:<br><br>
-        
-        <b>Destination:</b> %s <br>
-        <b>Description:</b> %s <br>
-        <b>Departure date:</b> %s <br>
-        <b>Return date:</b> %s <br>
-        <b>Number of people:</b> %d <br>
-        <b>Email:</b> %s <br>
-        <b>Price:</b> %s <br>
-        """,    user.getFirstName(),
+    Hello %s, <br><br>
+    Your reservation has been confirmed! Here are the details:<br><br>
+    
+    <b>Destination:</b> %s <br>
+    <b>Description:</b> %s <br>
+    <b>Departure date:</b> %s <br>
+    <b>Return date:</b> %s <br>
+    <b>Number of people:</b> %d <br>
+    <b>Email:</b> %s <br>
+    <b>Price:</b> %.2f лв. <br>
+    """,    user.getFirstName(),
                 reservation.getDestination().getName(),
                 reservation.getDestination().getDescription(),
-                reservation.getDestination().getDateOfDeparture(),
-                reservation.getDestination().getDateOfReturn(),
+                formattedDepartureDate,  // Use formatted date
+                formattedReturnDate,     // Use formatted date
                 reservation.getNumberOfPeople(),
-                user.getEmail(), // Fix: Added missing email argument
+                user.getEmail(),
                 reservation.getTotalPrice());
 
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
@@ -70,10 +75,6 @@ public class MailService {
 
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(mimeBodyPart);
-
-//    MimeBodyPart attachmentBodyPart = new MimeBodyPart();
-//    attachmentBodyPart.attachFile(generateReservationPdf(reservation, user));
-//    multipart.addBodyPart(attachmentBodyPart);
 
         message.setContent(multipart);
         Transport.send(message);
@@ -87,24 +88,28 @@ public class MailService {
                 Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
         message.setSubject("RESERVATION CANCELED");
 
+        // Format departure and return dates
+        String formattedDepartureDate = reservation.getDestination().getDateOfDeparture().format(dateFormatter);
+        String formattedReturnDate = reservation.getDestination().getDateOfReturn().format(dateFormatter);
+
         String msg = String.format("""
-        Hello %s, <br><br>
-        Your reservation has been canceled! Here are the details of the canceled reservation:<br><br>
-        
-        <b>Destination:</b> %s <br>
-        <b>Description:</b> %s <br>
-        <b>Departure date:</b> %s <br>
-        <b>Return date:</b> %s <br>
-        <b>Number of people:</b> %d <br>
-        <b>Email:</b> %s <br>
-        <b>Price:</b> %s <br>
-        """,    user.getFirstName(),
+    Hello %s, <br><br>
+    Your reservation has been canceled! Here are the details of the canceled reservation:<br><br>
+    
+    <b>Destination:</b> %s <br>
+    <b>Description:</b> %s <br>
+    <b>Departure date:</b> %s <br>
+    <b>Return date:</b> %s <br>
+    <b>Number of people:</b> %d <br>
+    <b>Email:</b> %s <br>
+    <b>Price:</b> %.2f лв. <br>
+    """,    user.getFirstName(),
                 reservation.getDestination().getName(),
                 reservation.getDestination().getDescription(),
-                reservation.getDestination().getDateOfDeparture(),
-                reservation.getDestination().getDateOfReturn(),
+                formattedDepartureDate,  // Use formatted date
+                formattedReturnDate,     // Use formatted date
                 reservation.getNumberOfPeople(),
-                user.getEmail(), // Fix: Added missing email argument
+                user.getEmail(),
                 reservation.getTotalPrice());
 
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
@@ -112,10 +117,6 @@ public class MailService {
 
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(mimeBodyPart);
-
-//    MimeBodyPart attachmentBodyPart = new MimeBodyPart();
-//    attachmentBodyPart.attachFile(generateReservationPdf(reservation, user));
-//    multipart.addBodyPart(attachmentBodyPart);
 
         message.setContent(multipart);
         Transport.send(message);
@@ -170,7 +171,7 @@ public class MailService {
         detailsTable.addCell(new Cell().add(new Paragraph(String.valueOf(reservation.getNumberOfPeople())).setFont(utf8Font)).setBorder(new SolidBorder(blackColor, 1)));
 
         detailsTable.addCell(new Cell().add(new Paragraph("Цена:").setFont(utf8Font)).setBackgroundColor(beigeColor).setBorder(new SolidBorder(blackColor, 1)));
-        detailsTable.addCell(new Cell().add(new Paragraph(reservation.getTotalPrice() + " лв").setFont(utf8Font)).setBorder(new SolidBorder(blackColor, 1)));
+        detailsTable.addCell(new Cell().add(new Paragraph(String.format("%.2f лв", reservation.getTotalPrice())).setFont(utf8Font)).setBorder(new SolidBorder(blackColor, 1)));
 
         detailsTable.addCell(new Cell().add(new Paragraph("Дата на заминаване:").setFont(utf8Font)).setBackgroundColor(beigeColor).setBorder(new SolidBorder(blackColor, 1)));
         detailsTable.addCell(new Cell().add(new Paragraph(reservation.getDestination().getDateOfDeparture().format(dateFormatter)).setFont(utf8Font)).setBorder(new SolidBorder(blackColor, 1)));
