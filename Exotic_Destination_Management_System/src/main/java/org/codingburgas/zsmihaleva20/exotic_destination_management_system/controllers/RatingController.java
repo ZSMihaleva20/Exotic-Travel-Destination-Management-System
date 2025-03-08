@@ -104,44 +104,28 @@ public class RatingController {
     @PostMapping("/deleteRating/{ratingId}")
     public String deleteRating(@PathVariable Long ratingId) {
         Optional<Rating> ratingOpt = ratingRepository.findById(ratingId);
-
         if (ratingOpt.isPresent()) {
             Rating rating = ratingOpt.get();
             Destination destination = rating.getDestination();
             User user = rating.getUser();
-//
-//            // Remove rating from the destination
-//            destination.setRatingSum(destination.getRatingSum() - rating.getStars());
-//            destination.setRatingCount(destination.getRatingCount() - 1);
-//
-//            // Ensure rating count doesn't go negative
-//            if (destination.getRatingCount() < 0) {
-//                destination.setRatingCount(0);
-//            }
 
-            // Recalculate the average rating
+            // Delete only the selected rating
+            ratingRepository.delete(rating);
 
-            // Save the updated destination
+            // Recalculate the destination's average rating
+            var averageRatings = ratingRepository.getAverageRatingByDestination(destination.getId());
+            destination.setAverageRating(averageRatings == null ? 0 : averageRatings);
             destinationRepository.save(destination);
 
-            // Find and update the reservation related to this rating
+            // Update reservations linked to this rating
             List<Reservation> reservations = reservationRepository.findByUser(user);
             for (Reservation reservation : reservations) {
-                if (reservation.getDestination().equals(destination) && reservation.isDestinationRated()) {
+                if (reservation.getDestination().equals(destination) && reservation.getDestinationRating() == rating.getStars()) {
                     reservation.setDestinationRating(0);
                     reservation.setComment("");
                     reservationRepository.save(reservation);
-                    break;
                 }
             }
-
-            // Delete the rating from the database
-            ratingRepository.delete(rating);
-
-            var averageRatings = ratingRepository.getAverageRatingByDestination(destination.getId());
-
-            destination.setAverageRating(averageRatings == null ? 0 : averageRatings);
-            destinationRepository.save(destination);
         }
 
         return "redirect:/ratingManagement";
