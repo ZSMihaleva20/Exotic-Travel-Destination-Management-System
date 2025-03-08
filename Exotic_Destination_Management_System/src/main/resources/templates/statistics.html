@@ -171,6 +171,22 @@
             background: linear-gradient(90deg, #00f2fe, #4facfe);
             transform: scale(1.05);
         }
+
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px; /* Adjust height */
+            width: 100%;
+        }
+
+        canvas {
+            min-width: 600px;
+            min-height: 400px;
+            max-width: 800px; /* Increase chart size */
+            max-height: 600px;
+        }
+
     </style>
 </head>
 <body>
@@ -209,7 +225,7 @@
     </div>
 </header>
 
-<div>
+<div class="chart-container">
     <canvas id="demo-chart"></canvas>
 </div>
 <script th:inline="javascript">
@@ -262,27 +278,61 @@
         });
     });
 
-    // charts
-    const ctx = document.getElementById('demo-chart');
+    const ctx = document.getElementById('demo-chart').getContext('2d');
+
+    // Define different colors for each column dynamically
+    const backgroundColors = [
+        '#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#F4D03F', '#8E44AD', '#16A085',
+        '#E67E22', '#1ABC9C', '#D35400', '#2ECC71', '#2980B9', '#C0392B', '#7D3C98'
+    ];
+
+    // Generate colors dynamically if there are more destinations than colors in the array
+    const barColors = destinationLabels.map((_, index) => backgroundColors[index % backgroundColors.length]);
 
     new Chart(ctx, {
-    type: 'bar',
-    data: {
-    labels: destinationLabels,
-    datasets: [{
-    label: '# of Votes',
-    data: ratings,
-    borderWidth: 1
-}]
-},
-    options: {
-    scales: {
-    y: {
-    beginAtZero: true
-}
-}
-}
-});
+        type: 'bar',
+        data: {
+            labels: destinationLabels,
+            datasets: [{
+                label: 'Среден рейтинг за всяка дестинация',
+                data: ratings,
+                backgroundColor: barColors, // Assign colors dynamically
+                borderColor: barColors.map(color => color.replace('1)', '0.8)')), // Slightly darker border
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            // Customize tooltip label text
+                            const value = tooltipItem.raw;
+                            return `Среден рейтинг: ${value}`; // Customize how the text should appear
+                        }
+                    }
+                },
+                legend: {
+                    labels: {
+                        usePointStyle: false,
+                        boxWidth: 0,
+                        boxHeight: 0,
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
+            }
+        }
+    });
+
 </script>
 </body>
 </html>
