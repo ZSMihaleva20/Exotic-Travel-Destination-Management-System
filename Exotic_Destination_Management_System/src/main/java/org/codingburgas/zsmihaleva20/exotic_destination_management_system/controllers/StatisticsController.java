@@ -20,6 +20,7 @@ public class StatisticsController {
     public String showStatistics(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("destinationRatings", statisticService.getDestinationRatings());
+        model.addAttribute("destinationPopularity", statisticService.getDestinationPopularity());
         return "statistics";
     }
 }

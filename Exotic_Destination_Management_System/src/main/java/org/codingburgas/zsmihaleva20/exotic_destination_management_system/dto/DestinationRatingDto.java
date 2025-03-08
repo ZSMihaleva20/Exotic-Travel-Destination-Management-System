@@ -4,6 +4,7 @@ public class DestinationRatingDto {
     private Long id;
     private String name;
     private Double rating;
+    private int popularity;
 
     public Long getId() {
         return id;
@@ -27,5 +28,13 @@ public class DestinationRatingDto {
 
     public void setRating(Double rating) {
         this.rating = rating;
+    }
+
+    public int getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(int popularity) {
+        this.popularity = popularity;
     }
 }

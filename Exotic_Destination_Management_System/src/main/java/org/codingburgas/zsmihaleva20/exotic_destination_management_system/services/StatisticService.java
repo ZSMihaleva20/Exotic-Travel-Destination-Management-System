@@ -27,4 +27,15 @@ public class StatisticService {
             return dto;
         }).toList();
     }
+
+    public List<DestinationRatingDto> getDestinationPopularity() {
+        return destinationRepository.findAll().stream().map(d -> {
+            var dto = new DestinationRatingDto();
+            dto.setId(d.getId());
+            dto.setName(d.getName());
+            dto.setPopularity(d.getPopularity()); // Only setting popularity
+            return dto;
+        }).toList();
+    }
+
 }

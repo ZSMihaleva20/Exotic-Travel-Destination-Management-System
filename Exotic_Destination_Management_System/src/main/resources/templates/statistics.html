@@ -180,11 +180,17 @@
             width: 100%;
         }
 
-        canvas {
+        #rating-chart {
             min-width: 600px;
             min-height: 400px;
             max-width: 800px; /* Increase chart size */
             max-height: 600px;
+        }
+        #popularity-chart {
+            min-width: 400px;
+            min-height: 350px;
+            max-width: 800px; /* Increase chart size */
+            max-height: 750px;
         }
 
     </style>
@@ -226,16 +232,31 @@
 </header>
 
 <div class="chart-container">
-    <canvas id="demo-chart"></canvas>
+    <canvas id="rating-chart"></canvas>
+</div>
+<br>
+<br>
+<div class="chart-container">
+    <canvas id="popularity-chart"></canvas>
 </div>
 <script th:inline="javascript">
     const destinationRatings = /*[[${destinationRatings}]]*/{};
+    const destinationPopularity = /*[[${destinationPopularity}]]*/{};
+
     const destinationLabels = destinationRatings.map(d => {
+        return d.name;
+    });
+
+    const destinationPopularityLabels = destinationPopularity.map(d => {
         return d.name;
     });
 
     const ratings = destinationRatings.map(d => {
         return d.rating;
+    });
+
+    const popularityData = destinationPopularity.map(d => {
+        return d.popularity;
     });
 </script>
 
@@ -278,7 +299,8 @@
         });
     });
 
-    const ctx = document.getElementById('demo-chart').getContext('2d');
+    const ctx = document.getElementById('rating-chart').getContext('2d');
+    const popularityCtx = document.getElementById('popularity-chart').getContext('2d');
 
     // Define different colors for each column dynamically
     const backgroundColors = [
@@ -320,14 +342,86 @@
                     }
                 },
                 legend: {
+                    display: false
+                },
+                title: {  // ✅ Added title above the bar chart
+                    display: true,
+                    text: 'Среден рейтинг за всяка дестинация',
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    },
+                    padding: {
+                        top: 10,
+                        bottom: 20
+                    }
+                },
+            }
+        }
+    });
+
+
+    new Chart(popularityCtx, {
+        type: 'pie',
+        data: {
+            labels: destinationPopularityLabels,
+            datasets: [{
+                label: 'Популярност на дестинациите', // Not visible by default, so we add a title
+                data: popularityData,
+                backgroundColor: barColors,
+                borderColor: '#fff',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                // ✅ Add title above the chart
+                title: {
+                    display: true,
+                    text: 'Популярност на дестинациите',
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    },
+                    padding: {
+                        top: 10,
+                        bottom: 20
+                    }
+                },
+                legend: {
+                    position: 'bottom',
                     labels: {
-                        usePointStyle: false,
-                        boxWidth: 0,
-                        boxHeight: 0,
                         font: {
                             size: 14
                         }
                     }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            let value = tooltipItem.raw;
+                            let total = popularityData.reduce((a, b) => a + b, 0);
+                            let percentage = ((value / total) * 100).toFixed(1);
+
+                            return `Брой резервирали: ${value} (${percentage}%)`;
+                        }
+                    }
+                },
+                datalabels: {
+                    color: '#fff',
+                    font: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    formatter: (value, ctx) => {
+                        let total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                        let percentage = ((value / total) * 100).toFixed(1);
+                        return `${percentage}%`; // Show percentage inside the chart
+                    },
+                    anchor: 'center',
+                    align: 'start',
+                    offset: 10
                 }
             }
         }
