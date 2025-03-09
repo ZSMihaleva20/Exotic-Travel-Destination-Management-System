@@ -75,8 +75,8 @@ public class DataLoader {
             destinationOne.setStatus("ACCEPTED");
             destinationOne.setLimitedPeople(28);
             destinationOne.setRemainingPeople(28);
-            destinationOne.setDateOfDeparture(LocalDate.parse("2025-02-25"));
-            destinationOne.setDateOfReturn(LocalDate.parse("2025-02-28"));
+            destinationOne.setDateOfDeparture(LocalDate.parse("2025-03-25"));
+            destinationOne.setDateOfReturn(LocalDate.parse("2025-03-28"));
 
             destinationRepository.save(destinationOne);
 

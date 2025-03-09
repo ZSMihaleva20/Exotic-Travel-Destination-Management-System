@@ -33,11 +33,6 @@
                     <button type="submit">Cancel</button>
                 </form>
             </td>
-            <td>
-                <form th:action="@{/download-reservation/{id}(id=${reservation.id})}" method="get">
-                    <button type="submit">Download PDF</button>
-                </form>
-            </td>
         </tr>
     </th:block>
 </table>
@@ -81,10 +76,9 @@
             <td th:text="${reservation.destination.name}"></td>
             <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
             <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
-            <td th:text="${reservation.destination.dateOfReturn}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
             <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 1, 2)} + ' lv.'"></td>
-            <td>Past</td>
+            <td>PAST</td>
         </tr>
     </th:block>
 </table>

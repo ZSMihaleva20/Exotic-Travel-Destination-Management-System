@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Promotions and campaigns</title>
     <link rel="stylesheet" href="/css/style.css">
@@ -231,12 +231,13 @@
                     <th:block th:if="${promotion.destination.remainingPeople == 0 or promotion.destination.dateOfReturn < T(java.time.LocalDate).now()}">
                         <p style="color: red; font-weight: bold;">Reservation Closed</p>
                     </th:block>
+                    <div sec:authorize="hasAuthority('USER')">
                     <th:block th:unless="${promotion.destination.remainingPeople == 0 or promotion.destination.dateOfReturn < T(java.time.LocalDate).now()}">
                         <a th:href="@{/reservation/{id}(id=${promotion.destination.id})}">
                             <button class="reservation-button">Make reservation</button>
                         </a>
                     </th:block>
-
+                    </div>
                 </li>
             </th:block>
         </th:block>

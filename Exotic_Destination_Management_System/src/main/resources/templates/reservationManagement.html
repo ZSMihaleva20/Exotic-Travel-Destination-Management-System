@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Reservation Management</title>
     <meta charset="UTF-8">
@@ -89,10 +89,18 @@
             <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
             <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 1, 2)} + ' lv.'"></td>
-            <td>Past</td>
+            <td>PAST</td>
         </tr>
     </th:block>
 </table>
+
+<br>
+<div sec:authorize="hasAuthority('ADMIN')">
+    <form th:action="@{/downloadDestinationsReservationsPdf}" method="get">
+        <button type="submit">Download Reservations Report</button>
+    </form>
+</div>
+<br>
 
 <a href="/destinations">Back</a>
 

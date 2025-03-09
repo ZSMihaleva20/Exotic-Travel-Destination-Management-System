@@ -1,6 +1,5 @@
 package org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories;
 
-import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Destination;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Reservation;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +13,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Reservation> findByUser(User user);
 
     void deleteByDestinationId(Long id);
+
+    List<Reservation> findAllByStatus(String booked);
 }
