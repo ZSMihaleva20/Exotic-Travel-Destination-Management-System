@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class DataLoader {
 
     @Bean
-    CommandLineRunner commandLineRunner(UserRepository userRepository, PasswordEncoder passwordEncoder, DestinationRepository destinationRepository, ReservationRepository reservationRepository, RatingRepository ratingRepository, PromotionService promotionService, RatingService ratingService) {
+    CommandLineRunner commandLineRunner(UserRepository userRepository, PasswordEncoder passwordEncoder, DestinationRepository destinationRepository, ReservationRepository reservationRepository, PromotionService promotionService, RatingService ratingService) {
         return args -> {
             User userOne = new User();
             User admin = new User();
@@ -39,8 +39,8 @@ public class DataLoader {
 
             Rating ratingOne = new Rating();
 
-            userOne.setFirstName("Zhasmina");
-            userOne.setLastName("Mihaleva");
+            userOne.setFirstName("Жасмина");
+            userOne.setLastName("Михалева");
             userOne.setEmail("robocrforbulgaria@gmail.com");
             userOne.setPassword(passwordEncoder.encode("zhasmina"));
             userOne.setRole("USER");
@@ -48,8 +48,8 @@ public class DataLoader {
 
             userRepository.save(userOne);
 
-            admin.setFirstName("Admin");
-            admin.setLastName("Adminov");
+            admin.setFirstName("Иван");
+            admin.setLastName("Василев");
             admin.setEmail("admin@email.com");
             admin.setPassword(passwordEncoder.encode("admin"));
             admin.setRole("ADMIN");
@@ -57,8 +57,8 @@ public class DataLoader {
 
             userRepository.save(admin);
 
-            manager.setFirstName("Manager");
-            manager.setLastName("Managerov");
+            manager.setFirstName("Мартин");
+            manager.setLastName("Георгиев");
             manager.setEmail("manager@email.com");
             manager.setPassword(passwordEncoder.encode("manager"));
             manager.setRole("MANAGER");
@@ -66,10 +66,18 @@ public class DataLoader {
 
             userRepository.save(manager);
 
-            destinationOne.setName("Turciq");
-            destinationOne.setDescription("Насладете се на уникалната турска култура, вкусна храна и красиви плажове. " +
-                    "Пакетът включва самолетни билети, настаняване в Istanbul Grand Hotel, както и закуска и вечеря. " +
-                    "Очакват ви незабравими преживявания като обиколка на историческите забележителности и разходка с лодка по Босфора.");
+            // Дестинация 1 - Малдиви
+            destinationOne.setName("Райските острови на Малдиви");
+            destinationOne.setDescription(
+                    "Малдивите са известни със своите бели плажове, кристално чисти води и луксозни курорти.\n" +
+                            "Самолетни билети: Излитане от Летище София (SOF) на 13 март в 10:00 ч.\n" +
+                            "Кацане на Международно летище Мале (MLE) в 18:00 ч.\n" +
+                            "Настаняване: Conrad Maldives Rangali Island, луксозен курорт с вили над водата.\n" +
+                            "Хранене: All-Inclusive (закуска, обяд, вечеря и напитки).\n" +
+                            "Активности: Гмуркане с шнорхел, скуба дайвинг, риболов, водни спортове.\n" +
+                            "Екскурзии: Посещение на близки острови, вечери на плажа с местни специалитети.\n" +
+                            "Допълнително: Спа процедури, йога на плажа, частни вечери."
+            );
             destinationOne.setImageUrl("photoTwo.jpg");
             destinationOne.setPrice(1000);
             destinationOne.setStatus("ACCEPTED");
@@ -80,38 +88,62 @@ public class DataLoader {
 
             destinationRepository.save(destinationOne);
 
-            destinationTwo.setName("Gurciq");
-            destinationTwo.setDescription("Райски острови с бели плажове, кристално синя вода и луксозни курорти. " +
-                    "Пакетът включва самолетни билети, настаняване в Maldives Paradise Resort и All-Inclusive изхранване (закуска, обяд, вечеря). " +
-                    "Ще можете да се насладите на гмуркане с шнорхел, разходка с яхта и спа процедури.");
+            // Дестинация 2 - Мексико
+            destinationTwo.setName("Тайните на Мексико: Чичен Ица и Карибите");
+            destinationTwo.setDescription(
+                    "Мексико е земя на древни цивилизации, красиви плажове и вкусна кухня.\n" +
+                            "Самолетни билети: Излитане от Летище София (SOF) на 10 януари в 08:00 ч.\n" +
+                            "Кацане на Международно летище Канкун (CUN) в 16:00 ч.\n" +
+                            "Настаняване: Hyatt Ziva Cancun, луксозен курорт с изглед към Карибско море.\n" +
+                            "Хранене: All-Inclusive (закуска, обяд, вечеря и напитки).\n" +
+                            "Активности: Плажни игри, водни спортове, вечерни шоута.\n" +
+                            "Екскурзии: Посещение на древните пирамиди на Чичен Ица, подводен музей, рибарски села.\n" +
+                            "Допълнително: Вечери с традиционна мексиканска кухня, текила тейстънг."
+            );
             destinationTwo.setImageUrl("photoOne.jpg");
-            destinationTwo.setPrice(200);
+            destinationTwo.setPrice(2000);
             destinationTwo.setStatus("ACCEPTED");
             destinationTwo.setLimitedPeople(20);
             destinationTwo.setRemainingPeople(20);
             destinationTwo.setDateOfDeparture(LocalDate.parse("2025-01-10"));
             destinationTwo.setDateOfReturn(LocalDate.parse("2025-01-16"));
+
             destinationRepository.save(destinationTwo);
 
-            destinationThree.setName("Albania");
-            destinationThree.setDescription("Потопете се в италианската култура, насладете се на пица, паста и невероятна архитектура. " +
-                    "Пакетът включва самолетни билети и настаняване в Rome Luxury Hotel. " +
-                    "Храната не е включена, за да имате свободата да опитате местни ресторанти. " +
-                    "Посетете Колизеума, Ватикана и Фонтан ди Треви.");
+            // Дестинация 3 - Мароко
+            destinationThree.setName("Магията на Мароко: Пустинята и пазарите");
+            destinationThree.setDescription(
+                    "Мароко е страна на контрасти – от пустинята Сахара до оживените пазари в Марракеш.\n" +
+                            "Самолетни битери: Излитане от Летище София (SOF) на 12 март в 09:00 ч.\n" +
+                            "Кацане на Летище Марракеш (RAK) в 14:00 ч.\n" +
+                            "Настаняване: Royal Mansour Marrakech, луксозен хотел в сърцето на Марракеш.\n" +
+                            "Хранене: Полупансион (закуска и вечеря).\n" +
+                            "Активности: Разходки с камили в пустинята, катерене в Атласките планини.\n" +
+                            "Екскурзии: Посещение на градовете Фес и Мекнес, пазари в Марракеш.\n" +
+                            "Допълнително: Вечери с традиционна музика и танци, ароматен маррокански чай."
+            );
             destinationThree.setImageUrl("photoThree.jpg");
-            destinationThree.setPrice(500);
+            destinationThree.setPrice(1500);
             destinationThree.setStatus("ACCEPTED");
             destinationThree.setLimitedPeople(15);
             destinationThree.setRemainingPeople(15);
             destinationThree.setDateOfDeparture(LocalDate.parse("2025-03-12"));
-            destinationThree.setDateOfReturn(LocalDate.parse("2025-05-15"));
+            destinationThree.setDateOfReturn(LocalDate.parse("2025-03-19"));
+
             destinationRepository.save(destinationThree);
 
-
-            destinationFour.setName("Egypt");
-            destinationFour.setDescription("Experience the wonder of ancient Egypt. Explore the pyramids, the Great Sphinx, and the Valley of the Kings. " +
-                    "This package includes round-trip flights, a stay at the Luxor Royal Hotel, and guided tours to iconic sites. " +
-                    "Relax by the Nile and enjoy traditional Egyptian cuisine.");
+            // Дестинация 4 - Египет
+            destinationFour.setName("Тайните на Древен Египет: Пирамиди и Нил");
+            destinationFour.setDescription(
+                    "Изпитайте чудото на древен Египет с пирамидите, Великата сфинкса и Долината на царете.\n" +
+                            "Самолетни билети: Излитане от Летище София (SOF) на 1 юни в 07:00 ч.\n" +
+                            "Кацане на Летище Луксор (LXR) в 12:00 ч.\n" +
+                            "Настаняване: Luxor Royal Hotel, хотел с изглед към река Нил.\n" +
+                            "Хранене: All-Inclusive (закуска, обяд, вечеря и напитки).\n" +
+                            "Активности: Разходки с камили, круизи по река Нил.\n" +
+                            "Екскурзии: Посещение на пирамидите в Гиза, Египетски музей, храмове в Луксор.\n" +
+                            "Допълнително: Вечери с традиционна египетска кухня, светлинно шоу при пирамидите."
+            );
             destinationFour.setImageUrl("photoFour.jpg");
             destinationFour.setPrice(1200);
             destinationFour.setStatus("ACCEPTED");
@@ -119,14 +151,21 @@ public class DataLoader {
             destinationFour.setRemainingPeople(25);
             destinationFour.setDateOfDeparture(LocalDate.parse("2025-06-01"));
             destinationFour.setDateOfReturn(LocalDate.parse("2025-06-10"));
+
             destinationRepository.save(destinationFour);
 
-            // Destination 5 - Japan
-
-            destinationFive.setName("Japan");
-            destinationFive.setDescription("Immerse yourself in the rich culture of Japan. From bustling Tokyo to serene Kyoto, experience the best of both worlds. " +
-                    "The package includes flights, hotel stays, and a guided tour to visit the temples, Mount Fuji, and Tokyo Disneyland. " +
-                    "Enjoy sushi, ramen, and the beauty of cherry blossoms during your stay.");
+            // Дестинация 5 - Япония
+            destinationFive.setName("Загадките на Япония: Токио и Фуджи");
+            destinationFive.setDescription(
+                    "Потопете се в богатата култура на Япония – от оживен Токио до спокойна Киото.\n" +
+                            "Самолетни билети: Излитане от Летище София (SOF) на 15 юли в 11:00 ч.\n" +
+                            "Кацане на Летище Нарита (NRT) в 20:00 ч.\n" +
+                            "Настаняване: Park Hotel Tokyo, модерен хотел в центъра на Токио.\n" +
+                            "Хранене: Закуска и вечеря.\n" +
+                            "Активности: Посещение на Токио Дисниленд, шопинг в квартал Гинза.\n" +
+                            "Екскурзии: Храмове в Киото, планина Фуджи, традиционна чайна церемония.\n" +
+                            "Допълнително: Вечери с суши и сашими, представление на гейши."
+            );
             destinationFive.setImageUrl("photoFive.jpg");
             destinationFive.setPrice(1800);
             destinationFive.setStatus("ACCEPTED");
@@ -134,13 +173,21 @@ public class DataLoader {
             destinationFive.setRemainingPeople(30);
             destinationFive.setDateOfDeparture(LocalDate.parse("2025-07-15"));
             destinationFive.setDateOfReturn(LocalDate.parse("2025-07-25"));
+
             destinationRepository.save(destinationFive);
 
-            // Destination 6 - Australia
-
-            destinationSix.setName("Australia");
-            destinationSix.setDescription("Discover the wonders of Australia – from the Great Barrier Reef to the Outback. This package includes flights, accommodations at a 5-star resort, and snorkeling tours. " +
-                    "Explore the vibrant cities of Sydney and Melbourne, and enjoy the amazing wildlife and nature of the land down under.");
+            // Дестинация 6 - Австралия
+            destinationSix.setName("Дивата природа на Австралия: Рифове и джунгли");
+            destinationSix.setDescription(
+                    "Открийте чудесата на Австралия – от Големия бариерен риф до Австралийското вътрешно.\n" +
+                            "Самолетни билети: Излитане от Летище София (SOF) на 1 август в 09:00 ч.\n" +
+                            "Кацане на Летище Сидни (SYD) в 22:00 ч.\n" +
+                            "Настаняване: Shangri-La Hotel Sydney, хотел с изглед към залива.\n" +
+                            "Хранене: Закуска и вечеря.\n" +
+                            "Активности: Гмуркане в Големия бариерен риф, сафари в национални паркове.\n" +
+                            "Екскурзии: Посещение на Сидни и Мелбърн, Оперен театър в Сидни.\n" +
+                            "Допълнително: Вечери с австралийска кухня, обиколки с хеликоптер."
+            );
             destinationSix.setImageUrl("photoSix.jpg");
             destinationSix.setPrice(2500);
             destinationSix.setStatus("ACCEPTED");
@@ -148,14 +195,21 @@ public class DataLoader {
             destinationSix.setRemainingPeople(35);
             destinationSix.setDateOfDeparture(LocalDate.parse("2025-08-01"));
             destinationSix.setDateOfReturn(LocalDate.parse("2025-08-15"));
+
             destinationRepository.save(destinationSix);
 
-            // Destination 7 - Thailand
-
-            destinationSeven.setName("Thailand");
-            destinationSeven.setDescription("Escape to the tropical paradise of Thailand. Enjoy beautiful beaches, vibrant markets, and rich history. " +
-                    "This package includes flights, stays at luxury resorts in Phuket and Bangkok, and cultural tours. " +
-                    "Indulge in traditional Thai massages and explore ancient temples.");
+            // Дестинация 7 - Тайланд
+            destinationSeven.setName("Тропическият рай на Тайланд: Плажове и храмове");
+            destinationSeven.setDescription(
+                    "Избягайте в тропическия рай на Тайланд с красиви плажове и богата история.\n" +
+                            "Самолетни билети: Излитане от Летище София (SOF) на 5 септември в 08:00 ч.\n" +
+                            "Кацане на Летище Пукет (HKT) в 18:00 ч.\n" +
+                            "Настаняване: Banyan Tree Phuket, луксозен курорт с частни вили.\n" +
+                            "Хранене: All-Inclusive (закуска, обяд, вечеря и напитки).\n" +
+                            "Активности: Тайландски масажи, водни спортове, плажни игри.\n" +
+                            "Екскурзии: Посещение на островите Пхи Пхи, храмове в Банкок.\n" +
+                            "Допълнително: Курсове по тайландска кухня, вечерни шоута."
+            );
             destinationSeven.setImageUrl("photoSeven.jpg");
             destinationSeven.setPrice(1500);
             destinationSeven.setStatus("ACCEPTED");
@@ -163,13 +217,21 @@ public class DataLoader {
             destinationSeven.setRemainingPeople(40);
             destinationSeven.setDateOfDeparture(LocalDate.parse("2025-09-05"));
             destinationSeven.setDateOfReturn(LocalDate.parse("2025-09-12"));
+
             destinationRepository.save(destinationSeven);
 
-            // Destination 8 - Brazil
-
-            destinationEight.setName("Brazil");
-            destinationEight.setDescription("Visit the vibrant cities of Rio de Janeiro and São Paulo, explore the Amazon rainforest, and enjoy world-class beaches. " +
-                    "The package includes flights, hotel accommodations, and an unforgettable experience during the Carnival season in Rio.");
+            // Дестинация 8 - Бразилия
+            destinationEight.setName("Карнавалът на Бразилия: Рио и Амазонка");
+            destinationEight.setDescription(
+                    "Посетете оживените градове Рио де Жанейро и Сао Пауло, изследвайте Амазонската джунгла.\n" +
+                            "Самолетни билети: Излитане от Летище София (SOF) на 10 октомври в 10:00 ч.\n" +
+                            "Кацане на Летище Рио де Жанейро (GIG) в 20:00 ч.\n" +
+                            "Настаняване: Copacabana Palace, луксозен хотел на плажа Копакабана.\n" +
+                            "Хранене: Закуска и вечеря.\n" +
+                            "Активности: Плажни игри, катерене до статуята Христос Спасител.\n" +
+                            "Екскурзии: Посещение на Амазонската джунгла, град Сао Пауло.\n" +
+                            "Допълнително: Вечери с бразилска кухня, обиколки с джип."
+            );
             destinationEight.setImageUrl("photoEight.jpg");
             destinationEight.setPrice(2200);
             destinationEight.setStatus("ACCEPTED");
@@ -177,7 +239,9 @@ public class DataLoader {
             destinationEight.setRemainingPeople(20);
             destinationEight.setDateOfDeparture(LocalDate.parse("2025-10-10"));
             destinationEight.setDateOfReturn(LocalDate.parse("2025-10-20"));
+
             destinationRepository.save(destinationEight);
+
 
             reservationOne.setDestination(destinationOne);
             reservationOne.setUser(userOne);
