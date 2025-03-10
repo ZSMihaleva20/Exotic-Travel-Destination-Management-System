@@ -7,6 +7,7 @@ import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.DestinationRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.ReservationRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.MailService;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.ReservationNotificationService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -33,11 +34,13 @@ public class ReservationController {
     private final ReservationRepository reservationRepository;
     private final DestinationRepository destinationRepository;
     private final MailService mailService;
+    private final ReservationNotificationService reservationNotificationService;
 
-    public ReservationController(ReservationRepository reservationRepository, DestinationRepository destinationRepository, MailService mailService) {
+    public ReservationController(ReservationRepository reservationRepository, DestinationRepository destinationRepository, MailService mailService, ReservationNotificationService reservationNotificationService) {
         this.reservationRepository = reservationRepository;
         this.destinationRepository = destinationRepository;
         this.mailService = mailService;
+        this.reservationNotificationService = reservationNotificationService;
     }
 
     @GetMapping("/reservation/{id}")
@@ -132,10 +135,17 @@ public class ReservationController {
                                         res.getDestination().getDateOfReturn().isBefore(now))))
                 .toList();
 
+        // 🔔 **Urgent Reservations (Departing in 3 days or less)**
+        List<Reservation> urgentReservations = reservationNotificationService.getUrgentReservations(user);
+
         model.addAttribute("activeReservations", activeReservations);
         model.addAttribute("canceledReservations", canceledReservations);
         model.addAttribute("pastReservations", pastReservations);
+        model.addAttribute("urgentReservations", urgentReservations); // Add this for notifications
 
         return "myReservations";
     }
+
+
+
 }

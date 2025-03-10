@@ -75,7 +75,7 @@ public class DataLoader {
             destinationOne.setStatus("ACCEPTED");
             destinationOne.setLimitedPeople(28);
             destinationOne.setRemainingPeople(28);
-            destinationOne.setDateOfDeparture(LocalDate.parse("2025-03-25"));
+            destinationOne.setDateOfDeparture(LocalDate.parse("2025-03-13"));
             destinationOne.setDateOfReturn(LocalDate.parse("2025-03-28"));
 
             destinationRepository.save(destinationOne);
@@ -103,7 +103,7 @@ public class DataLoader {
             destinationThree.setStatus("ACCEPTED");
             destinationThree.setLimitedPeople(15);
             destinationThree.setRemainingPeople(15);
-            destinationThree.setDateOfDeparture(LocalDate.parse("2025-05-12"));
+            destinationThree.setDateOfDeparture(LocalDate.parse("2025-03-12"));
             destinationThree.setDateOfReturn(LocalDate.parse("2025-05-15"));
             destinationRepository.save(destinationThree);
 

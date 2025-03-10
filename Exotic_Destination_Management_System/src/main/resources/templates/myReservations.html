@@ -3,8 +3,120 @@
 <head>
     <title>My Reservations</title>
     <meta charset="UTF-8">
+    <script>
+        function showNotifications() {
+            let dropdown = document.getElementById('notificationDropdown');
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+    <style>
+        /* 🔔 Notification Bell */
+        .notification-container {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            font-size: 24px;
+            background: white;
+            border-radius: 50%;
+            padding: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification-bell .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* 🔽 Notification Dropdown */
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            width: 280px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        /* 📝 Notification Card */
+        .notification-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification-card span {
+            font-weight: bold;
+        }
+
+        /* 🔴🟠🟢 Days Left Badge */
+        .days-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .red { background: #ff4d4d; color: white; }      /* 1 Day Left */
+        .orange { background: #ffa500; color: white; }   /* 2-3 Days Left */
+        .green { background: #4caf50; color: white; }    /* More than 3 Days */
+
+        /* 🎬 Fade In Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
+
+<div class="notification-container">
+    <!-- Notification Bell -->
+    <div class="notification-bell" onclick="showNotifications()">
+        🔔
+        <span class="badge" th:if="${#lists.size(urgentReservations) > 0}"
+              th:text="${#lists.size(urgentReservations)}"></span>
+    </div>
+
+    <!-- Notification Dropdown -->
+    <div id="notificationDropdown" class="dropdown">
+        <p th:if="${#lists.isEmpty(urgentReservations)}">✅ No upcoming trips in 3 days.</p>
+        <div th:each="reservation : ${urgentReservations}" class="notification-card">
+            <div>
+                <span th:text="${reservation.destination.name}"></span> <br>
+                <small th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMM yyyy')}"></small>
+            </div>
+            <!-- Dynamic Badge Color Based on Days Left -->
+            <span class="days-badge"
+                  th:classappend="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), reservation.destination.dateOfDeparture) == 1 ? 'red' :
+                                  (T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), reservation.destination.dateOfDeparture) <= 3 ? 'orange' : 'green')}"
+                  th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), reservation.destination.dateOfDeparture)} + ' days'">
+            </span>
+        </div>
+    </div>
+</div>
+
+
 <h1>My Reservations</h1>
 
 <!-- Активни резервации -->
