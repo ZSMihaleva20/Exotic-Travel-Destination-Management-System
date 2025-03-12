@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Destination Management</title>
+    <title>Управление на дестинациите</title>
     <link rel="stylesheet" href="/css/style.css">
     <style>
         body {
@@ -36,53 +36,65 @@
     </style>
 </head>
 <body>
-<h1>Tourist Destinations</h1>
-<a href="/addDestination">Add New Destination</a>
+<h1>Управление на дестинациите</h1>
+<a href="/addDestination">Добави нова дестинация</a>
 
 <table>
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Date of departure</th>
-        <th>Date of return</th>
-        <th>Price</th>
-        <th>Max people</th>
-        <th>Image</th>
-        <th>Status</th>
-        <th>Actions</th>
+        <th>Име на дестинацията</th>
+        <th>Описание</th>
+        <th>Дата на заминаване</th>
+        <th>Дата на връщане</th>
+        <th>Цена</th>
+        <th>Максимален брой хора</th>
+        <th>Снимка</th>
+        <th>Статус</th>
+        <th>Действия</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="destination : ${destinations}">
         <td th:text="${destination.name}"></td>
-        <td th:text="${destination.description}"></td>
-        <td th:text="${#temporals.format(destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
-        <td th:text="${#temporals.format(destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
-        <td th:text="${#numbers.formatDecimal(destination.price, 2, 2)} + ' lv.'"></td>
+        <td>
+            <ul
+                th:utext="'<li>' + ${#strings.listJoin(#strings.arraySplit(destination.description, '\\;'), '</li><li>')} + '</li>'">
+            </ul>
+        </td>
+
+        <td th:text="${#temporals.format(destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
+        <td th:text="${#temporals.format(destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
+        <td th:text="${#numbers.formatDecimal(destination.price, 2, 2)} + ' лв.'"></td>
         <td th:text="${destination.limitedPeople}"></td>
         <td>
             <img th:src="@{'/uploaded-image/' + ${destination.imageUrl}}" alt="Image" style="width: 100px;">
         </td>
-        <td th:text="${destination.status}"></td>
+        <td>
+    <span th:switch="${destination.status}">
+        <span th:case="'ACCEPTED'">ОДОБРЕНА</span>
+        <span th:case="'PENDING-ACCEPT'">ИЗЧАКВА ОДОБРЕНИЕ</span>
+        <span th:case="'PENDING-EDIT'">ИЗЧАКВА ОДОБРЕНИЕ ЗА РЕДАКТИРАНЕ</span>
+        <span th:case="'PENDING-DELETE'">ИЗЧАКВА ОДОБРЕНИЕ ЗА ИЗТРИВАНЕ</span>
+    </span>
+        </td>
         <td>
             <div sec:authorize="hasAuthority('ADMIN')">
                 <form th:if="${destination.status == 'PENDING-ACCEPT' || destination.status == 'PENDING-EDIT' || destination.status == 'PENDING-DELETE'}"
                       th:action="@{'/approveRequest/' + ${destination.id}}"
                       method="post"
                       style="display:inline;">
-                    <button type="submit">Accept</button>
+                    <button type="submit">Приеми</button>
                 </form>
                 <form th:if="${destination.status == 'PENDING-ACCEPT' || destination.status == 'PENDING-EDIT' || destination.status == 'PENDING-DELETE'}"
                       th:action="@{'/declineRequest/' + ${destination.id}}"
                       method="post"
                       style="display:inline;">
-                    <button type="submit">Decline</button>
+                    <button type="submit">Откажи</button>
                 </form>
                 <th:block th:if="${destination.status != 'PENDING-ACCEPT' and destination.status != 'PENDING-DELETE' and destination.status != 'PENDING-EDIT'}">
-                    <a th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
+                    <a th:href="@{'/editDestination/' + ${destination.id}}">Редактирай</a>
                     <form th:action="@{'/delete/' + ${destination.id}}" method="post" style="display:inline;">
-                        <button type="submit">Delete</button>
+                        <button type="submit">Изтрий</button>
                     </form>
                 </th:block>
             </div>
@@ -90,10 +102,10 @@
                 <th:block th:if="${destination.status != 'PENDING-ACCEPT'}">
                     <a th:if="${destination.editApproved}" th:href="@{'/editDestination/' + ${destination.id}}">Edit</a>
                     <form th:if="${!destination.editApproved}" th:action="@{'/requestEdit/' + ${destination.id}}" method="post" style="display:inline;">
-                        <button type="submit">Request Edit</button>
+                        <button type="submit">Заявка за редактиране</button>
                     </form>
                     <form th:action="@{'/requestDelete/' + ${destination.id}}" method="post" style="display:inline;">
-                        <button type="submit">Request Delete</button>
+                        <button type="submit">Заявка за изтриване</button>
                     </form>
                 </th:block>
             </div>
@@ -102,6 +114,6 @@
     </tbody>
 </table>
 
-<a href="/destinations">Back</a>
+<a href="/destinations">Върни се в главната страница</a>
 </body>
 </html>

@@ -5,7 +5,7 @@ import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Reservation;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.DestinationRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.ReservationRepository;
-import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.MailService;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.MailAndPdfService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,18 +20,16 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 public class ReservationManagementController {
     private final ReservationRepository reservationRepository;
-    private final MailService mailService;
+    private final MailAndPdfService mailAndPdfService;
     private final DestinationRepository destinationRepository;
 
-    public ReservationManagementController(ReservationRepository reservationRepository, MailService mailService, DestinationRepository destinationRepository) {
+    public ReservationManagementController(ReservationRepository reservationRepository, MailAndPdfService mailAndPdfService, DestinationRepository destinationRepository) {
         this.reservationRepository = reservationRepository;
-        this.mailService = mailService;
+        this.mailAndPdfService = mailAndPdfService;
         this.destinationRepository = destinationRepository;
     }
 
@@ -82,7 +80,7 @@ public class ReservationManagementController {
         destinationRepository.save(destination);
 
         try {
-            mailService.sendCancelationMail(reservation, reservation.getUser());
+            mailAndPdfService.sendCancelationMail(reservation, reservation.getUser());
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -104,14 +102,14 @@ public class ReservationManagementController {
                 .toList();
 
         // Generate the PDF as a byte array (not saved to file)
-        byte[] pdfBytes = mailService.generateAllActiveReservationsPdf(activeReservations);
+        byte[] pdfBytes = mailAndPdfService.generateAllActiveReservationsPdf(activeReservations);
 
         // Create a resource from the byte array
         InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(pdfBytes));
 
         // Return the PDF as a downloadable file
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Destinations_Reservations_Report.pdf")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=pdf_report.pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(resource);
     }

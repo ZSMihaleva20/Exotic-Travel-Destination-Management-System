@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Rate Your Destinations</title>
+    <title></title>
+    <meta charset="UTF-8">
 </head>
 <body>
-<h1>Rate Your Visited Destinations</h1>
+<h1>Добави рейтинг на дестинация</h1>
 <table>
     <tr>
-        <th>Destination</th>
-        <th>Departure Date</th>
-        <th>Return Date</th>
-        <th>Total Price</th>
-        <th>Your Rating</th>
-        <th>Your Comment</th>
+        <th>Дестинация</th>
+        <th>Дата на заминаване</th>
+        <th>Дата на връщане</th>
+        <th>Обща цена</th>
+        <th>Рейтинг</th>
+        <th>Коментар</th>
         <th></th>
     </tr>
     <th:block th:each="reservation : ${reservations}">
         <tr th:if="${reservation.status == 'BOOKED'}">
             <td th:text="${reservation.destination.name}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
-            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' lv.'"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
+            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
 
             <!-- Display stars dynamically -->
             <td th:if="${reservation.isDestinationRated()}" th:utext="${'&#11088;'.repeat(reservation.destinationRating)}"></td>
@@ -31,7 +32,7 @@
                 <form th:action="@{/rateDestination}" method="post">
                     <input type="hidden" name="destinationId" th:value="${reservation.destination.id}">
                     <select name="stars" required>
-                        <option>Choose rating</option>
+                        <option>Избери рейтинг</option>
                         <option value="1">&#11088;</option>
                         <option value="2">&#11088;&#11088;</option>
                         <option value="3">&#11088;&#11088;&#11088;</option>
@@ -40,16 +41,16 @@
                     </select>
                     <td th:if="${!reservation.isDestinationRated()}">
                     <label for="comment"></label>
-                    <textarea name="comment" id="comment" rows="2" cols="30" placeholder="Write your review..." required></textarea>
+                    <textarea name="comment" id="comment" rows="2" cols="30" placeholder="Напиши коментар..." required></textarea>
                     </td>
                     <td th:if="${!reservation.isDestinationRated()}">
-                    <button type="submit">Rate</button>
+                    <button type="submit">Добави рейтинг</button>
                     </td>
                 </form>
             </td>
         </tr>
     </th:block>
 </table>
-<a href="/destinations">Back</a>
+<a href="/destinations">Върни се в главната страница</a>
 </body>
 </html>

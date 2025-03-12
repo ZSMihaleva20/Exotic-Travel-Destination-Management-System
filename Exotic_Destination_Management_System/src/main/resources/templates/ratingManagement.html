@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Rating Management</title>
+    <title>Управлявай рейтинги</title>
     <meta charset="utf-8">
 </head>
 <body>
-<h1>Destination Ratings</h1>
+<h1>Рейтинги по дестинации</h1>
 
 <!-- Display all destinations and their ratings -->
 <th:block th:each="destination : ${allDestinations}">
     <br>
     <h2 th:text="${destination.name}"></h2>
-    <p>Departure date: <span th:text="${#temporals.format(destination.dateOfDeparture, 'dd MMMM yyyy')}"></span></p>
-    <p>Return date: <span th:text="${#temporals.format(destination.dateOfReturn, 'dd MMMM yyyy')}"></span></p>
+    <p>Дата на заминаване: <span th:text="${#temporals.format(destination.dateOfDeparture, 'dd-MM-yyyy')}"></span></p>
+    <p>Дата на връщаве: <span th:text="${#temporals.format(destination.dateOfReturn, 'dd-MM-yyyy')}"></span></p>
     <th:block th:if="${ratingsByDestination.containsKey(destination)}">
         <table>
             <tr>
-                <th>User</th>
-                <th>Email</th>
-                <th>Rating</th>
-                <th>Comment</th>
-                <th>Rated At</th>
+                <th>Потребител</th>
+                <th>Имейл</th>
+                <th>Рейтинг</th>
+                <th>Коментар</th>
+                <th>Дата</th>
             </tr>
             <th:block th:each="rating : ${ratingsByDestination.get(destination)}">
                 <tr>
@@ -32,7 +32,7 @@
                     <td>
                         <!-- Add a delete button -->
                         <form th:action="@{/deleteRating/{ratingId}(ratingId=${rating.id})}" method="post">
-                            <button type="submit">Delete</button>
+                            <button type="submit">Изтрий</button>
                         </form>
                     </td>
                 </tr>
@@ -42,10 +42,10 @@
 
     <!-- If no ratings exist -->
     <th:block th:if="${!ratingsByDestination.containsKey(destination)}">
-        <p>No ratings available</p>
+        <p>Няма налични рейтинги за дестинацията</p>
     </th:block>
 </th:block>
 
-<a href="/destinations">Back</a>
+<a href="/destinations">Върни се в главната страница</a>
 </body>
 </html>

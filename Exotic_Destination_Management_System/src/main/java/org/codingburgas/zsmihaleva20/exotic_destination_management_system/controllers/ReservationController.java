@@ -6,13 +6,8 @@ import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.User;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.DestinationRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.ReservationRepository;
-import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.MailService;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.MailAndPdfService;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.ReservationNotificationService;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,8 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -33,13 +26,13 @@ public class ReservationController {
 
     private final ReservationRepository reservationRepository;
     private final DestinationRepository destinationRepository;
-    private final MailService mailService;
+    private final MailAndPdfService mailAndPdfService;
     private final ReservationNotificationService reservationNotificationService;
 
-    public ReservationController(ReservationRepository reservationRepository, DestinationRepository destinationRepository, MailService mailService, ReservationNotificationService reservationNotificationService) {
+    public ReservationController(ReservationRepository reservationRepository, DestinationRepository destinationRepository, MailAndPdfService mailAndPdfService, ReservationNotificationService reservationNotificationService) {
         this.reservationRepository = reservationRepository;
         this.destinationRepository = destinationRepository;
-        this.mailService = mailService;
+        this.mailAndPdfService = mailAndPdfService;
         this.reservationNotificationService = reservationNotificationService;
     }
 
@@ -76,7 +69,7 @@ public class ReservationController {
         destinationRepository.save(destination);
 
         try {
-            mailService.sendConfirmationMail(reservation, user);
+            mailAndPdfService.sendConfirmationMail(reservation, user);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -97,7 +90,7 @@ public class ReservationController {
         destinationRepository.save(destination);
 
         try {
-            mailService.sendCancelationMail(reservation, reservation.getUser());
+            mailAndPdfService.sendCancelationMail(reservation, reservation.getUser());
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

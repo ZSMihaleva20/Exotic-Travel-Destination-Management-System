@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-  <title>Destinations</title>
+  <title>Екзотични туристически дестинации</title>
+  <meta charset="UTF-8">
   <link rel="stylesheet" href="/css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
   <style>
@@ -265,36 +266,36 @@
 </head>
 <body>
 <header>
-  <h1>Destinations</h1>
+  <h1>Екзотични туристически дестинации</h1>
   <nav class="top-nav">
-    <a href="/destinations">Destinations</a>
-    <a href="/promotions">Promotions and Campaigns</a>
-    <a href="/statistics">Statistics</a>
+    <a href="/destinations">Дестинации</a>
+    <a href="/promotionsAndCampaigns">Промоции и кампании</a>
+    <a href="/statistics">Статистики</a>
   </nav>
   <div class="user-menu">
     <span class="material-symbols-outlined user-icon">account_circle</span>
     <div class="dropdown-menu" id="dropdownMenu">
-      <a href="/profile">Profile</a>
+      <a href="/profile">Профил</a>
 
       <!-- Admin & Manager -->
       <th:block th:if="${#strings.equals(user.role, 'ADMIN') or #strings.equals(user.role, 'MANAGER')}">
-        <a href="/destinationManagement">Manage Destinations</a>
-        <a href="/ratingManagement">Manage Ratings</a>
-        <a href="/reservationManagement">Manage Reservations</a>
+        <a href="/destinationManagement">Управлявай дестинации</a>
+        <a href="/ratingManagement">Управлявай рейтинги</a>
+        <a href="/reservationManagement">Управлявай резервации</a>
       </th:block>
 
       <!-- Admin Only -->
       <th:block th:if="${#strings.equals(user.role, 'ADMIN')}">
-        <a href="/profilesManagement">Manage Profiles</a>
+        <a href="/profilesManagement">Управлявай профили</a>
       </th:block>
 
       <!-- User Only -->
       <th:block th:if="${#strings.equals(user.role, 'USER')}">
-        <a href="/myReservations">My Reservations</a>
-        <a href="/rateDestination">Rate Your Destinations</a>
+        <a href="/myReservations">Mоите резервации</a>
+        <a href="/rateDestination">Добави рейтинг на дестинация</a>
       </th:block>
 
-      <a href="/logout">Log out</a>
+      <a href="/logout">Изход</a>
     </div>
   </div>
 </header>
@@ -302,35 +303,35 @@
 <main>
   <div>
     <form action="/destinations" method="get">
-      <label for="search">Search:</label>
-      <input type="text" id="search" name="keyword" placeholder="Enter keyword..." th:value="${keyword}">
+      <label for="search">Търси:</label>
+      <input type="text" id="search" name="keyword" placeholder="Въведи ключова дума..." th:value="${keyword}">
 
-      <label for="startDate">Date of departure:</label>
+      <label for="startDate">Дата на заминаване:</label>
       <input type="date" id="startDate" name="dateOfDeparture" th:value="${dateOfDeparture}">
 
-      <label for="endDate">Date of return:</label>
+      <label for="endDate">Дата на връщане:</label>
       <input type="date" id="endDate" name="dateOfReturn" th:value="${dateOfReturn}">
 
       <br>
 
-      <label for="minPrice">Min Price:</label>
+      <label for="minPrice">Минимална цена:</label>
       <input type="number" id="minPrice" name="minPrice" th:value="${minPrice}">
 
-      <label for="maxPrice">Max Price:</label>
+      <label for="maxPrice">Максимална цена:</label>
       <input type="number" id="maxPrice" name="maxPrice" th:value="${maxPrice}">
 
-      <label for="minRating">Min Rating:</label>
+      <label for="minRating">Минимален рейтинг:</label>
       <input type="number" id="minRating" name="minRating" min="0" max="5" step="0.1" th:value="${minRating}">
 
-      <label for="sortOptions">Sort by:</label>
+      <label for="sortOptions">Сортирай по:</label>
       <select id="sortOptions" name="sortBy">
-        <option value="none" th:selected="${currentSort == 'none'}">Select</option>
-        <option value="price" th:selected="${currentSort == 'price'}">Price</option>
-        <option value="popularity" th:selected="${currentSort == 'popularity'}">Popularity</option>
-        <option value="rating" th:selected="${currentSort == 'rating'}">Rating</option>
+        <option value="none" th:selected="${currentSort == 'none'}">Всички</option>
+        <option value="price" th:selected="${currentSort == 'price'}">Цена</option>
+        <option value="popularity" th:selected="${currentSort == 'popularity'}">Популярност</option>
+        <option value="rating" th:selected="${currentSort == 'rating'}">Рейтинг</option>
       </select>
 
-      <button type="submit">Filter & Sort</button>
+      <button type="submit">Филтрирай и сортирай</button>
     </form>
     <ul>
       <th:block th:each="destination : ${acceptedDestinations}">
@@ -338,23 +339,22 @@
         <li>
           <h2 th:text="${destination.name}"></h2>
           <ul class="destination-description-list"
-              th:utext="${#strings.listJoin(#strings.arraySplit(destination.description, '\\.'), '</li><li>') + '.'}">
+              th:utext="${#strings.listJoin(#strings.arraySplit(destination.description, '\\;'), '</li><li>')}">
           </ul>
-          <p>Departure date: <span th:text="${#temporals.format(destination.dateOfDeparture, 'dd MMMM yyyy')}"></span></p>
-          <p>Return date: <span th:text="${#temporals.format(destination.dateOfReturn, 'dd MMMM yyyy')}"></span></p>
+          <p>Дата на заминаване: <span th:text="${#temporals.format(destination.dateOfDeparture, 'dd-MM-yyyy')}"></span></p>
+          <p>Дата на връщане: <span th:text="${#temporals.format(destination.dateOfReturn, 'dd-MM-yyyy')}"></span></p>
           <img th:src="'/uploaded-image/' + ${destination.imageUrl}" alt="Destination Image">
-          <p>Max people: <span th:text="${destination.limitedPeople}"></span></p>
-          <p>Remaining spots: <span th:text="${destination.remainingPeople}"></span></p>
-          <p>Price for 1 person: <span th:text="${#numbers.formatDecimal(destination.price, 2, 2)}"></span> lv.</p>
-          <p>Average Rating: <span th:text="${destination.getAverageRating()}"></span> &#11088;</p>
-          <p>Popularity: <span th:text="${destination.getPopularity()}"></span> people reserved</p>
+          <p>Оставащи места: <span th:text="${destination.remainingPeople}"></span></p>
+          <p>Цена за 1 човек: <span th:text="${#numbers.formatDecimal(destination.price, 2, 2)}"></span> лв.</p>
+          <p>Среден рейтинг: <span th:text="${destination.getAverageRating()}"></span> &#11088;</p>
+          <p>Популярност: <span th:text="${destination.getPopularity()}"></span> човека резервирали</p>
           <th:block th:if="${destination.remainingPeople == 0 or destination.dateOfReturn < T(java.time.LocalDate).now()}">
-            <p style="color: red; font-weight: bold;">Reservation Closed</p>
+            <p style="color: red; font-weight: bold;">Затворено за резервации</p>
           </th:block>
           <div sec:authorize="hasAuthority('USER')">
           <th:block th:unless="${destination.remainingPeople == 0 or destination.dateOfReturn < T(java.time.LocalDate).now()}">
             <a th:href="@{/reservation/{id}(id=${destination.id})}">
-              <button class="reservation-button">Make reservation</button>
+              <button class="reservation-button">Направи резервация</button>
             </a>
           </th:block>
           </div>
@@ -412,14 +412,14 @@
         returnInput.min = departureInput.value; // Set return date min to departure date
       }
       if (returnInput.value && departureInput.value > returnInput.value) {
-        alert("Departure date cannot be after the return date!");
+        alert("Датата на тръгване не може да бъде след датата на връщане!");
         departureInput.value = ""; // Reset invalid departure date
       }
     });
 
     returnInput.addEventListener("change", function () {
       if (departureInput.value && returnInput.value < departureInput.value) {
-        alert("Return date must be after the departure date!");
+        alert("Датата на връщане трябва да бъде след датата на тръгване!");
         returnInput.value = ""; // Reset invalid return date
       }
     });

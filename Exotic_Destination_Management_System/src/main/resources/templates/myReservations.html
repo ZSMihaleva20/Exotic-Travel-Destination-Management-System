@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>My Reservations</title>
+    <title>Моите резервации</title>
     <meta charset="UTF-8">
     <script>
         function showNotifications() {
@@ -100,7 +100,7 @@
 
     <!-- Notification Dropdown -->
     <div id="notificationDropdown" class="dropdown">
-        <p th:if="${#lists.isEmpty(urgentReservations)}">✅ No upcoming trips in 3 days.</p>
+        <p th:if="${#lists.isEmpty(urgentReservations)}">✅ Няма предстоящи пътувания през следващите 3 дни</p>
         <div th:each="reservation : ${urgentReservations}" class="notification-card">
             <div>
                 <span th:text="${reservation.destination.name}"></span> <br>
@@ -110,36 +110,34 @@
             <span class="days-badge"
                   th:classappend="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), reservation.destination.dateOfDeparture) == 1 ? 'red' :
                                   (T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), reservation.destination.dateOfDeparture) <= 3 ? 'orange' : 'green')}"
-                  th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), reservation.destination.dateOfDeparture)} + ' days'">
+                  th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), reservation.destination.dateOfDeparture)} + ' дни'">
             </span>
         </div>
     </div>
 </div>
 
 
-<h1>My Reservations</h1>
+<h1>Моите резервации</h1>
 
 <!-- Активни резервации -->
-<h2>Active Reservations</h2>
+<h2>Активни дестинации</h2>
 <table>
     <tr>
-        <th>Destination</th>
-        <th>Departure Date</th>
-        <th>Return Date</th>
-        <th>Number of People</th>
-        <th>Total Price</th>
-        <th>Status</th>
-        <th>Action</th>
+        <th>Дестинация</th>
+        <th>Дата на заминаване</th>
+        <th>Дата на връщане</th>
+        <th>Брой хора</th>
+        <th>Обща цена</th>
+        <th>Действие</th>
         <th></th>
     </tr>
     <th:block th:each="reservation : ${activeReservations}">
         <tr>
             <td th:text="${reservation.destination.name}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
-            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 1, 2)} + ' lv.'"></td>
-            <td th:text="${reservation.status}"></td>
+            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
             <td>
                 <form th:action="@{/cancel-reservation/{id}(id=${reservation.id})}" method="post">
                     <button type="submit">Cancel</button>
@@ -150,52 +148,48 @@
 </table>
 
 <!-- Отменени резервации -->
-<h2>Canceled Reservations</h2>
+<h2>Отменени резервации</h2>
 <table>
     <tr>
-        <th>Destination</th>
-        <th>Departure Date</th>
-        <th>Return Date</th>
-        <th>Number of People</th>
-        <th>Total Price</th>
-        <th>Status</th>
+        <th>Дестинация</th>
+        <th>Дата на заминаване</th>
+        <th>Дата на връщане</th>
+        <th>Брой хора</th>
+        <th>Обща цена</th>
     </tr>
     <th:block th:each="reservation : ${canceledReservations}">
         <tr>
             <td th:text="${reservation.destination.name}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
-            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 1, 2)} + ' lv.'"></td>
-            <td th:text="${reservation.status}"></td>
+            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
         </tr>
     </th:block>
 </table>
 
 <!-- Минали резервации -->
-<h2>Past reservations</h2>
+<h2>Минали резервации</h2>
 <table>
     <tr>
-        <th>Destination</th>
-        <th>Departure Date</th>
-        <th>Return Date</th>
-        <th>Number of People</th>
-        <th>Total Price</th>
-        <th>Status</th>
+        <th>Дестинация</th>
+        <th>Дата на заминаване</th>
+        <th>Дата на връщане</th>
+        <th>Брой хора</th>
+        <th>Обща цена</th>
     </tr>
     <th:block th:each="reservation : ${pastReservations}">
         <tr>
             <td th:text="${reservation.destination.name}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMMM yyyy')}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd MMMM yyyy')}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
+            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
             <td th:text="${reservation.numberOfPeople}"></td>
-            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 1, 2)} + ' lv.'"></td>
-            <td>PAST</td>
+            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
         </tr>
     </th:block>
 </table>
 
-<a href="/destinations">Back</a>
+<a href="/destinations">Върни се в главната страница</a>
 
 </body>
 </html>

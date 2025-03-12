@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>User Profile</title>
+    <title>Информация за потребителя</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,39 +34,39 @@
 <body>
 
 <div class="profile-container">
-    <div class="profile-header">User Profile</div>
+    <div class="profile-header">Информация за потребителя</div>
 
     <div class="profile-info">
-        <span class="label">First Name:</span>
+        <span class="label">Име:</span>
         <span th:text="${user.firstName}"></span>
     </div>
 
     <div class="profile-info">
-        <span class="label">Last Name:</span>
+        <span class="label">Фамилия:</span>
         <span th:text="${user.lastName}"></span>
     </div>
 
     <div class="profile-info">
-        <span class="label">Full Name:</span>
-        <span th:text="${user.fullName}"></span>
-    </div>
-
-    <div class="profile-info">
-        <span class="label">Username:</span>
+        <span class="label">Потребителско име:</span>
         <span th:text="${user.username}"></span>
     </div>
 
     <div class="profile-info">
-        <span class="label">Email:</span>
+        <span class="label">Имейл:</span>
         <span th:text="${user.email}"></span>
     </div>
 
     <div class="profile-info">
-        <span class="label">Role:</span>
-        <span th:text="${user.role}"></span>
+        <span class="label">Роля:</span>
+        <span th:switch="${user.role}">
+        <span th:case="'ADMIN'">АДМИН</span>
+        <span th:case="'MANAGER'">МЕНИДЖЪР</span>
+        <span th:case="'USER'">ПОТРЕБИТЕЛ</span>
+    </span>
     </div>
 
+
 </div>
-<a href="/destinations">Back</a>
+<a href="/destinations">Върни се в главната страница</a>
 </body>
 </html>

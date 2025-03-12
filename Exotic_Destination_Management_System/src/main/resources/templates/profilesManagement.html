@@ -2,38 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Profiles Management</title>
+    <title>Управление на профили</title>
 </head>
 <body>
-<h1>Profiles Management</h1>
+<h1>Управление на профили</h1>
 
 <!-- Create new admin or manager form -->
 <form th:action="@{/createUser}" method="post" th:object="${user}">
-    <h2>Create New Admin/Manager</h2>
-    <label for="firstName">First Name</label>
+    <h2>Създай нов админ/мениджър</h2>
+    <label for="firstName">Име: </label>
     <input type="text" id="firstName" th:field="*{firstName}" required><br>
 
-    <label for="lastName">Last Name</label>
+    <label for="lastName">Фамилия:</label>
     <input type="text" id="lastName" th:field="*{lastName}" required><br>
 
-    <label for="username">Username</label>
+    <label for="username">Потребителско име:</label>
     <input type="text" id="username" th:field="*{username}" required><br>
 
-    <label for="email">Email</label>
+    <label for="email">Имейл</label>
     <input type="email" id="email" th:field="*{email}" required><br>
 
-    <label for="role">Role</label>
+    <label for="role">Роля</label>
     <select id="role" th:field="*{role}">
-        <option value="ADMIN">Admin</option>
-        <option value="MANAGER">Manager</option>
+        <option value="ADMIN">Админ</option>
+        <option value="MANAGER">Мениджър</option>
     </select><br>
 
-    <label for="password">Password</label>
+    <label for="password">Парола</label>
     <input type="password" id="password" th:field="*{password}" required><br>
 
-    <button type="submit">Create User</button>
+    <button type="submit">Създай потребител</button>
 </form>
 
-<a href="/destinations">Back</a>
+<a href="/destinations">Върни се в главната страница</a>
 </body>
 </html>

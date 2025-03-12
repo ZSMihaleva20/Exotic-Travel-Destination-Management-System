@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Register</title>
+  <title>Регистрация</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -54,26 +54,26 @@
 <form th:action="@{/register}" th:object="${user}" method="post">
   <h1>Register</h1>
 
-  <label>First Name</label>
+  <label>Име</label>
   <input type="text" id="firstName" th:field="*{firstName}" required>
 
-  <label>Last Name</label>
+  <label>Фамилия</label>
   <input type="text" id="lastName" th:field="*{lastName}" required>
 
-  <label>Username</label>
-  <input type="text" id="username" th:field="*{username}" required>
-
-  <label>Email</label>
+  <label>Имейл</label>
   <input type="email" id="email" th:field="*{email}" required>
 
-  <label>Password</label>
+  <label>Потребителско име</label>
+  <input type="text" id="username" th:field="*{username}" required>
+
+  <label>Парола</label>
   <input type="password" id="password" th:field="*{password}" required>
 
   <br>
   <br>
 
-  <button type="submit">Register</button>
-  <a th:href="@{/login}">Or Log In</a>
+  <button type="submit">Регистрация</button>
+  <a th:href="@{/login}">Влез</a>
 </form>
 </body>
 </html>

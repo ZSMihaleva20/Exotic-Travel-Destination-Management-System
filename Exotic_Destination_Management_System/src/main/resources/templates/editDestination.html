@@ -3,40 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit destination</title>
+  <title>Редактирай дестинация</title>
   <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-<h1>Edit destination</h1>
+<h1>Редактирай дестинация</h1>
 
 <form th:action="@{'/editDestination/' + ${destination.id}}" method="post" enctype="multipart/form-data">
-  <label for="name">Name:</label>
+  <label for="name">Име на дестинацията:</label>
   <input type="text" id="name" name="name" th:value="${destination.name}" required><br><br>
 
-  <label for="description">Description:</label>
+  <label for="description">Описание:</label>
   <textarea id="description" name="description" th:text="${destination.description}" required></textarea><br><br>
 
-  <label for="dateOfDeparture">Date of departure:</label>
+  <label for="dateOfDeparture">Дата на заминаване:</label>
   <input type="date" id="dateOfDeparture" name="dateOfDeparture" th:value="${destination.dateOfDeparture}" required><br><br>
 
-  <label for="dateOfReturn">Date of return:</label>
+  <label for="dateOfReturn">Дата на връщане:</label>
   <input type="date" id="dateOfReturn" name="dateOfReturn" th:value="${destination.dateOfReturn}" required><br><br>
 
-  <label for="price">Price:</label>
+  <label for="price">Цена за 1 човек:</label>
   <input type="number" step="0.01" id="price" name="price" th:value="${destination.price}" required><br><br>
 
-  <label for="limitedPeople">Max number of people:</label>
+  <label for="limitedPeople">Максимален брой хора:</label>
   <input type="number" id="limitedPeople" name="limitedPeople" th:value="${destination.limitedPeople}" required><br><br>
 
-  <label for="image">Change image:</label>
+  <label for="image">Промени снимката:</label>
   <input type="file" id="image" name="image" accept="image/*">
 
   <img th:src="@{'/uploaded-image/' + ${destination.imageUrl}}" width="100" /><br><br>
 
-  <button type="submit">Edit</button>
+  <button type="submit">Редактирай</button>
 </form>
 
-<a href="/destinationManagement">Back</a>
+<a href="/destinationManagement">Върни се в главната страница</a>
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     let departureInput = document.getElementById("dateOfDeparture");
@@ -49,14 +50,14 @@
 
       // Check if departure date is after return date
       if (returnInput.value && departureInput.value > returnInput.value) {
-        alert("Departure date cannot be after the return date!");
+        alert("Датата на тръгване не може да бъде след датата на връщане!");
         departureInput.value = ""; // Reset invalid departure date
       }
     });
 
     returnInput.addEventListener("change", function () {
       if (departureInput.value && returnInput.value < departureInput.value) {
-        alert("Return date must be after the departure date!");
+        alert("Датата на връщане трябва да бъде след датата на тръгване!");
         returnInput.value = ""; // Reset invalid return date
       }
     });

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Statistics</title>
+    <title>Статистики</title>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -197,36 +197,36 @@
 </head>
 <body>
 <header>
-    <h1>Statistics</h1>
+    <h1>Статистики</h1>
     <nav class="top-nav">
-        <a href="/destinations">Destinations</a>
-        <a href="/promotions">Promotions and Campaigns</a>
-        <a href="/statistics">Statistics</a>
+        <a href="/destinations">Дестинации</a>
+        <a href="/promotionsAndCampaigns">Промоции и кампании</a>
+        <a href="/statistics">Статистики</a>
     </nav>
     <div class="user-menu">
         <span class="material-symbols-outlined user-icon">account_circle</span>
         <div class="dropdown-menu" id="dropdownMenu">
-            <a href="/profile">Profile</a>
+            <a href="/profile">Профил</a>
 
             <!-- Admin & Manager -->
             <th:block th:if="${#strings.equals(user.role, 'ADMIN') or #strings.equals(user.role, 'MANAGER')}">
-                <a href="/destinationManagement">Manage Destinations</a>
-                <a href="/ratingManagement">Manage Ratings</a>
-                <a href="/reservationManagement">Manage Reservations</a>
+                <a href="/destinationManagement">Управлявай дестинации</a>
+                <a href="/ratingManagement">Управлявай рейтинги</a>
+                <a href="/reservationManagement">Управлявай дестинации</a>
             </th:block>
 
             <!-- Admin Only -->
             <th:block th:if="${#strings.equals(user.role, 'ADMIN')}">
-                <a href="/profilesManagement">Manage Profiles</a>
+                <a href="/profilesManagement">Управлявай профили</a>
             </th:block>
 
             <!-- User Only -->
             <th:block th:if="${#strings.equals(user.role, 'USER')}">
-                <a href="/myReservations">My Reservations</a>
-                <a href="/rateDestination">Rate Your Destinations</a>
+                <a href="/myReservations">Моите резервации</a>
+                <a href="/rateDestination">Добави рейтинг на дестинация</a>
             </th:block>
 
-            <a href="/logout">Log out</a>
+            <a href="/logout">Изход</a>
         </div>
     </div>
 </header>
@@ -337,7 +337,7 @@
                         label: function(tooltipItem) {
                             // Customize tooltip label text
                             const value = tooltipItem.raw;
-                            return `Среден рейтинг: ${value}`; // Customize how the text should appear
+                            return `Среден рейтинг: ${value} + звезди`; // Customize how the text should appear
                         }
                     }
                 },
