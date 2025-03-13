@@ -140,7 +140,7 @@
             <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
             <td>
                 <form th:action="@{/cancel-reservation/{id}(id=${reservation.id})}" method="post">
-                    <button type="submit">Cancel</button>
+                    <button type="submit">Откажи</button>
                 </form>
             </td>
         </tr>
