@@ -21,7 +21,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register", "/css/**", "/js/**", "/images/**", "/", "/uploaded-image/**").permitAll()
+                        .requestMatchers("/register", "/css/**", "/js/**", "/images/**", "/", "/uploaded-image/**", "/home").permitAll()
                         .requestMatchers("/destinationManagement", "reservationManagement", "/addDestination", "/editDestination/", "ratingManagement").hasAnyAuthority("ADMIN", "MANAGER") // Allow both ADMIN and MANAGER
                         .requestMatchers("/profilesManagement").hasAuthority("ADMIN") // Only ADMIN for adminProfiles
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()

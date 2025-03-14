@@ -1,79 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Регистрация</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0 auto;
-      padding: 20px;
-      max-width: 500px;
-    }
-    form {
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      padding: 15px;
-      border-radius: 5px;
-      height: 600px;
-      backdrop-filter: blur(4px);
-    }
-    form label {
-      display: block;
-      font-weight: bold;
-    }
-
-    form select,input
-    {
-      width: 100%;
-      padding: 8px;
-      box-sizing: border-box;
-      border: 1px solid #cccccc;
-      background-color: white;
-      border-radius: 2px;
-    }
-    form button {
-      padding: 10px;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    form button:hover {
-      background-color: #0056b3;
-    }
-    form a{
-      text-decoration: none;
-      color: black;
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/logInAndSignUpStyle.css">
 </head>
 <body>
 
-<form th:action="@{/register}" th:object="${user}" method="post">
-  <h1>Регистрация</h1>
+<div class="form-container">
+  <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Exotico</h2>
 
-  <label>Име</label>
-  <input type="text" id="firstName" th:field="*{firstName}" required>
+  <h1 class="form-title">Регистрация</h1>
 
-  <label>Фамилия</label>
-  <input type="text" id="lastName" th:field="*{lastName}" required>
+  <form th:action="@{/register}" th:object="${user}" method="post">
+    <label>Име</label>
+    <input type="text" id="firstName" th:field="*{firstName}" required class="form-input">
 
-  <label>Имейл</label>
-  <input type="email" id="email" th:field="*{email}" required>
+    <label>Фамилия</label>
+    <input type="text" id="lastName" th:field="*{lastName}" required class="form-input">
 
-  <label>Потребителско име</label>
-  <input type="text" id="username" th:field="*{username}" required>
+    <label>Имейл</label>
+    <input type="email" id="email" th:field="*{email}" required class="form-input">
 
-  <label>Парола</label>
-  <input type="password" id="password" th:field="*{password}" required>
+    <label>Потребителско име</label>
+    <input type="text" id="username" th:field="*{username}" required class="form-input">
 
-  <br>
-  <br>
+    <label>Парола</label>
+    <input type="password" id="password" th:field="*{password}" required class="form-input">
 
-  <button type="submit">Регистрация</button>
-  <a th:href="@{/login}">Влез</a>
-</form>
+    <button type="submit" class="form-button">Регистрация</button>
+
+    <p class="form-link">Вече имате акаунт? <a href="/login">Вход</a></p>
+  </form>
+</div>
+
 </body>
 </html>

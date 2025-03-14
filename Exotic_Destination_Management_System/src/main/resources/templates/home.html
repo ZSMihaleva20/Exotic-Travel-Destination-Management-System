@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exotico - Открий света</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/homePageStyle.css">
+</head>
+<body>
+
+<!-- Навигация -->
+<nav class="navbar fixed w-full z-50 flex justify-between items-center">
+  <h2 class="text-2xl font-bold text-gray-800">Exotico</h2>
+</nav>
+
+<!-- Главна секция -->
+<header class="hero">
+  <div class="hero-content">
+    <h1 class="text-5xl font-bold mb-4">Добре дошли в <span class="text-yellow-400">Exotico</span></h1>
+    <p class="text-lg max-w-xl mx-auto">Открийте най-красивите екзотични дестинации и планирайте пътешествието на мечтите си!</p>
+
+    <!-- Нови бутони за вход и регистрация -->
+    <div class="mt-6">
+      <a href="/login" class="inline-block btn btn-primary mr-4">Влез</a>
+      <a href="/register" class="inline-block btn btn-secondary">Регистрирай се</a>
+    </div>
+  </div>
+</header>
+
+<!-- Секция с дестинации -->
+<section id="destinations">
+  <h2>Популярни дестинации</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+    <!-- Карта 1 -->
+    <div class="destination-card">
+      <img th:src="@{/images/bali.jpg}" alt="Бали">
+      <div class="p-4">
+        <h3>Бали, Индонезия</h3>
+        <p>Насладете се на екзотични плажове и култура</p>
+      </div>
+    </div>
+
+    <!-- Карта 2 -->
+    <div class="destination-card">
+      <img th:src="@{/images/maldivies.jpg}" alt="Малдиви">
+      <div class="p-4">
+        <h3>Малдиви</h3>
+        <p>Луксозни бунгала върху океана</p>
+      </div>
+    </div>
+
+    <!-- Карта 3 -->
+    <div class="destination-card">
+      <img th:src="@{/images/seychelles.jpg}" alt="Сейшелски острови">
+      <div class="p-4">
+        <h3>Сейшелски острови</h3>
+        <p>Райски плажове и екзотична природа</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>&copy; 2025 Exotico. Всички права запазени.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+/* General Button Styling */
+/* General Button Styling */
+.btn-secondary {
+    background-color: #1aa61a; /* Ярко зелено */
+    color: white;
+    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+}
+
+/* Hover Effect */
+.btn-secondary:hover {
+    background-color: #1b9813; /* По-тъмно зелено при ховър */
+}
+

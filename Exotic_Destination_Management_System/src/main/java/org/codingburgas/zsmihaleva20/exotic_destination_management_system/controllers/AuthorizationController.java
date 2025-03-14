@@ -35,7 +35,7 @@ public class AuthorizationController {
 
     @GetMapping("/")
     public String index() {
-        return "login";
+        return "home";
     }
 
     @GetMapping("/register")
