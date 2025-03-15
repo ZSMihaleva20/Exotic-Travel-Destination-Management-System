@@ -11,8 +11,6 @@
     color: white;
     padding: 12px;
     font-size: 18px;
-    font-weight: bold;
-    border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: 0.3s;
@@ -22,21 +20,14 @@
     background-color: #2980b9;
 }
 
-/* General Button Styling */
-/* General Button Styling */
 .btn-secondary {
-    background-color: #1aa61a; /* Ярко зелено */
+    background-color: #1aa61a;
     color: white;
     font-weight: bold;
-    padding: 12px 20px;
+    padding: 12px;
     border-radius: 8px;
-    text-align: center;
-    border: none;
-    cursor: pointer;
 }
 
-/* Hover Effect */
 .btn-secondary:hover {
-    background-color: #1b9813; /* По-тъмно зелено при ховър */
+    background-color: #1b9813;
 }
-
