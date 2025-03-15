@@ -54,121 +54,125 @@
     </div>
   </div>
 </nav>
+<!-- Main Layout Container (Centers Content & Limits Width) -->
+<!-- Main Layout Container (Increased Width) -->
+<div class="container max-w-7xl mx-auto px-4 md:px-6">
 
 
-    <!-- Search & Filter Form -->
-    <form action="/destinations" method="get" class="bg-white p-6 rounded-lg shadow-md mb-6">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <!-- Search & Filter Form (Centered & Compact) -->
+  <form action="/destinations" method="get" class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-        <!-- Search Keyword -->
-        <div class="flex items-center gap-2">
-          <span class="text-gray-400">🔍</span>
-          <input type="text" name="keyword" placeholder="Ключова дума..." class="input-field w-full" th:value="${keyword}">
-        </div>
-
-        <!-- Departure Date -->
-        <div class="flex items-center gap-2">
-          <label for="dateOfDeparture" class="text-sm font-medium text-gray-600 whitespace-nowrap">Заминаване:</label>
-          <input type="date" id="dateOfDeparture" name="dateOfDeparture" class="input-field w-full" th:value="${dateOfDeparture}">
-        </div>
-
-        <!-- Return Date -->
-        <div class="flex items-center gap-2">
-          <label for="dateOfReturn" class="text-sm font-medium text-gray-600 whitespace-nowrap">Връщане:</label>
-          <input type="date" id="dateOfReturn" name="dateOfReturn" class="input-field w-full" th:value="${dateOfReturn}">
-        </div>
-
-        <!-- Minimum Price -->
-        <div class="flex items-center gap-2">
-          <span class="text-gray-400">💰</span>
-          <input type="number" name="minPrice" placeholder="Мин. цена" class="input-field w-full" th:value="${minPrice}">
-        </div>
-
-        <!-- Maximum Price -->
-        <div class="flex items-center gap-2">
-          <span class="text-gray-400">💰</span>
-          <input type="number" name="maxPrice" placeholder="Макс. цена" class="input-field w-full" th:value="${maxPrice}">
-        </div>
-
-        <!-- Minimum Rating -->
-        <div class="flex items-center gap-2">
-          <span class="text-gray-400">⭐</span>
-          <input type="number" name="minRating" min="0" max="5" step="0.1" placeholder="Мин. рейтинг" class="input-field w-full" th:value="${minRating}">
-        </div>
-
-        <!-- Sort Options -->
-        <!-- Sort Options (Centered and Below Max Price) -->
-        <div class="col-span-3 flex justify-center items-center mt-4">
-          <label for="sortOptions" class="text-sm font-medium text-gray-600 mr-2">Сортирай по:</label>
-          <select id="sortOptions" name="sortBy" class="input-field w-48 text-center">
-            <option value="none" th:selected="${currentSort == 'none'}">📌 Всички</option>
-            <option value="price" th:selected="${currentSort == 'price'}">💰 Цена</option>
-            <option value="popularity" th:selected="${currentSort == 'popularity'}">🔥 Популярност</option>
-            <option value="rating" th:selected="${currentSort == 'rating'}">⭐ Рейтинг</option>
-          </select>
-        </div>
+      <!-- Search Keyword -->
+      <div class="flex items-center gap-2">
+        <span class="text-gray-400">🔍</span>
+        <input type="text" name="keyword" placeholder="Ключова дума..." class="input-field w-full" th:value="${keyword}">
       </div>
 
-      <!-- Submit Button -->
-      <button type="submit" class="btn btn-primary mt-4 w-full">Филтрирай и сортирай</button>
-    </form>
+      <!-- Departure Date -->
+      <div class="flex items-center gap-2">
+        <label for="dateOfDeparture" class="text-sm font-medium text-gray-600 whitespace-nowrap">Заминаване:</label>
+        <input type="date" id="dateOfDeparture" name="dateOfDeparture" class="input-field w-full" th:value="${dateOfDeparture}">
+      </div>
 
+      <!-- Return Date -->
+      <div class="flex items-center gap-2">
+        <label for="dateOfReturn" class="text-sm font-medium text-gray-600 whitespace-nowrap">Връщане:</label>
+        <input type="date" id="dateOfReturn" name="dateOfReturn" class="input-field w-full" th:value="${dateOfReturn}">
+      </div>
 
-    <!-- Destination Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <th:block th:each="destination : ${acceptedDestinations}">
-        <th:block th:if="${!destination.isOnPromotion}">
-          <div class="bg-white p-6 rounded-lg shadow-md flex flex-col min-h-full">
+      <!-- Minimum Price -->
+      <div class="flex items-center gap-2">
+        <span class="text-gray-400">💰</span>
+        <input type="number" name="minPrice" placeholder="Мин. цена" class="input-field w-full" th:value="${minPrice}">
+      </div>
 
-            <!-- Destination Name -->
-            <h2 class="text-xl font-bold text-gray-700" th:text="${destination.name}"></h2>
+      <!-- Maximum Price -->
+      <div class="flex items-center gap-2">
+        <span class="text-gray-400">💰</span>
+        <input type="number" name="maxPrice" placeholder="Макс. цена" class="input-field w-full" th:value="${maxPrice}">
+      </div>
 
-            <!-- Destination Description -->
-            <ul class="text-gray-600 mt-2 list-disc pl-5 flex-grow"
-                th:utext="${#strings.listJoin(#strings.arraySplit(destination.description, '\\;'), '</li><li>')}">
-            </ul>
+      <!-- Minimum Rating -->
+      <div class="flex items-center gap-2">
+        <span class="text-gray-400">⭐</span>
+        <input type="number" name="minRating" min="0" max="5" step="0.1" placeholder="Мин. рейтинг" class="input-field w-full" th:value="${minRating}">
+      </div>
 
-            <!-- Dates -->
-            <p class="text-gray-600 mt-2">📅 Дата на заминаване:
-              <span th:text="${#temporals.format(destination.dateOfDeparture, 'dd-MM-yyyy')}"></span>
-            </p>
-            <p class="text-gray-600">📅 Дата на връщане:
-              <span th:text="${#temporals.format(destination.dateOfReturn, 'dd-MM-yyyy')}"></span>
-            </p>
-
-            <!-- Image -->
-            <img th:src="'/uploaded-image/' + ${destination.imageUrl}"
-                 alt="Destination Image"
-                 class="w-full h-48 object-cover rounded-lg mt-4">
-
-            <!-- Other Info -->
-            <p class="mt-2">🧑‍🤝‍🧑 Оставащи места: <span th:text="${destination.remainingPeople}"></span></p>
-            <p class="text-yellow-500 font-bold">💰 Цена:
-              <span th:text="${#numbers.formatDecimal(destination.price, 2, 2)}"></span> лв.
-            </p>
-            <p>⭐ Среден рейтинг: <span th:text="${destination.getAverageRating()}"></span></p>
-            <p>🔥 Популярност: <span th:text="${destination.getPopularity()}"></span> резервирали</p>
-
-            <!-- Closed Reservations Notice -->
-            <th:block th:if="${destination.remainingPeople == 0 or destination.dateOfDeparture <= T(java.time.LocalDate).now()}">
-              <p class="text-red-500 font-bold">🚫 Затворено за резервации</p>
-            </th:block>
-
-            <!-- Reserve Button (Always at Bottom) -->
-            <div class="mt-auto pt-4">
-              <div sec:authorize="hasAuthority('USER')">
-                <th:block th:if="${destination.dateOfDeparture > T(java.time.LocalDate).now()}">
-                  <a th:href="@{/reservation/{id}(id=${destination.id})}">
-                    <button class="btn btn-secondary w-full">Направи резервация</button>
-                  </a>
-                </th:block>
-              </div>
-            </div>
-
-          </div>
-        </th:block>
-      </th:block>
+      <!-- Sort Options -->
+      <div class="col-span-3 flex justify-center items-center mt-4">
+        <label for="sortOptions" class="text-sm font-medium text-gray-600 mr-2">Сортирай по:</label>
+        <select id="sortOptions" name="sortBy" class="input-field w-48 text-center">
+          <option value="none" th:selected="${currentSort == 'none'}">📌 Всички</option>
+          <option value="price" th:selected="${currentSort == 'price'}">💰 Цена</option>
+          <option value="popularity" th:selected="${currentSort == 'popularity'}">🔥 Популярност</option>
+          <option value="rating" th:selected="${currentSort == 'rating'}">⭐ Рейтинг</option>
+        </select>
+      </div>
     </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary mt-4 w-full">Филтрирай и сортирай</button>
+  </form>
+
+  <!-- Destination Cards (Centered & Limited Width) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <th:block th:each="destination : ${acceptedDestinations}">
+      <th:block th:if="${!destination.isOnPromotion}">
+        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col min-h-full">
+
+          <!-- Destination Name -->
+          <h2 class="text-xl font-bold text-gray-700" th:text="${destination.name}"></h2>
+
+          <!-- Destination Description -->
+          <ul class="text-gray-600 mt-2 list-disc pl-5 flex-grow"
+              th:utext="${#strings.listJoin(#strings.arraySplit(destination.description, '\\;'), '</li><li>')}">
+          </ul>
+
+          <!-- Dates -->
+          <p class="text-gray-600 mt-2">📅 Дата на заминаване:
+            <span th:text="${#temporals.format(destination.dateOfDeparture, 'dd-MM-yyyy')}"></span>
+          </p>
+          <p class="text-gray-600">📅 Дата на връщане:
+            <span th:text="${#temporals.format(destination.dateOfReturn, 'dd-MM-yyyy')}"></span>
+          </p>
+
+          <!-- Image -->
+          <img th:src="'/uploaded-image/' + ${destination.imageUrl}"
+               alt="Destination Image"
+               class="w-full h-40 object-cover rounded-lg mt-4">
+
+          <!-- Other Info -->
+          <p class="mt-2">🧑‍🤝‍🧑 Оставащи места: <span th:text="${destination.remainingPeople}"></span></p>
+          <p class="text-yellow-500 font-bold">💰 Цена:
+            <span th:text="${#numbers.formatDecimal(destination.price, 2, 2)}"></span> лв.
+          </p>
+          <p>⭐ Среден рейтинг: <span th:text="${destination.getAverageRating()}"></span></p>
+          <p>🔥 Популярност: <span th:text="${destination.getPopularity()}"></span> резервирали</p>
+
+          <!-- Closed Reservations Notice -->
+          <th:block th:if="${destination.remainingPeople == 0 or destination.dateOfDeparture <= T(java.time.LocalDate).now()}">
+            <p class="text-red-500 font-bold">🚫 Затворено за резервации</p>
+          </th:block>
+
+          <!-- Reserve Button (Always at Bottom) -->
+          <div class="mt-auto pt-4">
+            <div sec:authorize="hasAuthority('USER')">
+              <th:block th:if="${destination.dateOfDeparture > T(java.time.LocalDate).now()}">
+                <a th:href="@{/reservation/{id}(id=${destination.id})}">
+                  <button class="btn btn-secondary w-full">Направи резервация</button>
+                </a>
+              </th:block>
+            </div>
+          </div>
+
+        </div>
+      </th:block>
+    </th:block>
+  </div>
+
+</div>
+
 
   </main>
 
