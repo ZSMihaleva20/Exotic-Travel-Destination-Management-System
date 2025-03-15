@@ -1,30 +1,48 @@
 <!DOCTYPE html>
-<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<html lang="bg">
 <head>
     <meta charset="UTF-8">
-    <title>Вход</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход | Exotico</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/css/logInAndSignUpStyle.css">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+    <link rel="stylesheet" href="/css/logInAndSignUpStyle.css"/>
 </head>
-<body>
+<body onload="AOS.init()">
 
-<div class="form-container">
-    <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Exotico</h2>
+<!-- Navigation -->
+<nav class="fixed top-0 w-full bg-white shadow-md backdrop-blur-md z-50">
+    <div class="container mx-auto flex justify-between items-center py-4 px-6">
+        <a href = "/"><h2 class="text-3xl font-extrabold text-yellow-500">Exotico</h2></a>
+    </div>
+</nav>
 
-    <h1 class="form-title">Вход</h1>
+<!-- Login Form Section -->
+<div class="flex items-center justify-center min-h-screen">
+    <div class="form-container" data-aos="fade-up">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">🌴 Вход</h1>
+        <form th:action="@{/login}" method="post">
+            <label for="username" class="text-gray-700 font-semibold">Потребителско име:</label>
+            <input type="text" id="username" name="username" required class="form-input mt-2 mb-4" placeholder="Въведете вашето име">
 
-    <form th:action="@{/login}" method="post">
-        <label for="username" class="text-gray-800 font-semibold">Потребителско име:</label>
-        <input type="text" id="username" name="username" required class="form-input">
+            <label for="password" class="text-gray-700 font-semibold">Парола:</label>
+            <input type="password" id="password" name="password" required class="form-input mt-2 mb-4" placeholder="Въведете парола">
 
-        <label for="password" class="text-gray-800 font-semibold">Парола:</label>
-        <input type="password" id="password" name="password" required class="form-input">
+            <button type="submit" class="form-button mt-4">Вход</button>
+        </form>
 
-        <button type="submit" class="form-button">Вход</button>
-
-        <p class="form-link">Нямате акаунт? <a href="/register">Регистрация</a></p>
-    </form>
+        <p class="mt-4 text-gray-700">Нямате акаунт? <a href="/register" class="text-yellow-500 font-bold hover:underline">Регистрация</a></p>
+    </div>
 </div>
+
+<!-- Initialize AOS -->
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true,
+    });
+</script>
 
 </body>
 </html>

@@ -24,7 +24,7 @@ public class SecurityConfig {
                         .requestMatchers("/register", "/css/**", "/js/**", "/images/**", "/", "/uploaded-image/**", "/home").permitAll()
                         .requestMatchers("/destinationManagement", "reservationManagement", "/addDestination", "/editDestination/", "ratingManagement").hasAnyAuthority("ADMIN", "MANAGER") // Allow both ADMIN and MANAGER
                         .requestMatchers("/profilesManagement").hasAuthority("ADMIN") // Only ADMIN for adminProfiles
-                        .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).hasAnyAuthority("ADMIN")
                         .requestMatchers("/destinations", "promotions", "myReservations", "reservation", "/rateDestination", "/profile", "statistics").authenticated()
                         .requestMatchers("/rateDestination", "/reservation/").hasAnyAuthority("USER")
                         .anyRequest().authenticated()

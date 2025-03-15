@@ -5,68 +5,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Exotico - Открий света</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
   <link rel="stylesheet" href="/css/homePageStyle.css">
-</head>
-<body>
 
-<!-- Навигация -->
-<nav class="navbar fixed w-full z-50 flex justify-between items-center">
-  <h2 class="text-2xl font-bold text-gray-800">Exotico</h2>
+  <style>
+
+  </style>
+
+</head>
+<body class="bg-gray-100 text-gray-900" onload="AOS.init()">
+
+<!-- 🌍 Navigation Bar -->
+<nav class="fixed top-0 w-full bg-white shadow-md backdrop-blur-md z-50">
+  <div class="container mx-auto flex justify-between items-center py-4 px-6">
+    <h2 class="text-3xl font-extrabold text-yellow-500">Exotico</h2>
+    <div>
+      <a href="/login" class="px-5 py-2 bg-yellow-500 text-white rounded-lg font-semibold hover:bg-yellow-600 transition">Влез</a>
+      <a href="/register" class="ml-3 px-5 py-2 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition">Регистрирай се</a>
+    </div>
+  </div>
 </nav>
 
-<!-- Главна секция -->
-<header class="hero">
-  <div class="hero-content">
-    <h1 class="text-5xl font-bold mb-4">Добре дошли в <span class="text-yellow-400">Exotico</span></h1>
-    <p class="text-lg max-w-xl mx-auto">Открийте най-красивите екзотични дестинации и планирайте пътешествието на мечтите си!</p>
-
-    <!-- Нови бутони за вход и регистрация -->
-    <div class="mt-6">
-      <a href="/login" class="inline-block btn btn-primary mr-4">Влез</a>
-      <a href="/register" class="inline-block btn btn-secondary">Регистрирай се</a>
-    </div>
+<!-- 🏝️ Hero Section (Fade-in Zoom Effect) -->
+<header class="hero relative h-[80vh] flex flex-col justify-center items-center text-white text-center bg-cover bg-center"
+        style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/destination.jpg');">
+  <div class="hero-content z-10">
+    <h1 class="text-5xl font-extrabold leading-tight">Добре дошли в <span class="text-yellow-400">Exotico!</span></h1>
+    <p class="mt-4 text-lg max-w-2xl mx-auto">Открийте най-красивите екзотични дестинации и планирайте пътешествието на мечтите си!</p>
   </div>
 </header>
 
-<!-- Секция с дестинации -->
-<section id="destinations">
-  <h2>Популярни дестинации</h2>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+<!-- ✈️ Popular Destinations (Slide-Up Effect) -->
+<section id="destinations" class="py-20 bg-white">
+  <div class="container mx-auto text-center">
+    <h2 class="text-4xl font-bold text-gray-800 mb-10" data-aos="fade-up">Популярни дестинации</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-6">
 
-    <!-- Карта 1 -->
-    <div class="destination-card">
-      <img th:src="@{/images/bali.jpg}" alt="Бали">
-      <div class="p-4">
-        <h3>Бали, Индонезия</h3>
-        <p>Насладете се на екзотични плажове и култура</p>
+      <!-- 🌴 Destination Card 1 -->
+      <div class="destination-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition"
+           data-aos="fade-up" data-aos-delay="200">
+        <img src="/images/bali.jpg" alt="Бали" class="w-full h-64 object-cover">
+        <div class="p-6">
+          <h3 class="text-xl font-bold">Бали, Индонезия</h3>
+          <p class="text-gray-600 mt-2">Насладете се на екзотични плажове и култура</p>
+        </div>
       </div>
-    </div>
 
-    <!-- Карта 2 -->
-    <div class="destination-card">
-      <img th:src="@{/images/maldivies.jpg}" alt="Малдиви">
-      <div class="p-4">
-        <h3>Малдиви</h3>
-        <p>Луксозни бунгала върху океана</p>
+      <!-- 🌊 Destination Card 2 -->
+      <div class="destination-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition"
+           data-aos="fade-up" data-aos-delay="400">
+        <img src="/images/maldivies.jpg" alt="Малдиви" class="w-full h-64 object-cover">
+        <div class="p-6">
+          <h3 class="text-xl font-bold">Малдиви</h3>
+          <p class="text-gray-600 mt-2">Луксозни бунгала върху океана</p>
+        </div>
       </div>
-    </div>
 
-    <!-- Карта 3 -->
-    <div class="destination-card">
-      <img th:src="@{/images/seychelles.jpg}" alt="Сейшелски острови">
-      <div class="p-4">
-        <h3>Сейшелски острови</h3>
-        <p>Райски плажове и екзотична природа</p>
+      <!-- 🏝️ Destination Card 3 -->
+      <div class="destination-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition"
+           data-aos="fade-up" data-aos-delay="600">
+        <img src="/images/seychelles.jpg" alt="Сейшелски острови" class="w-full h-64 object-cover">
+        <div class="p-6">
+          <h3 class="text-xl font-bold">Сейшелски острови</h3>
+          <p class="text-gray-600 mt-2">Райски плажове и екзотична природа</p>
+        </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </section>
 
-<!-- Footer -->
-<footer>
+<!-- 🌎 Footer -->
+<footer class="bg-gray-900 text-white py-6 text-center">
   <p>&copy; 2025 Exotico. Всички права запазени.</p>
 </footer>
+
+<!-- Initialize AOS -->
+<script>
+  AOS.init({
+    duration: 1000,  // Animation duration
+    offset: 100,    // Trigger point
+    once: true,     // Only animate once
+  });
+</script>
 
 </body>
 </html>

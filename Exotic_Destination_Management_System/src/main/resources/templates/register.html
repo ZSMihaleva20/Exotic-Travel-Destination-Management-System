@@ -1,39 +1,57 @@
 <!DOCTYPE html>
-<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<html lang="bg">
 <head>
   <meta charset="UTF-8">
-  <title>Регистрация</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация | Exotico</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="/css/logInAndSignUpStyle.css">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <link rel="stylesheet" href="/css/logInAndSignUpStyle.css"/>
 </head>
-<body>
+<body onload="AOS.init()">
 
-<div class="form-container">
-  <h2 class="text-3xl font-bold text-center text-gray-800 mb-4">Exotico</h2>
+<!-- Navigation -->
+<nav class="fixed top-0 w-full bg-white shadow-md backdrop-blur-md z-50">
+  <div class="container mx-auto flex justify-between items-center py-4 px-6">
+    <a href="/"><h2 class="text-3xl font-extrabold text-yellow-500">Exotico</h2></a>
+  </div>
+</nav>
 
-  <h1 class="form-title">Регистрация</h1>
+<!-- Register Form Section -->
+<div class="flex items-center justify-center min-h-screen">
+  <div class="form-container" data-aos="fade-up">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">🌴 Регистрация</h1>
+    <form th:action="@{/register}" th:object="${user}" method="post">
+      <label class="text-gray-700 font-semibold">Име:</label>
+      <input type="text" id="firstName" th:field="*{firstName}" required class="form-input mt-2 mb-4" placeholder="Вашето име">
 
-  <form th:action="@{/register}" th:object="${user}" method="post">
-    <label>Име</label>
-    <input type="text" id="firstName" th:field="*{firstName}" required class="form-input">
+      <label class="text-gray-700 font-semibold">Фамилия:</label>
+      <input type="text" id="lastName" th:field="*{lastName}" required class="form-input mt-2 mb-4" placeholder="Вашата фамилия">
 
-    <label>Фамилия</label>
-    <input type="text" id="lastName" th:field="*{lastName}" required class="form-input">
+      <label class="text-gray-700 font-semibold">Имейл:</label>
+      <input type="email" id="email" th:field="*{email}" required class="form-input mt-2 mb-4" placeholder="Вашият имейл">
 
-    <label>Имейл</label>
-    <input type="email" id="email" th:field="*{email}" required class="form-input">
+      <label class="text-gray-700 font-semibold">Потребителско име:</label>
+      <input type="text" id="username" th:field="*{username}" required class="form-input mt-2 mb-4" placeholder="Изберете потребителско име">
 
-    <label>Потребителско име</label>
-    <input type="text" id="username" th:field="*{username}" required class="form-input">
+      <label class="text-gray-700 font-semibold">Парола:</label>
+      <input type="password" id="password" th:field="*{password}" required class="form-input mt-2 mb-4" placeholder="Създайте парола">
 
-    <label>Парола</label>
-    <input type="password" id="password" th:field="*{password}" required class="form-input">
+      <button type="submit" class="form-button mt-4">Регистрация</button>
 
-    <button type="submit" class="form-button">Регистрация</button>
-
-    <p class="form-link">Вече имате акаунт? <a href="/login">Вход</a></p>
-  </form>
+      <p class="mt-4 text-gray-700">Вече имате акаунт? <a href="/login" class="text-yellow-500 font-bold hover:underline">Вход</a></p>
+    </form>
+  </div>
 </div>
+
+<!-- Initialize AOS -->
+<script>
+  AOS.init({
+    duration: 1000,
+    once: true,
+  });
+</script>
 
 </body>
 </html>
