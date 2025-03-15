@@ -1,306 +1,193 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="bg">
 <head>
-    <title>Промоции и кампании</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Екзотични туристически дестинации</title>
     <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-    <style>
-        /* Reuse general styles from destinations.html */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #74ebd5, #acb6e5);
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-
-        header {
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 24px;
-            position: relative;
-        }
-
-        header h1 {
-            margin: 0;
-        }
-
-        .user-menu {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-        }
-
-        .user-icon {
-            font-size: 40px;
-            cursor: pointer;
-            color: white;
-            transition: transform 0.3s;
-        }
-
-        .user-icon:hover {
-            transform: scale(1.1);
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            width: 150px;
-            overflow: hidden;
-            z-index: 1000;
-        }
-
-        .dropdown-menu a {
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-            color: #333;
-            transition: background 0.3s;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f8c291;
-        }
-
-        /* Main Content */
-        main {
-            width: 80%;
-            margin: auto;
-            padding: 20px;
-        }
-
-        /* Destinations List */
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-            margin-bottom: 20px;
-            transition: transform 0.3s ease-in-out;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        li:hover {
-            transform: scale(1.03);
-        }
-
-        h2 {
-            margin-top: 0;
-            color: #333;
-        }
-
-        img {
-            width: 100%;
-            max-width: 300px;
-            border-radius: 10px;
-            display: block;
-            margin: 10px auto;
-        }
-
-        p {
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        /* Responsive */
-        @media screen and (width: 1920px) and (height: 1080px) {
-            main {
-                width: 70%;
-                max-width: 1600px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-        }
-
-        /* Specific styles for the destination description list */
-        .destination-description-list {
-            list-style: none;
-        }
-
-        .destination-description-list li::before {
-            content: "📍";
-            font-size: 18px;
-            margin-right: 10px;
-        }
-         button {
-            font-size: 16px;
-            padding: 8px 15px;
-            border-radius: 8px;
-            border: none;
-            background: #f8c291;
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-         button:hover {
-            background: #e17055;
-        }
-
-        .top-nav {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .top-nav a {
-            text-decoration: none;
-            color: white;
-            background: linear-gradient(90deg, #4facfe, #00f2fe);
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: background 0.3s, transform 0.2s;
-            margin: 10px;
-            display: inline-block;
-        }
-
-        .top-nav a:hover {
-            background: linear-gradient(90deg, #00f2fe, #4facfe);
-            transform: scale(1.05);
-        }
-    </style>
+    <link rel="stylesheet" href="/css/destinationsPageStyle.css">
 </head>
-<body>
-<header>
-    <h1>Промоции и кампании</h1>
-    <nav class="top-nav">
-        <a href="/destinations">Дестинации</a>
-        <a href="/promotionsAndCampaigns">Промоции и кампании</a>
-        <a href="/statistics">Статистики</a>
-    </nav>
-    <div class="user-menu">
-        <span class="material-symbols-outlined user-icon">account_circle</span>
-        <div class="dropdown-menu" id="dropdownMenu">
-            <a href="/profile">Профил</a>
+<body class="bg-gray-100 text-gray-800 pt-20 opacity-0 translate-y-10 transition-all duration-700 ease-out">
 
-            <!-- Admin & Manager -->
-            <th:block th:if="${#strings.equals(user.role, 'ADMIN') or #strings.equals(user.role, 'MANAGER')}">
-                <a href="/destinationManagement">Управлявай дестинации</a>
-                <a href="/ratingManagement">Управлявай рейтинги</a>
-                <a href="/reservationManagement">Управлявай резервации</a>
-            </th:block>
+<!-- Main Layout -->
+<nav class="fixed top-0 w-full bg-white shadow-md backdrop-blur-md z-50 h-16">
+    <div class="container mx-auto flex items-center justify-between py-4 px-6">
 
-            <!-- Admin Only -->
-            <th:block th:if="${#strings.equals(user.role, 'ADMIN')}">
-                <a href="/profilesManagement">Управлявай профили</a>
-            </th:block>
+        <!-- Left Side: Logo -->
+        <a href="/" class="text-3xl font-extrabold text-yellow-500">Exotico</a>
 
-            <!-- User Only -->
-            <th:block th:if="${#strings.equals(user.role, 'USER')}">
-                <a href="/myReservations">Mоите резервации</a>
-                <a href="/rateDestination">Добави рейтинг на дестинация</a>
-            </th:block>
+        <!-- Center: Navigation Links -->
+        <div class="hidden md:flex space-x-8 mx-auto">
+            <a href="/destinations" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Дестинации</a>
+            <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Промоции</a>
+            <a href="/statistics" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Статистики</a>
+        </div>
 
-            <a href="/logout">Изход</a>
+        <!-- Right Side: User Menu -->
+        <div class="relative">
+            <div class="bg-gray-800 text-white px-6 py-2 rounded-lg cursor-pointer flex items-center gap-2" id="userMenu">
+                <span class="material-symbols-outlined">person</span>
+                <span class="font-semibold">Моят акаунт</span>
+            </div>
+
+            <!-- Dropdown Menu -->
+            <div id="dropdownMenu" class="absolute right-0 mt-2 bg-white text-gray-900 p-4 rounded shadow-md w-48 hidden transition">
+                <a href="/profile" class="block py-2"> Профил</a>
+
+                <th:block th:if="${#strings.equals(user.role, 'ADMIN') or #strings.equals(user.role, 'MANAGER')}">
+                    <a href="/destinationManagement" class="block py-2"> Управлявай дестинации</a>
+                    <a href="/ratingManagement" class="block py-2"> Управлявай рейтинги</a>
+                    <a href="/reservationManagement" class="block py-2"> Управлявай резервации</a>
+                </th:block>
+
+                <th:block th:if="${#strings.equals(user.role, 'ADMIN')}">
+                    <a href="/profilesManagement" class="block py-2"> Управлявай профили</a>
+                </th:block>
+
+                <th:block th:if="${#strings.equals(user.role, 'USER')}">
+                    <a href="/myReservations" class="block py-2"> Моите резервации</a>
+                    <a href="/rateDestination" class="block py-2"> Добави рейтинг</a>
+                </th:block>
+
+                <a href="/logout" class="block py-2 text-red-500"> Изход</a>
+            </div>
         </div>
     </div>
-</header>
+</nav>
+<!-- Main Layout Container (Centers Content & Limits Width) -->
+<!-- Main Layout Container (Increased Width) -->
+<div class="container max-w-7xl mx-auto px-4 md:px-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Промоции и кампании</h1>
 
-<main>
-    <ul>
-        <th:block th:each="promotion : ${promotions}">
-            <th:block th:if="${promotion.destination.isOnPromotion}">
-                <li>
-                    <h2 th:text="${promotion.destination.name}"></h2>
-                    <ul class="destination-description-list"
-                        th:utext="${#strings.listJoin(#strings.arraySplit(promotion.destination.description, '\\;'), '</li><li>') + '</li>'}">
-                    </ul>
-                    <p>Дата на заминаване: <span th:text="${#temporals.format(promotion.destination.dateOfDeparture, 'dd-MM-yyyy')}"></span></p>
-                    <p>Дата на връщане: <span th:text="${#temporals.format(promotion.destination.dateOfReturn, 'dd-MM-yyyy')}"></span></p>
-                    <img th:src="'/uploaded-image/' + ${promotion.destination.imageUrl}" alt="Destination Image">
-                    <p>Оставащи места: <span th:text="${promotion.destination.remainingPeople}"></span></p>
-                    <p>Стара цена за 1 човек: <span th:text="${#numbers.formatDecimal(promotion.oldPrice, 2, 2)}"></span> лв.</p>
-                    <p>Нова цена за 1 човек: <span th:text="${#numbers.formatDecimal(promotion.newPrice, 2, 2)}"></span> лв.</p>
-                    <p>Среден рейтинг: <span th:text="${promotion.destination.getAverageRating()}"></span> &#11088;</p>
-                    <p>Популярност: <span th:text="${promotion.destination.getPopularity()}"></span> човека резервирали</p>
-                    <th:block th:if="${promotion.destination.remainingPeople == 0 or promotion.destination.dateOfReturn < T(java.time.LocalDate).now()}">
-                        <p style="color: red; font-weight: bold;">Затворено за резервации</p>
-                    </th:block>
-                    <div sec:authorize="hasAuthority('USER')">
-                    <th:block th:unless="${promotion.destination.remainingPeople == 0 or promotion.destination.dateOfReturn < T(java.time.LocalDate).now()}">
-                        <a th:href="@{/reservation/{id}(id=${promotion.destination.id})}">
-                            <button class="reservation-button">Направи резервация</button>
-                        </a>
-                    </th:block>
-                    </div>
-                </li>
-            </th:block>
-        </th:block>
-    </ul>
-    <ul>
-        <th:block th:each="campaign : ${campaigns}">
-            <th:block th:if="${campaign.destination.isOnPromotion}">
-                <li style="background-color: #ffeb3b;">
-                    <h2>ЛЯТНА КАМПАНИЯ!</h2>
-                    <h2 th:text="${campaign.destination.name}"></h2>
-                    <ul class="destination-description-list"
-                        th:utext="${#strings.listJoin(#strings.arraySplit(campaign.destination.description, '\\;'), '</li><li>') + '</li>'}">
-                    </ul>
-                    <p>Дата на заминаване: <span th:text="${#temporals.format(campaign.destination.dateOfDeparture, 'dd-MM-yyyy')}"></span></p>
-                    <p>Дата на връщане: <span th:text="${#temporals.format(campaign.destination.dateOfReturn, 'dd-MM-yyyy')}"></span></p>
-                    <img th:src="'/uploaded-image/' + ${campaign.destination.imageUrl}" alt="Destination Image">
-                    <p>Оставащи места: <span th:text="${campaign.destination.remainingPeople}"></span></p>
-                    <p>Стара цена за 1 човек: <span th:text="${#numbers.formatDecimal(campaign.oldPrice, 2, 2)}"></span> лв.</p>
-                    <p>Нова цена за 1 човек: <span th:text="${#numbers.formatDecimal(campaign.newPrice, 2, 2)}"></span> лв.</p>
-                    <p>Среден рейтинг: <span th:text="${campaign.destination.getAverageRating()}"></span> &#11088;</p>
-                    <p>Популярност: <span th:text="${campaign.destination.getPopularity()}"></span> човека резервирали</p>
-                    <th:block th:if="${campaign.destination.remainingPeople == 0 or campaign.destination.dateOfReturn < T(java.time.LocalDate).now()}">
-                        <p style="color: red; font-weight: bold;">Затворено за резервации</p>
-                    </th:block>
-                    <div sec:authorize="hasAuthority('USER')">
-                        <th:block th:unless="${campaign.destination.remainingPeople == 0 or campaign.destination.dateOfReturn < T(java.time.LocalDate).now()}">
-                            <a th:href="@{/reservation/{id}(id=${campaign.destination.id})}">
-                                <button class="reservation-button">Направи резервация</button>
-                            </a>
+        <!-- Promotions Section -->
+    <h2 class="text-3xl font-extrabold text-gray-800 mt-10 mb-4 text-center">Промоции</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <th:block th:each="promotion : ${promotions}">
+                <th:block th:if="${promotion.destination.isOnPromotion}">
+                    <div class="bg-white p-6 rounded-lg shadow-md flex flex-col min-h-full border-2 border-yellow-500">
+                        <h2 class="text-xl font-bold text-gray-700" th:text="${promotion.destination.name}"></h2>
+
+                        <ul class="text-gray-600 mt-2 list-disc pl-5 flex-grow"
+                            th:utext="${#strings.listJoin(#strings.arraySplit(promotion.destination.description, '\\;'), '</li><li>')}">
+                        </ul>
+
+                        <p class="text-black-600 font-bold mt-2">Дата на заминаване:
+                            <span th:text="${#temporals.format(promotion.destination.dateOfDeparture, 'dd-MM-yyyy')}"></span>
+                        </p>
+                        <p class="text-black-600 font-bold">Дата на връщане:
+                            <span th:text="${#temporals.format(promotion.destination.dateOfReturn, 'dd-MM-yyyy')}"></span>
+                        </p>
+
+                        <img th:src="'/uploaded-image/' + ${promotion.destination.imageUrl}"
+                             alt="Destination Image"
+                             class="w-full h-40 object-cover rounded-lg mt-4">
+
+                        <p class="mt-2 text-black-500 font-bold"> Оставащи места: <span th:text="${promotion.destination.remainingPeople}"></span></p>
+                        <p class="text-gray-500"> <del>Стара цена: <span th:text="${#numbers.formatDecimal(promotion.oldPrice, 2, 2)}"></span> лв.</del></p>
+                        <p class="text-yellow-500 font-bold"> Нова цена: <span th:text="${#numbers.formatDecimal(promotion.newPrice, 2, 2)}"></span> лв.</p>
+                        <p class = "text-black-500 font-bold">⭐ <span th:text="${promotion.destination.getAverageRating()}"></span></p>
+                        <p class = "text-black-500 font-bold"> Популярност: <span th:text="${promotion.destination.getPopularity()}"></span> резервирали</p>
+
+                        <th:block th:if="${promotion.destination.remainingPeople == 0 or promotion.destination.dateOfReturn < T(java.time.LocalDate).now()}">
+                            <p class="text-red-500 font-bold"> Затворено за резервации</p>
                         </th:block>
-                    </div>
-                </li>
-            </th:block>
-        </th:block>
-    </ul>
-</main>
 
+                        <div class="mt-auto pt-4">
+                            <div sec:authorize="hasAuthority('USER')">
+                                <th:block th:unless="${promotion.destination.remainingPeople == 0 or promotion.destination.dateOfReturn < T(java.time.LocalDate).now()}">
+                                    <a th:href="@{/reservation/{id}(id=${promotion.destination.id})}">
+                                        <button class="btn btn-secondary w-full">Направи резервация</button>
+                                    </a>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </th:block>
+        </div>
+
+        <!-- Campaigns Section -->
+    <h2 class="text-3xl font-extrabold text-gray-800 mt-16 mb-4 text-center">Летни кампании</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <th:block th:each="campaign : ${campaigns}">
+                <th:block th:if="${campaign.destination.isOnPromotion}">
+                    <div class="bg-yellow-100 p-6 rounded-lg shadow-md flex flex-col min-h-full border-2 border-yellow-500">
+                        <h2 class="text-xl font-bold text-gray-700">ЛЯТНА КАМПАНИЯ!</h2>
+                        <h2 class="text-xl font-bold text-gray-700" th:text="${campaign.destination.name}"></h2>
+
+                        <ul class="text-gray-600 mt-2 list-disc pl-5 flex-grow"
+                            th:utext="${#strings.listJoin(#strings.arraySplit(campaign.destination.description, '\\;'), '</li><li>')}">
+                        </ul>
+
+                        <p class="text-black-600 font-bold mt-2">Дата на заминаване:
+                            <span th:text="${#temporals.format(campaign.destination.dateOfDeparture, 'dd-MM-yyyy')}"></span>
+                        </p>
+                        <p class="text-black-600 font-bold"> Дата на връщане:
+                            <span th:text="${#temporals.format(campaign.destination.dateOfReturn, 'dd-MM-yyyy')}"></span>
+                        </p>
+
+                        <img th:src="'/uploaded-image/' + ${campaign.destination.imageUrl}"
+                             alt="Destination Image"
+                             class="w-full h-40 object-cover rounded-lg mt-4">
+
+                        <p class="mt-2 text-black-500 font-bold">Оставащи места: <span th:text="${campaign.destination.remainingPeople}"></span></p>
+                        <p class="text-gray-500"><del>Стара цена: <span th:text="${#numbers.formatDecimal(campaign.oldPrice, 2, 2)}"></span> лв.</del></p>
+                        <p class="text-yellow-500 font-bold">Нова цена: <span th:text="${#numbers.formatDecimal(campaign.newPrice, 2, 2)}"></span> лв.</p>
+                        <p class="text-black-500 font-bold">⭐ <span th:text="${campaign.destination.getAverageRating()}"></span></p>
+                        <p class="text-black-500 font-bold">Популярност: <span th:text="${campaign.destination.getPopularity()}"></span> резервирали</p>
+
+                        <th:block th:if="${campaign.destination.remainingPeople == 0 or campaign.destination.dateOfReturn < T(java.time.LocalDate).now()}">
+                            <p class="text-red-500 font-bold">Затворено за резервации</p>
+                        </th:block>
+
+                        <div class="mt-auto pt-4">
+                            <div sec:authorize="hasAuthority('USER')">
+                                <th:block th:unless="${campaign.destination.remainingPeople == 0 or campaign.destination.dateOfReturn < T(java.time.LocalDate).now()}">
+                                    <a th:href="@{/reservation/{id}(id=${campaign.destination.id})}">
+                                        <button class="btn btn-secondary w-full">Направи резервация</button>
+                                    </a>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </th:block>
+        </div>
+    </div>
+<div class="mb-10"></div>
+<footer class="bg-gray-900 text-white py-6 text-center">
+    <p>&copy; 2025 Exotico. Всички права запазени.</p>
+</footer>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const listItems = document.querySelectorAll("li");
+        let departureInput = document.getElementById("startDate");
+        let returnInput = document.getElementById("endDate");
 
-        // Animation on load
-        listItems.forEach((item, index) => {
-            setTimeout(() => {
-                item.style.opacity = "1";
-                item.style.transform = "translateY(0)";
-            }, index * 100);
+        departureInput.addEventListener("change", function () {
+            if (departureInput.value) {
+                returnInput.min = departureInput.value; // Set return date min to departure date
+            }
+            if (returnInput.value && departureInput.value > returnInput.value) {
+                alert("Датата на тръгване не може да бъде след датата на връщане!");
+                departureInput.value = ""; // Reset invalid departure date
+            }
         });
 
-        // Dropdown functionality
-        const userIcon = document.querySelector(".user-icon");
-        const dropdownMenu = document.getElementById("dropdownMenu");
-
-        userIcon.addEventListener("click", function () {
-            dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
-        });
-
-        document.addEventListener("click", function (event) {
-            if (!userIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                dropdownMenu.style.display = "none";
+        returnInput.addEventListener("change", function () {
+            if (departureInput.value && returnInput.value < departureInput.value) {
+                alert("Датата на връщане трябва да бъде след датата на тръгване!");
+                returnInput.value = ""; // Reset invalid return date
             }
         });
     });
-</script>
 
+    document.querySelector("#userMenu").addEventListener("click", () => {
+        document.getElementById("dropdownMenu").classList.toggle("hidden");
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.body.classList.remove("opacity-0", "translate-y-10");
+    });
+</script>
 </body>
 </html>

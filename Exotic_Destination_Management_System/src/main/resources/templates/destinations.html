@@ -18,9 +18,9 @@
 
     <!-- Center: Navigation Links -->
     <div class="hidden md:flex space-x-8 mx-auto">
-      <a href="/destinations" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">🏝 Дестинации</a>
-      <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">🔥 Промоции</a>
-      <a href="/statistics" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">📊 Статистики</a>
+      <a href="/destinations" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Дестинации</a>
+      <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">Промоции</a>
+      <a href="/statistics" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Статистики</a>
     </div>
 
     <!-- Right Side: User Menu -->
@@ -32,24 +32,24 @@
 
       <!-- Dropdown Menu -->
       <div id="dropdownMenu" class="absolute right-0 mt-2 bg-white text-gray-900 p-4 rounded shadow-md w-48 hidden transition">
-        <a href="/profile" class="block py-2">👤 Профил</a>
+        <a href="/profile" class="block py-2">Профил</a>
 
         <th:block th:if="${#strings.equals(user.role, 'ADMIN') or #strings.equals(user.role, 'MANAGER')}">
-          <a href="/destinationManagement" class="block py-2">🌍 Управлявай дестинации</a>
-          <a href="/ratingManagement" class="block py-2">⭐ Управлявай рейтинги</a>
-          <a href="/reservationManagement" class="block py-2">📅 Управлявай резервации</a>
+          <a href="/destinationManagement" class="block py-2">Управлявай дестинации</a>
+          <a href="/ratingManagement" class="block py-2">Управлявай рейтинги</a>
+          <a href="/reservationManagement" class="block py-2"> Управлявай резервации</a>
         </th:block>
 
         <th:block th:if="${#strings.equals(user.role, 'ADMIN')}">
-          <a href="/profilesManagement" class="block py-2">👥 Управлявай профили</a>
+          <a href="/profilesManagement" class="block py-2">Управлявай профили</a>
         </th:block>
 
         <th:block th:if="${#strings.equals(user.role, 'USER')}">
-          <a href="/myReservations" class="block py-2">📌 Моите резервации</a>
-          <a href="/rateDestination" class="block py-2">💬 Добави рейтинг</a>
+          <a href="/myReservations" class="block py-2">Моите резервации</a>
+          <a href="/rateDestination" class="block py-2"> Добави рейтинг</a>
         </th:block>
 
-        <a href="/logout" class="block py-2 text-red-500">🚪 Изход</a>
+        <a href="/logout" class="block py-2 text-red-500">Изход</a>
       </div>
     </div>
   </div>
@@ -57,7 +57,7 @@
 <!-- Main Layout Container (Centers Content & Limits Width) -->
 <!-- Main Layout Container (Increased Width) -->
 <div class="container max-w-7xl mx-auto px-4 md:px-6">
-
+  <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Дестинации</h1>
 
   <!-- Search & Filter Form (Centered & Compact) -->
   <form action="/destinations" method="get" class="bg-white p-6 rounded-lg shadow-md mb-6">
@@ -65,7 +65,7 @@
 
       <!-- Search Keyword -->
       <div class="flex items-center gap-2">
-        <span class="text-gray-400">🔍</span>
+        <label for="dateOfDeparture" class="text-sm font-medium text-gray-600 whitespace-nowrap">Търсене:</label>
         <input type="text" name="keyword" placeholder="Ключова дума..." class="input-field w-full" th:value="${keyword}">
       </div>
 
@@ -83,30 +83,30 @@
 
       <!-- Minimum Price -->
       <div class="flex items-center gap-2">
-        <span class="text-gray-400">💰</span>
+        <label for="dateOfDeparture" class="text-sm font-medium text-gray-600 whitespace-nowrap">Минимална цена:</label>
         <input type="number" name="minPrice" placeholder="Мин. цена" class="input-field w-full" th:value="${minPrice}">
       </div>
 
       <!-- Maximum Price -->
       <div class="flex items-center gap-2">
-        <span class="text-gray-400">💰</span>
+        <label for="dateOfDeparture" class="text-sm font-medium text-gray-600 whitespace-nowrap">Максимална цена:</label>
         <input type="number" name="maxPrice" placeholder="Макс. цена" class="input-field w-full" th:value="${maxPrice}">
       </div>
 
       <!-- Minimum Rating -->
       <div class="flex items-center gap-2">
-        <span class="text-gray-400">⭐</span>
+        <label for="dateOfDeparture" class="text-sm font-medium text-gray-600 whitespace-nowrap">Минимален рейтинг:</label>
         <input type="number" name="minRating" min="0" max="5" step="0.1" placeholder="Мин. рейтинг" class="input-field w-full" th:value="${minRating}">
       </div>
 
       <!-- Sort Options -->
       <div class="col-span-3 flex justify-center items-center mt-4">
         <label for="sortOptions" class="text-sm font-medium text-gray-600 mr-2">Сортирай по:</label>
-        <select id="sortOptions" name="sortBy" class="input-field w-48 text-center">
-          <option value="none" th:selected="${currentSort == 'none'}">📌 Всички</option>
-          <option value="price" th:selected="${currentSort == 'price'}">💰 Цена</option>
-          <option value="popularity" th:selected="${currentSort == 'popularity'}">🔥 Популярност</option>
-          <option value="rating" th:selected="${currentSort == 'rating'}">⭐ Рейтинг</option>
+        <select id="sortOptions" name="sortBy" class="input-field w-48 text-left">
+          <option value="none" th:selected="${currentSort == 'none'}">Всички</option>
+          <option value="price" th:selected="${currentSort == 'price'}">Цена</option>
+          <option value="popularity" th:selected="${currentSort == 'popularity'}">Популярност</option>
+          <option value="rating" th:selected="${currentSort == 'rating'}">Рейтинг</option>
         </select>
       </div>
     </div>
@@ -119,7 +119,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <th:block th:each="destination : ${acceptedDestinations}">
       <th:block th:if="${!destination.isOnPromotion}">
-        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col min-h-full">
+        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col min-h-full border-2 border-black-500">
 
           <!-- Destination Name -->
           <h2 class="text-xl font-bold text-gray-700" th:text="${destination.name}"></h2>
@@ -130,10 +130,10 @@
           </ul>
 
           <!-- Dates -->
-          <p class="text-gray-600 mt-2">📅 Дата на заминаване:
+          <p class="text-black-600 font-bold mt-2">Дата на заминаване:
             <span th:text="${#temporals.format(destination.dateOfDeparture, 'dd-MM-yyyy')}"></span>
           </p>
-          <p class="text-gray-600">📅 Дата на връщане:
+          <p class="text-black-600 font-bold"> Дата на връщане:
             <span th:text="${#temporals.format(destination.dateOfReturn, 'dd-MM-yyyy')}"></span>
           </p>
 
@@ -143,16 +143,16 @@
                class="w-full h-40 object-cover rounded-lg mt-4">
 
           <!-- Other Info -->
-          <p class="mt-2">🧑‍🤝‍🧑 Оставащи места: <span th:text="${destination.remainingPeople}"></span></p>
-          <p class="text-yellow-500 font-bold">💰 Цена:
+          <p class="mt-2 text-black-600 font-bold"> Оставащи места: <span th:text="${destination.remainingPeople}"></span></p>
+          <p class="text-yellow-500 font-bold">Цена:
             <span th:text="${#numbers.formatDecimal(destination.price, 2, 2)}"></span> лв.
           </p>
-          <p>⭐ Среден рейтинг: <span th:text="${destination.getAverageRating()}"></span></p>
-          <p>🔥 Популярност: <span th:text="${destination.getPopularity()}"></span> резервирали</p>
+          <p class = "text-black-600 font-bold">⭐ <span th:text="${destination.getAverageRating()}"></span></p>
+          <p class = "text-black-600 font-bold">Популярност: <span th:text="${destination.getPopularity()}"></span> резервирали</p>
 
           <!-- Closed Reservations Notice -->
           <th:block th:if="${destination.remainingPeople == 0 or destination.dateOfDeparture <= T(java.time.LocalDate).now()}">
-            <p class="text-red-500 font-bold">🚫 Затворено за резервации</p>
+            <p class="text-red-500 font-bold">Затворено за резервации</p>
           </th:block>
 
           <!-- Reserve Button (Always at Bottom) -->
@@ -172,11 +172,11 @@
   </div>
 
 </div>
+<div class="mb-10"></div>
+<footer class="bg-gray-900 text-white py-6 text-center">
+  <p>&copy; 2025 Exotico. Всички права запазени.</p>
+</footer>
 
-
-  </main>
-
-</div>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     let departureInput = document.getElementById("startDate");

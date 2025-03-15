@@ -21,7 +21,7 @@
 <!-- Register Form Section -->
 <div class="flex items-center justify-center min-h-screen">
   <div class="form-container" data-aos="fade-up">
-    <h1 class="text-3xl font-bold text-gray-800 mb-4">🌴 Регистрация</h1>
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">Регистрация</h1>
     <form th:action="@{/register}" th:object="${user}" method="post">
       <label class="text-gray-700 font-semibold">Име:</label>
       <input type="text" id="firstName" th:field="*{firstName}" required class="form-input mt-2 mb-4" placeholder="Вашето име">
@@ -36,7 +36,12 @@
       <input type="text" id="username" th:field="*{username}" required class="form-input mt-2 mb-4" placeholder="Изберете потребителско име">
 
       <label class="text-gray-700 font-semibold">Парола:</label>
-      <input type="password" id="password" th:field="*{password}" required class="form-input mt-2 mb-4" placeholder="Създайте парола">
+      <input type="password" id="password" th:field="*{password}" required class="form-input mt-2 mb-4"
+             placeholder="Създайте парола"
+             minlength="8"
+             maxlength="20"
+             pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$"
+             title="Паролата трябва да съдържа поне 8 знака, включително букви и цифри">
 
       <button type="submit" class="form-button mt-4">Регистрация</button>
 
@@ -44,7 +49,6 @@
     </form>
   </div>
 </div>
-
 <!-- Initialize AOS -->
 <script>
   AOS.init({

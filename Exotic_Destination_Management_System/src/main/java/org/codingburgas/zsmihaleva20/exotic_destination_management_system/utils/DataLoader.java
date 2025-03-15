@@ -46,7 +46,7 @@ public class DataLoader {
             userOne.setFirstName("Жасмина");
             userOne.setLastName("Михалева");
             userOne.setEmail("robocrforbulgaria@gmail.com");
-            userOne.setPassword(passwordEncoder.encode("zhasmina"));
+            userOne.setPassword(passwordEncoder.encode("zhasminaMihaleva12!"));
             userOne.setRole("USER");
             userOne.setUsername("zhasmina");
 
@@ -55,7 +55,7 @@ public class DataLoader {
             admin.setFirstName("Иван");
             admin.setLastName("Василев");
             admin.setEmail("admin@email.com");
-            admin.setPassword(passwordEncoder.encode("admin"));
+            admin.setPassword(passwordEncoder.encode("adminAdminov12!"));
             admin.setRole("ADMIN");
             admin.setUsername("admin");
 
@@ -64,7 +64,7 @@ public class DataLoader {
             manager.setFirstName("Мартин");
             manager.setLastName("Георгиев");
             manager.setEmail("manager@email.com");
-            manager.setPassword(passwordEncoder.encode("manager"));
+            manager.setPassword(passwordEncoder.encode("managerManagerov12!"));
             manager.setRole("MANAGER");
             manager.setUsername("manager");
 
