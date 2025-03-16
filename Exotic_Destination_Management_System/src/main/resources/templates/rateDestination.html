@@ -7,40 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <link rel="stylesheet" href="/css/myReservationsStyle.css">
     <script>
-        function showReservationDetails() {
-            var select = document.getElementById("reservationSelect");
-            var selectedOption = select.options[select.selectedIndex];
 
-            if (select.value === "") {
-                document.getElementById("reservationDetails").classList.add("hidden");
-                document.getElementById("ratingForm").classList.add("hidden");
-                document.getElementById("ratingMessage").classList.add("hidden");
-                return;
-            }
-
-            document.getElementById("departureDate").textContent = selectedOption.getAttribute("data-departure");
-            document.getElementById("returnDate").textContent = selectedOption.getAttribute("data-return");
-            document.getElementById("price").textContent = selectedOption.getAttribute("data-price");
-            document.getElementById("people").textContent = selectedOption.getAttribute("data-people");
-
-            document.getElementById("reservationDetails").classList.remove("hidden");
-
-            if (selectedOption.getAttribute("data-rated") === "true") {
-                document.getElementById("ratingForm").classList.add("hidden");
-                document.getElementById("ratingMessage").classList.remove("hidden");
-            } else {
-                document.getElementById("ratingForm").classList.remove("hidden");
-                document.getElementById("ratingMessage").classList.add("hidden");
-            }
-        }
-
-        function openModal() {
-            document.getElementById("ratingModal").classList.remove("hidden");
-        }
-
-        function closeModal() {
-            document.getElementById("ratingModal").classList.add("hidden");
-        }
     </script>
 </head>
 <body class="bg-gray-100 text-gray-800 pt-20 opacity-0 transition-opacity duration-700 ease-out">
@@ -174,6 +141,6 @@
 
 </div>
 
-<script type="text/javascript" th:src="@{/js/myReservationsScript.js}"></script>
+<script type="text/javascript" th:src="@{/js/rateDestinationScript.js}"></script>
 </body>
 </html>
