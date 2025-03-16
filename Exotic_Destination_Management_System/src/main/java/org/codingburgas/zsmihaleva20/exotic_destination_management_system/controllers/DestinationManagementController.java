@@ -39,8 +39,9 @@ public class DestinationManagementController {
     }
 
     @GetMapping("/destinationManagement")
-    public String destinationManagementList(Model model) {
+    public String destinationManagementList(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("destinations", destinationService.getAllDestinations());
+        model.addAttribute("user", user);
         return "destinationManagement";
     }
 
