@@ -1,56 +1,179 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="bg">
 <head>
-    <title></title>
+    <title>Добави рейтинг</title>
     <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="/css/myReservationsStyle.css">
+    <script>
+        function showReservationDetails() {
+            var select = document.getElementById("reservationSelect");
+            var selectedOption = select.options[select.selectedIndex];
+
+            if (select.value === "") {
+                document.getElementById("reservationDetails").classList.add("hidden");
+                document.getElementById("ratingForm").classList.add("hidden");
+                document.getElementById("ratingMessage").classList.add("hidden");
+                return;
+            }
+
+            document.getElementById("departureDate").textContent = selectedOption.getAttribute("data-departure");
+            document.getElementById("returnDate").textContent = selectedOption.getAttribute("data-return");
+            document.getElementById("price").textContent = selectedOption.getAttribute("data-price");
+            document.getElementById("people").textContent = selectedOption.getAttribute("data-people");
+
+            document.getElementById("reservationDetails").classList.remove("hidden");
+
+            if (selectedOption.getAttribute("data-rated") === "true") {
+                document.getElementById("ratingForm").classList.add("hidden");
+                document.getElementById("ratingMessage").classList.remove("hidden");
+            } else {
+                document.getElementById("ratingForm").classList.remove("hidden");
+                document.getElementById("ratingMessage").classList.add("hidden");
+            }
+        }
+
+        function openModal() {
+            document.getElementById("ratingModal").classList.remove("hidden");
+        }
+
+        function closeModal() {
+            document.getElementById("ratingModal").classList.add("hidden");
+        }
+    </script>
 </head>
-<body>
-<h1>Добави рейтинг на дестинация</h1>
-<table>
-    <tr>
-        <th>Дестинация</th>
-        <th>Дата на заминаване</th>
-        <th>Дата на връщане</th>
-        <th>Обща цена</th>
-        <th>Рейтинг</th>
-        <th>Коментар</th>
-        <th></th>
-    </tr>
-    <th:block th:each="reservation : ${reservations}">
-        <tr th:if="${reservation.status == 'BOOKED'}">
-            <td th:text="${reservation.destination.name}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
-            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
+<body class="bg-gray-100 text-gray-800 pt-20 opacity-0 transition-opacity duration-700 ease-out">
 
-            <!-- Display stars dynamically -->
-            <td th:if="${reservation.isDestinationRated()}" th:utext="${'&#11088;'.repeat(reservation.destinationRating)}"></td>
-            <td th:if="${reservation.isDestinationRated()}" th:text="${reservation.comment}"></td>
+<!-- Main Layout -->
+<nav class="fixed top-0 w-full bg-white shadow-md backdrop-blur-md z-50">
+    <div class="container mx-auto flex items-center justify-between py-4 px-6">
+        <h2 class="text-3xl font-extrabold text-yellow-500"><a href="/">Exotico</a></h2>
+        <div class="hidden md:flex space-x-8 mx-auto">
+            <a href="/destinations" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Дестинации</a>
+            <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">Промоции и кампании</a>
+            <a href="/statistics" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Статистики</a>
+        </div>
+        <div class="relative">
+            <div class="bg-gray-800 text-white px-6 py-2 rounded-lg cursor-pointer flex items-center gap-2" id="userMenu">
+                <span class="material-symbols-outlined">person</span>
+                <span class="font-semibold">Моят акаунт</span>
+            </div>
+            <div id="dropdownMenu" class="absolute right-0 mt-2 bg-white text-gray-900 p-4 rounded shadow-md w-48 hidden transition">
+                <a href="/profile" class="block py-2">Профил</a>
+                <a href="/myReservations" class="block py-2">Моите резервации</a>
+                <a href="/rateDestination" class="block py-2"> Добави рейтинг</a>
+                <a href="/logout" class="block py-2 text-red-500">Изход</a>
+            </div>
+        </div>
+    </div>
+</nav>
 
-            <!-- Show rating form if not yet rated -->
-            <td th:if="${!reservation.isDestinationRated()}">
-                <form th:action="@{/rateDestination}" method="post">
-                    <input type="hidden" name="destinationId" th:value="${reservation.destination.id}">
-                    <select name="stars" required>
-                        <option>Избери рейтинг</option>
-                        <option value="1">&#11088;</option>
-                        <option value="2">&#11088;&#11088;</option>
-                        <option value="3">&#11088;&#11088;&#11088;</option>
-                        <option value="4">&#11088;&#11088;&#11088;&#11088;</option>
-                        <option value="5">&#11088;&#11088;&#11088;&#11088;&#11088;</option>
+<!-- Content Section -->
+<div class="container max-w-4xl mx-auto px-4 md:px-6 mt-12 bg-white rounded-lg shadow-lg p-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800">Добави рейтинг за дестинация</h1>
+        <button onclick="openModal()" class="bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-yellow-600 transition duration-300">Добави рейтинг</button>
+    </div>
+
+    <!-- Table for rated reservations -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Рейтинговани резервации</h2>
+        <table class="w-full text-left border-collapse">
+            <thead>
+            <tr>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Дестинация</th>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Дата на заминаване</th>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Дата на връщане</th>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Брой хора</th>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Обща цена</th>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Рейтинг</th>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Коментар</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="reservation : ${reservations}">
+                <th:block th:if="${reservation.destinationRated}">
+                    <tr class="border-b border-gray-200">
+                        <td class="py-2 px-4" th:text="${reservation.destination.name}"></td>
+                        <td class="py-2 px-4" th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
+                        <td class="py-2 px-4" th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
+                        <td class="py-2 px-4" th:text="${reservation.numberOfPeople}"></td>
+                        <td class="py-2 px-4" th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2) + ' лв.'}"></td>
+                        <td class="py-2 px-4" th:text="${reservation.destinationRating}"></td>
+                        <td class="py-2 px-4" th:text="${reservation.comment}"></td>
+                    </tr>
+                </th:block>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal for adding rating -->
+    <div id="ratingModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6 w-full max-w-sm sm:max-w-md">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Добави рейтинг</h2>
+            <form th:action="@{/rateDestination}" method="post">
+                <div class="mb-4">
+                    <label for="reservationSelect" class="block font-semibold text-gray-700 text-lg mb-2">Изберете дестинация:</label>
+                    <select id="reservationSelect" name="destinationId" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 text-gray-700" onchange="showReservationDetails()" required>
+                        <option value="">Изберете дестинация</option>
+                        <th:block th:each="reservation : ${reservations}">
+                            <th:block th:if="${!reservation.isDestinationRated()}">
+                                <option th:value="${reservation.destination.id}"
+                                        th:text="${reservation.destination.name}"
+                                        th:data-departure="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"
+                                        th:data-return="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"
+                                        th:data-people="${reservation.numberOfPeople}"
+                                        th:data-price="${#numbers.formatDecimal(reservation.totalPrice, 2, 2) + ' лв.'}"
+                                        th:data-rated="${reservation.isDestinationRated() ? 'true' : 'false'}">
+                                </option>
+                            </th:block>
+                        </th:block>
                     </select>
-                    <td th:if="${!reservation.isDestinationRated()}">
-                    <label for="comment"></label>
-                    <textarea name="comment" id="comment" rows="2" cols="30" placeholder="Напиши коментар..." required></textarea>
-                    </td>
-                    <td th:if="${!reservation.isDestinationRated()}">
-                    <button type="submit">Добави рейтинг</button>
-                    </td>
-                </form>
-            </td>
-        </tr>
-    </th:block>
-</table>
-<a href="/destinations">Върни се в главната страница</a>
+                </div>
+
+                <!-- Message for already rated destination -->
+                <div id="ratingMessage" class="text-lg text-red-500 mb-4 hidden">
+                    Вие вече сте оценили тази дестинация.
+                </div>
+
+                <!-- Reservation details section (hidden initially) -->
+                <div id="reservationDetails" class="mb-4 hidden">
+                    <p class="text-lg"><strong>Дата на заминаване:</strong> <span id="departureDate" class="text-gray-600"></span></p>
+                    <p class="text-lg"><strong>Дата на връщане:</strong> <span id="returnDate" class="text-gray-600"></span></p>
+                    <p class="text-lg"><strong>Брой хора:</strong> <span id="people" class="text-gray-600"></span></p>
+                    <p class="text-lg"><strong>Обща цена:</strong> <span id="price" class="text-gray-600"></span></p>
+                </div>
+
+                <!-- Rating and Comment form (hidden initially) -->
+                <div id="ratingForm" class="hidden">
+                    <div class="mb-4">
+                        <label for="stars" class="block font-semibold text-gray-700 text-lg mb-2">Рейтинг:</label>
+                        <select id="stars" name="stars" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500" required>
+                            <option value="">Избери рейтинг</option>
+                            <option value="1">&#11088;</option>
+                            <option value="2">&#11088;&#11088;</option>
+                            <option value="3">&#11088;&#11088;&#11088;</option>
+                            <option value="4">&#11088;&#11088;&#11088;&#11088;</option>
+                            <option value="5">&#11088;&#11088;&#11088;&#11088;&#11088;</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="comment" class="block font-semibold text-gray-700 text-lg mb-2">Коментар:</label>
+                        <textarea id="comment" name="comment" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 text-gray-700" placeholder="Напишете вашия коментар..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-yellow-500 text-white font-semibold py-3 rounded-lg hover:bg-yellow-600 transition duration-300">Добави рейтинг</button>
+                </div>
+            </form>
+            <button onclick="closeModal()" class="mt-4 w-full bg-gray-500 text-white font-semibold py-3 rounded-lg hover:bg-gray-600 transition duration-300">Затвори</button>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" th:src="@{/js/myReservationsScript.js}"></script>
 </body>
 </html>
