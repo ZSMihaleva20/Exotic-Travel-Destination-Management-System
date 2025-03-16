@@ -71,7 +71,10 @@
 
     <!-- Активни резервации -->
     <h2 class="text-2xl font-semibold text-gray-700 mb-4">Активни резервации</h2>
-    <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+    <div th:if="${#lists.isEmpty(activeReservations)}">
+        <p class="text-lg text-gray-600">Няма налични активни резервации.</p>
+    </div>
+    <table th:if="${!#lists.isEmpty(activeReservations)}" class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
         <thead>
         <tr class="bg-blue-700 text-white">
             <th class="px-6 py-3 text-left">Дестинация</th>
@@ -102,7 +105,10 @@
 
     <!-- Отменени резервации -->
     <h2 class="text-2xl font-semibold text-gray-700 mb-4 mt-8">Отменени резервации</h2>
-    <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+    <div th:if="${#lists.isEmpty(canceledReservations)}">
+        <p class="text-lg text-gray-600">Няма налични отменени резервации.</p>
+    </div>
+    <table th:if="${!#lists.isEmpty(canceledReservations)}" class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
         <thead>
         <tr class="bg-blue-700 text-white">
             <th class="px-6 py-3 text-left">Дестинация</th>
@@ -127,7 +133,10 @@
 
     <!-- Минали резервации -->
     <h2 class="text-2xl font-semibold text-gray-700 mb-4 mt-8">Минали резервации</h2>
-    <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+    <div th:if="${#lists.isEmpty(pastReservations)}">
+        <p class="text-lg text-gray-600">Няма налични минали резервации.</p>
+    </div>
+    <table th:if="${!#lists.isEmpty(pastReservations)}" class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
         <thead>
         <tr class="bg-blue-700 text-white">
             <th class="px-6 py-3 text-left">Дестинация</th>
