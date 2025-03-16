@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-    <link rel="stylesheet" href="/css/myReservationsStyle.css">
+    <link rel="stylesheet" href="/css/rateDestinationStyle.css">
     <script>
 
     </script>
@@ -37,7 +37,7 @@
 </nav>
 
 <!-- Content Section -->
-<div class="container max-w-4xl mx-auto px-4 md:px-6 mt-12 bg-white rounded-lg shadow-lg p-8">
+<div class="container max-w-6xl mx-auto px-4 md:px-6 mt-12 bg-white rounded-lg shadow-lg p-8">
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-4xl font-bold text-gray-800">Добави рейтинг за дестинация</h1>
         <button onclick="openModal()" class="bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-yellow-600 transition duration-300">Добави рейтинг</button>
@@ -45,29 +45,29 @@
 
     <!-- Table for rated reservations -->
     <div class="mb-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Рейтинговани резервации</h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Рейтинговани резервации</h2>
         <table class="w-full text-left border-collapse">
             <thead>
             <tr>
-                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Дестинация</th>
-                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Дата на заминаване</th>
-                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Дата на връщане</th>
-                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Брой хора</th>
-                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Обща цена</th>
-                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Рейтинг</th>
-                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700">Коментар</th>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700 text-center">Дестинация</th>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700 text-center">Дата на заминаване</th>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700 text-center">Дата на връщане</th>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700 text-center">Брой хора</th>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700 text-center">Обща цена</th>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700 text-center">Рейтинг</th>
+                <th class="py-2 px-4 bg-gray-200 font-bold text-gray-700 text-center">Коментар</th>
             </tr>
             </thead>
             <tbody>
             <th:block th:each="reservation : ${reservations}">
                 <th:block th:if="${reservation.destinationRated}">
                     <tr class="border-b border-gray-200">
-                        <td class="py-2 px-4" th:text="${reservation.destination.name}"></td>
+                        <td class="py-2 px-4 text-center" th:text="${reservation.destination.name}"></td>
                         <td class="py-2 px-4" th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
                         <td class="py-2 px-4" th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
-                        <td class="py-2 px-4" th:text="${reservation.numberOfPeople}"></td>
-                        <td class="py-2 px-4" th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2) + ' лв.'}"></td>
-                        <td class="py-2 px-4" th:text="${reservation.destinationRating}"></td>
+                        <td class="py-2 px-4 text-center" th:text="${reservation.numberOfPeople}"></td>
+                        <td class="py-2 px-4 text-center" th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2) + ' лв.'}"></td>
+                        <td class="py-2 px-4 text-center" th:text="${reservation.destinationRating}"></td>
                         <td class="py-2 px-4" th:text="${reservation.comment}"></td>
                     </tr>
                 </th:block>
@@ -140,7 +140,7 @@
     </div>
 
 </div>
-
+<div class="mb-10"></div>
 <script type="text/javascript" th:src="@{/js/rateDestinationScript.js}"></script>
 </body>
 </html>

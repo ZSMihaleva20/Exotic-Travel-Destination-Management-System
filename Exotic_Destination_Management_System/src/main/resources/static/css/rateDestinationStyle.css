@@ -1,0 +1,37 @@
+/* Container for main content */
+.container {
+    max-width: 80%;  /* Increases the width of the container */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem; /* Add padding to the content container for more space */
+}
+
+/* Table styling for more space */
+table {
+    width: 100%;
+    table-layout: fixed; /* Ensures consistent column widths */
+    border-collapse: collapse;
+}
+
+/* Styling for table cells */
+td, th {
+    padding: 1rem; /* Add more space inside the table cells */
+    text-align: left;
+}
+
+th {
+    background-color: #f3f4f6; /* Light gray background for headers */
+    font-weight: bold;
+}
+
+td {
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px; /* Limit the width of columns like the comment column */
+}
+
+/* Optional: Increase the height of table rows for better spacing */
+tr {
+    height: 60px;
+}
