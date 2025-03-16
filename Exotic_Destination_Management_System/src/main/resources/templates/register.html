@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
   <link rel="stylesheet" href="/css/logInAndSignUpStyle.css"/>
 </head>
-<body onload="AOS.init()">
+<body onload="AOS.init()" class="h-full overflow-hidden"> <!-- Added overflow-hidden to prevent scroll -->
 
 <!-- Navigation -->
 <nav class="fixed top-0 w-full bg-white shadow-md backdrop-blur-md z-50">
@@ -19,43 +19,51 @@
 </nav>
 
 <!-- Register Form Section -->
-<div class="flex items-center justify-center min-h-screen">
-  <div class="form-container" data-aos="fade-up">
-    <h1 class="text-3xl font-bold text-gray-800 mb-4">Регистрация</h1>
+<div class="flex items-center justify-center min-h-screen pt-16 px-4"> <!-- Reduced pt-40 to pt-16 for less padding at the top -->
+  <div class="form-container bg-white p-6 rounded-lg shadow-lg w-full max-w-xl" data-aos="fade-up"> <!-- Reduced max-width to make the form more compact -->
+    <h1 class="text-3xl font-bold text-gray-800 mb-4 text-center">Регистрация</h1>
     <form th:action="@{/register}" th:object="${user}" method="post">
-      <label class="text-gray-700 font-semibold">Име:</label>
-      <input type="text" id="firstName" th:field="*{firstName}" required class="form-input mt-2 mb-4" placeholder="Вашето име">
 
-      <label class="text-gray-700 font-semibold">Фамилия:</label>
-      <input type="text" id="lastName" th:field="*{lastName}" required class="form-input mt-2 mb-4" placeholder="Вашата фамилия">
+      <!-- First Name and Last Name on the same row -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label class="text-gray-700 font-semibold">Име:</label>
+          <input type="text" id="firstName" th:field="*{firstName}" required class="form-input mt-2 mb-4 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Вашето име">
+        </div>
+        <div>
+          <label class="text-gray-700 font-semibold">Фамилия:</label>
+          <input type="text" id="lastName" th:field="*{lastName}" required class="form-input mt-2 mb-4 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Вашата фамилия">
+        </div>
+      </div>
 
-      <label class="text-gray-700 font-semibold">Имейл:</label>
-      <input type="email" id="email" th:field="*{email}" required class="form-input mt-2 mb-4" placeholder="Вашият имейл">
+      <!-- Email -->
+      <div class="mb-4">
+        <label class="text-gray-700 font-semibold">Имейл:</label>
+        <input type="email" id="email" th:field="*{email}" required class="form-input mt-2 mb-4 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Вашият имейл">
+      </div>
 
-      <label class="text-gray-700 font-semibold">Потребителско име:</label>
-      <input type="text" id="username" th:field="*{username}" required class="form-input mt-2 mb-4" placeholder="Изберете потребителско име">
+      <!-- Username -->
+      <div class="mb-4">
+        <label class="text-gray-700 font-semibold">Потребителско име:</label>
+        <input type="text" id="username" th:field="*{username}" required class="form-input mt-2 mb-4 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Изберете потребителско име">
+      </div>
 
-      <label class="text-gray-700 font-semibold">Парола:</label>
-      <input type="password" id="password" th:field="*{password}" required class="form-input mt-2 mb-4"
-             placeholder="Създайте парола"
-             minlength="8"
-             maxlength="20"
-             pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$"
-             title="Паролата трябва да съдържа поне 8 знака, включително букви и цифри">
+      <!-- Password -->
+      <div class="mb-6">
+        <label class="text-gray-700 font-semibold">Парола:</label>
+        <input type="password" id="password" th:field="*{password}" required class="form-input mt-2 mb-4 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Създайте парола" minlength="8" maxlength="20" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$" title="Паролата трябва да съдържа поне 8 знака, включително букви и цифри">
+      </div>
 
-      <button type="submit" class="form-button mt-4">Регистрация</button>
+      <!-- Submit Button -->
+      <button type="submit" class="w-full bg-yellow-500 text-white py-3 rounded-md hover:bg-yellow-400 transition">Регистрация</button>
 
-      <p class="mt-4 text-gray-700">Вече имате акаунт? <a href="/login" class="text-yellow-500 font-bold hover:underline">Вход</a></p>
+      <!-- Login Link -->
+      <p class="mt-4 text-gray-700 text-center">Вече имате акаунт? <a href="/login" class="text-yellow-500 font-bold hover:underline">Вход</a></p>
     </form>
   </div>
 </div>
-<!-- Initialize AOS -->
-<script>
-  AOS.init({
-    duration: 1000,
-    once: true,
-  });
-</script>
 
+<!-- Initialize AOS -->
+<script type="text/javascript" th:src="@{/js/registerScript.js}"></script>
 </body>
 </html>

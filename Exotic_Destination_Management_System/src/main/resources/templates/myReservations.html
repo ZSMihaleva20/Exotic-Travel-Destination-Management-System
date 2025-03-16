@@ -5,85 +5,7 @@
     <meta charset="UTF-8">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-    <style>
-        /* 🔔 Notification Bell */
-        .notification-container {
-            position: fixed;
-            top: 90px;
-            right: 50px;
-        }
-
-        .notification-bell {
-            position: relative;
-            cursor: pointer;
-            font-size: 28px;
-            background: white; /* Bright yellow background */
-            border-radius: 50%;
-            padding: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .notification-bell .badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: red;
-            color: white;
-            border-radius: 50%;
-            padding: 5px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        /* 🔽 Notification Dropdown */
-        .dropdown {
-            display: none;
-            position: absolute;
-            top: 50px;
-            right: 0;
-            background-color: white;
-            border-radius: 10px;
-            padding: 15px;
-            width: 280px;
-            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        /* 📝 Notification Card */
-        .notification-card {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .notification-card span {
-            font-weight: bold;
-        }
-
-        /* 🔴🟠🟢 Days Left Badge */
-        .days-badge {
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .red { background: #ff4d4d; color: white; }      /* 1 Day Left */
-        .orange { background: #ffa500; color: white; }   /* 2-3 Days Left */
-        .green { background: #4caf50; color: white; }    /* More than 3 Days */
-
-        /* 🎬 Fade In Animation */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-    </style>
+    <link rel="stylesheet" href="/css/myReservationsStyle.css">
 </head>
 <body class="bg-gray-100 text-gray-800 pt-20 opacity-0 transition-opacity duration-700 ease-out">
 
@@ -97,7 +19,7 @@
         <!-- Center: Navigation Links -->
         <div class="hidden md:flex space-x-8 mx-auto">
             <a href="/destinations" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Дестинации</a>
-            <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">Промоции</a>
+            <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">Промоции и кампании</a>
             <a href="/statistics" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Статистики</a>
         </div>
 
@@ -229,21 +151,6 @@
     </table>
 </div>
 <div class="mb-10"></div>
-
-<script>
-    function showNotifications() {
-        let dropdown = document.getElementById('notificationDropdown');
-        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-    }
-
-    document.querySelector("#userMenu").addEventListener("click", () => {
-        document.getElementById("dropdownMenu").classList.toggle("hidden");
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        document.body.classList.remove("opacity-0");
-    });
-</script>
-
+<script type="text/javascript" th:src="@{/js/myReservationsScript.js}"></script>
 </body>
 </html>

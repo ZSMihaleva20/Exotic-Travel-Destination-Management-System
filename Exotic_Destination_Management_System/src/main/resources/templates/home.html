@@ -8,11 +8,6 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
   <link rel="stylesheet" href="/css/homePageStyle.css">
-
-  <style>
-
-  </style>
-
 </head>
 <body class="bg-gray-100 text-gray-900" onload="AOS.init()">
 
@@ -85,13 +80,7 @@
 </footer>
 
 <!-- Initialize AOS -->
-<script>
-  AOS.init({
-    duration: 1000,  // Animation duration
-    offset: 100,    // Trigger point
-    once: true,     // Only animate once
-  });
-</script>
+<script type="text/javascript" th:src="@{/js/homeScript.js}"></script>
 
 </body>
 </html>

@@ -20,7 +20,7 @@
         <!-- Center: Navigation Links -->
         <div class="hidden md:flex space-x-8 mx-auto">
             <a href="/destinations" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Дестинации</a>
-            <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">Промоции</a>
+            <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">Промоции и кампании</a>
             <a href="/statistics" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Статистики</a>
         </div>
 
@@ -92,16 +92,6 @@
         </div>
     </div>
 </div>
-<script>
-
-    document.querySelector("#userMenu").addEventListener("click", () => {
-        document.getElementById("dropdownMenu").classList.toggle("hidden");
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        document.body.classList.remove("opacity-0");
-    });
-
-</script>
+<script type="text/javascript" th:src="@{/js/profileScript.js}"></script>
 </body>
 </html>
