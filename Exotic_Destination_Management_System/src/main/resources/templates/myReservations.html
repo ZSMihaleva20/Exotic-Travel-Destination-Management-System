@@ -1,30 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="bg">
 <head>
     <title>Моите резервации</title>
     <meta charset="UTF-8">
-    <script>
-        function showNotifications() {
-            let dropdown = document.getElementById('notificationDropdown');
-            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-        }
-    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <style>
         /* 🔔 Notification Bell */
         .notification-container {
-            position: absolute;
-            top: 10px;
-            right: 20px;
+            position: fixed;
+            top: 90px;
+            right: 50px;
         }
 
         .notification-bell {
             position: relative;
             cursor: pointer;
-            font-size: 24px;
-            background: white;
+            font-size: 28px;
+            background: white; /* Bright yellow background */
             border-radius: 50%;
-            padding: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .notification-bell .badge {
@@ -43,7 +39,7 @@
         .dropdown {
             display: none;
             position: absolute;
-            top: 40px;
+            top: 50px;
             right: 0;
             background-color: white;
             border-radius: 10px;
@@ -86,110 +82,168 @@
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
     </style>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800 pt-20 opacity-0 transition-opacity duration-700 ease-out">
 
-<div class="notification-container">
-    <!-- Notification Bell -->
-    <div class="notification-bell" onclick="showNotifications()">
-        🔔
-        <span class="badge" th:if="${#lists.size(urgentReservations) > 0}"
-              th:text="${#lists.size(urgentReservations)}"></span>
-    </div>
+<!-- Main Layout -->
+<nav class="fixed top-0 w-full bg-white shadow-md backdrop-blur-md z-50">
+    <div class="container mx-auto flex items-center justify-between py-4 px-6">
 
-    <!-- Notification Dropdown -->
-    <div id="notificationDropdown" class="dropdown">
-        <p th:if="${#lists.isEmpty(urgentReservations)}">✅ Няма предстоящи пътувания през следващите 3 дни</p>
-        <div th:each="reservation : ${urgentReservations}" class="notification-card">
-            <div>
-                <span th:text="${reservation.destination.name}"></span> <br>
-                <small th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMM yyyy')}"></small>
+        <!-- Left Side: Logo -->
+        <h2 class="text-3xl font-extrabold text-yellow-500"><a href="/">Exotico</a></h2>
+
+        <!-- Center: Navigation Links -->
+        <div class="hidden md:flex space-x-8 mx-auto">
+            <a href="/destinations" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Дестинации</a>
+            <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">Промоции</a>
+            <a href="/statistics" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Статистики</a>
+        </div>
+
+        <!-- Right Side: User Menu -->
+        <div class="relative">
+            <div class="bg-gray-800 text-white px-6 py-2 rounded-lg cursor-pointer flex items-center gap-2" id="userMenu">
+                <span class="material-symbols-outlined">person</span>
+                <span class="font-semibold">Моят акаунт</span>
             </div>
-            <!-- Dynamic Badge Color Based on Days Left -->
-            <span class="days-badge"
-                  th:classappend="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), reservation.destination.dateOfDeparture) == 1 ? 'red' :
-                                  (T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), reservation.destination.dateOfDeparture) <= 3 ? 'orange' : 'green')}"
-                  th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), reservation.destination.dateOfDeparture)} + ' дни'">
-            </span>
+
+            <!-- Dropdown Menu -->
+            <div id="dropdownMenu" class="absolute right-0 mt-2 bg-white text-gray-900 p-4 rounded shadow-md w-48 hidden transition">
+                <a href="/profile" class="block py-2">Профил</a>
+                <a href="/myReservations" class="block py-2">Моите резервации</a>
+                <a href="/rateDestination" class="block py-2"> Добави рейтинг</a>
+                <a href="/logout" class="block py-2 text-red-500">Изход</a>
+            </div>
         </div>
     </div>
+</nav>
+
+<!-- Content Section -->
+<div class="container max-w-6xl mx-auto px-4 md:px-6 mt-12">
+    <div class="notification-container">
+        <!-- Notification Bell -->
+        <div class="notification-bell" onclick="showNotifications()">
+            🔔
+            <span class="badge" th:if="${#lists.size(urgentReservations) > 0}" th:text="${#lists.size(urgentReservations)}"></span>
+        </div>
+
+        <!-- Notification Dropdown -->
+        <div id="notificationDropdown" class="dropdown">
+            <p th:if="${#lists.isEmpty(urgentReservations)}">✅ Няма предстоящи пътувания през следващите 3 дни</p>
+            <div th:each="reservation : ${urgentReservations}" class="notification-card">
+                <div>
+                    <span th:text="${reservation.destination.name}"></span> <br>
+                    <small th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd MMM yyyy')}"></small>
+                </div>
+                <span class="days-badge"
+                      th:classappend="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), reservation.destination.dateOfDeparture) == 1 ? 'red' :
+                                  (T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), reservation.destination.dateOfDeparture) <= 3 ? 'orange' : 'green')}"
+                      th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), reservation.destination.dateOfDeparture)} + ' дни'">
+            </span>
+            </div>
+        </div>
+    </div>
+
+    <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center">Моите резервации</h1>
+
+    <!-- Активни резервации -->
+    <h2 class="text-2xl font-semibold text-gray-700 mb-4">Активни резервации</h2>
+    <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+        <thead>
+        <tr class="bg-blue-700 text-white">
+            <th class="px-6 py-3 text-left">Дестинация</th>
+            <th class="px-6 py-3 text-left">Дата на заминаване</th>
+            <th class="px-6 py-3 text-left">Дата на връщане</th>
+            <th class="px-6 py-3 text-left">Брой хора</th>
+            <th class="px-6 py-3 text-left">Обща цена</th>
+            <th class="px-6 py-3 text-left">Действие</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="reservation : ${activeReservations}">
+            <tr class="border-t hover:bg-gray-50">
+                <td class="px-6 py-4" th:text="${reservation.destination.name}"></td>
+                <td class="px-6 py-4" th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
+                <td class="px-6 py-4" th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
+                <td class="px-6 py-4" th:text="${reservation.numberOfPeople}"></td>
+                <td class="px-6 py-4" th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
+                <td class="px-6 py-4">
+                    <form th:action="@{/cancel-reservation/{id}(id=${reservation.id})}" method="post">
+                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">Откажи</button>
+                    </form>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+
+    <!-- Отменени резервации -->
+    <h2 class="text-2xl font-semibold text-gray-700 mb-4 mt-8">Отменени резервации</h2>
+    <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+        <thead>
+        <tr class="bg-blue-700 text-white">
+            <th class="px-6 py-3 text-left">Дестинация</th>
+            <th class="px-6 py-3 text-left">Дата на заминаване</th>
+            <th class="px-6 py-3 text-left">Дата на връщане</th>
+            <th class="px-6 py-3 text-left">Брой хора</th>
+            <th class="px-6 py-3 text-left">Обща цена</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="reservation : ${canceledReservations}">
+            <tr class="border-t hover:bg-gray-50">
+                <td class="px-6 py-4" th:text="${reservation.destination.name}"></td>
+                <td class="px-6 py-4" th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
+                <td class="px-6 py-4" th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
+                <td class="px-6 py-4" th:text="${reservation.numberOfPeople}"></td>
+                <td class="px-6 py-4" th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+
+    <!-- Минали резервации -->
+    <h2 class="text-2xl font-semibold text-gray-700 mb-4 mt-8">Минали резервации</h2>
+    <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
+        <thead>
+        <tr class="bg-blue-700 text-white">
+            <th class="px-6 py-3 text-left">Дестинация</th>
+            <th class="px-6 py-3 text-left">Дата на заминаване</th>
+            <th class="px-6 py-3 text-left">Дата на връщане</th>
+            <th class="px-6 py-3 text-left">Брой хора</th>
+            <th class="px-6 py-3 text-left">Обща цена</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="reservation : ${pastReservations}">
+            <tr class="border-t hover:bg-gray-50">
+                <td class="px-6 py-4" th:text="${reservation.destination.name}"></td>
+                <td class="px-6 py-4" th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
+                <td class="px-6 py-4" th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
+                <td class="px-6 py-4" th:text="${reservation.numberOfPeople}"></td>
+                <td class="px-6 py-4" th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
 </div>
+<div class="mb-10"></div>
 
+<script>
+    function showNotifications() {
+        let dropdown = document.getElementById('notificationDropdown');
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    }
 
-<h1>Моите резервации</h1>
+    document.querySelector("#userMenu").addEventListener("click", () => {
+        document.getElementById("dropdownMenu").classList.toggle("hidden");
+    });
 
-<!-- Активни резервации -->
-<h2>Активни дестинации</h2>
-<table>
-    <tr>
-        <th>Дестинация</th>
-        <th>Дата на заминаване</th>
-        <th>Дата на връщане</th>
-        <th>Брой хора</th>
-        <th>Обща цена</th>
-        <th>Действие</th>
-        <th></th>
-    </tr>
-    <th:block th:each="reservation : ${activeReservations}">
-        <tr>
-            <td th:text="${reservation.destination.name}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
-            <td th:text="${reservation.numberOfPeople}"></td>
-            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
-            <td>
-                <form th:action="@{/cancel-reservation/{id}(id=${reservation.id})}" method="post">
-                    <button type="submit">Откажи</button>
-                </form>
-            </td>
-        </tr>
-    </th:block>
-</table>
-
-<!-- Отменени резервации -->
-<h2>Отменени резервации</h2>
-<table>
-    <tr>
-        <th>Дестинация</th>
-        <th>Дата на заминаване</th>
-        <th>Дата на връщане</th>
-        <th>Брой хора</th>
-        <th>Обща цена</th>
-    </tr>
-    <th:block th:each="reservation : ${canceledReservations}">
-        <tr>
-            <td th:text="${reservation.destination.name}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
-            <td th:text="${reservation.numberOfPeople}"></td>
-            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
-        </tr>
-    </th:block>
-</table>
-
-<!-- Минали резервации -->
-<h2>Минали резервации</h2>
-<table>
-    <tr>
-        <th>Дестинация</th>
-        <th>Дата на заминаване</th>
-        <th>Дата на връщане</th>
-        <th>Брой хора</th>
-        <th>Обща цена</th>
-    </tr>
-    <th:block th:each="reservation : ${pastReservations}">
-        <tr>
-            <td th:text="${reservation.destination.name}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
-            <td th:text="${reservation.numberOfPeople}"></td>
-            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
-        </tr>
-    </th:block>
-</table>
-
-<a href="/destinations">Върни се в главната страница</a>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.body.classList.remove("opacity-0");
+    });
+</script>
 
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="bg">
 <head>
-    <title>Екзотични туристически дестинации</title>
+    <title>Промоции и кампании</title>
     <meta charset="UTF-8">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
@@ -57,102 +57,154 @@
 <!-- Main Layout Container (Centers Content & Limits Width) -->
 <!-- Main Layout Container (Increased Width) -->
 <div class="container max-w-7xl mx-auto px-4 md:px-6">
-        <h1 class="text-4xl font-bold text-gray-800 mb-6 text-center mt-8">Промоции и кампании</h1>
+    <h1 class="text-4xl font-bold text-gray-800 mb-6 text-center mt-8">Промоции и кампании</h1>
 
-        <!-- Promotions Section -->
+    <!-- Promotions Section -->
     <h2 class="text-3xl font-extrabold text-gray-800 mt-10 mb-4 text-center">Промоции</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <th:block th:each="promotion : ${promotions}">
-                <th:block th:if="${promotion.destination.isOnPromotion}">
-                    <div class="bg-white p-6 rounded-lg shadow-md flex flex-col min-h-full border-2 border-yellow-500">
+        <th:block th:each="promotion : ${promotions}">
+            <th:block th:if="${promotion.destination.isOnPromotion}">
+                <div class="destination-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition flex flex-col min-h-full relative p-4 border-2 border-yellow-500">
+
+                    <!-- Rating & Popularity -->
+                    <p class="absolute top-2 right-2 bg-blue-800 text-white font-bold px-3 py-1 rounded-lg shadow">
+                        ⭐ <span th:text="${promotion.destination.getAverageRating()}"></span>
+                    </p>
+                    <p class="absolute top-12 right-2 bg-green-600 text-white font-bold px-3 py-1 rounded-lg shadow">
+                        🔥 <span th:text="${promotion.destination.getPopularity()}"></span> резервирали
+                    </p>
+
+                    <!-- Image -->
+                    <img th:src="'/uploaded-image/' + ${promotion.destination.imageUrl}"
+                         alt="Destination Image"
+                         class="w-full h-64 object-cover rounded-lg">
+
+                    <!-- Destination Info -->
+                    <div class="p-6 flex flex-col flex-grow">
+
+                        <!-- Destination Name -->
                         <h2 class="text-xl font-bold text-gray-700" th:text="${promotion.destination.name}"></h2>
 
-                        <ul class="text-gray-600 mt-2 list-disc pl-5 flex-grow"
+                        <!-- Destination Description -->
+                        <ul class="text-gray-600 mt-2 list-disc pl-5"
                             th:utext="${#strings.listJoin(#strings.arraySplit(promotion.destination.description, '\\;'), '</li><li>')}">
                         </ul>
 
-                        <p class="text-black-600 font-bold mt-2">Дата на заминаване:
+                        <!-- Dates -->
+                        <p class="text-gray-700 font-bold mt-4">Дата на заминаване:
                             <span th:text="${#temporals.format(promotion.destination.dateOfDeparture, 'dd-MM-yyyy')}"></span>
                         </p>
-                        <p class="text-black-600 font-bold">Дата на връщане:
+                        <p class="text-gray-700 font-bold">Дата на връщане:
                             <span th:text="${#temporals.format(promotion.destination.dateOfReturn, 'dd-MM-yyyy')}"></span>
                         </p>
 
-                        <img th:src="'/uploaded-image/' + ${promotion.destination.imageUrl}"
-                             alt="Destination Image"
-                             class="w-full h-40 object-cover rounded-lg mt-4">
+                        <!-- Remaining Seats -->
+                        <p class="mt-2 text-gray-700 font-bold">Оставащи места:
+                            <span th:text="${promotion.destination.remainingPeople}"></span>
+                        </p>
 
-                        <p class="mt-2 text-black-500 font-bold"> Оставащи места: <span th:text="${promotion.destination.remainingPeople}"></span></p>
-                        <p class="text-gray-500"> <del>Стара цена: <span th:text="${#numbers.formatDecimal(promotion.oldPrice, 2, 2)}"></span> лв.</del></p>
-                        <p class="text-yellow-500 font-bold"> Нова цена: <span th:text="${#numbers.formatDecimal(promotion.newPrice, 2, 2)}"></span> лв.</p>
-                        <p class = "text-black-500 font-bold">⭐ <span th:text="${promotion.destination.getAverageRating()}"></span></p>
-                        <p class = "text-black-500 font-bold"> Популярност: <span th:text="${promotion.destination.getPopularity()}"></span> резервирали</p>
-
-                        <th:block th:if="${promotion.destination.remainingPeople == 0 or promotion.destination.dateOfReturn < T(java.time.LocalDate).now()}">
-                            <p class="text-red-500 font-bold"> Затворено за резервации</p>
-                        </th:block>
-
+                        <!-- Reserve Button -->
                         <div class="mt-auto pt-4">
+                            <p class="text-gray-500 text-xl mt-2 text-center">
+                                <del>Стара цена: <span th:text="${#numbers.formatDecimal(promotion.oldPrice, 2, 2)}"></span> лв.</del>
+                            </p>
+                            <p class="text-red-500 font-extrabold text-xl mt-2 text-center">
+                                Нова цена: <span th:text="${#numbers.formatDecimal(promotion.newPrice, 2, 2)}"></span> лв.
+                            </p>
+
+                            <th:block th:if="${promotion.destination.remainingPeople == 0 or promotion.destination.dateOfReturn < T(java.time.LocalDate).now()}">
+                                <p class="text-red-500 font-bold mt-2 text-center">Затворено за резервации</p>
+                            </th:block>
                             <div sec:authorize="hasAuthority('USER')">
                                 <th:block th:unless="${promotion.destination.remainingPeople == 0 or promotion.destination.dateOfReturn < T(java.time.LocalDate).now()}">
                                     <a th:href="@{/reservation/{id}(id=${promotion.destination.id})}">
-                                        <button class="btn btn-secondary w-full">Направи резервация</button>
+                                        <button class="btn btn-secondary w-full text-lg mt-4">Направи резервация</button>
                                     </a>
                                 </th:block>
                             </div>
                         </div>
-                    </div>
-                </th:block>
-            </th:block>
-        </div>
 
-        <!-- Campaigns Section -->
+                    </div>
+                </div>
+            </th:block>
+        </th:block>
+    </div>
+
+    <!-- Campaigns Section -->
     <h2 class="text-3xl font-extrabold text-gray-800 mt-16 mb-4 text-center">Летни кампании</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <th:block th:each="campaign : ${campaigns}">
-                <th:block th:if="${campaign.destination.isOnPromotion}">
-                    <div class="bg-yellow-100 p-6 rounded-lg shadow-md flex flex-col min-h-full border-2 border-yellow-500">
+        <th:block th:each="campaign : ${campaigns}">
+            <th:block th:if="${campaign.destination.isOnPromotion}">
+                <div class="destination-card bg-yellow-100 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition flex flex-col min-h-full relative p-4 border-2 border-yellow-500">
+
+                    <!-- Rating & Popularity -->
+                    <p class="absolute top-2 right-2 bg-blue-800 text-white font-bold px-3 py-1 rounded-lg shadow">
+                        ⭐ <span th:text="${campaign.destination.getAverageRating()}"></span>
+                    </p>
+                    <p class="absolute top-12 right-2 bg-green-600 text-white font-bold px-3 py-1 rounded-lg shadow">
+                        🔥 <span th:text="${campaign.destination.getPopularity()}"></span> резервирали
+                    </p>
+
+                    <!-- Image -->
+                    <img th:src="'/uploaded-image/' + ${campaign.destination.imageUrl}"
+                         alt="Destination Image"
+                         class="w-full h-64 object-cover rounded-lg">
+
+                    <!-- Destination Info -->
+                    <div class="p-6 flex flex-col flex-grow">
+
+                        <!-- Destination Name -->
                         <h2 class="text-xl font-bold text-gray-700">ЛЯТНА КАМПАНИЯ!</h2>
                         <h2 class="text-xl font-bold text-gray-700" th:text="${campaign.destination.name}"></h2>
 
-                        <ul class="text-gray-600 mt-2 list-disc pl-5 flex-grow"
+                        <!-- Destination Description -->
+                        <ul class="text-gray-600 mt-2 list-disc pl-5"
                             th:utext="${#strings.listJoin(#strings.arraySplit(campaign.destination.description, '\\;'), '</li><li>')}">
                         </ul>
 
-                        <p class="text-black-600 font-bold mt-2">Дата на заминаване:
+                        <!-- Dates -->
+                        <p class="text-gray-700 font-bold mt-4">Дата на заминаване:
                             <span th:text="${#temporals.format(campaign.destination.dateOfDeparture, 'dd-MM-yyyy')}"></span>
                         </p>
-                        <p class="text-black-600 font-bold"> Дата на връщане:
+                        <p class="text-gray-700 font-bold">Дата на връщане:
                             <span th:text="${#temporals.format(campaign.destination.dateOfReturn, 'dd-MM-yyyy')}"></span>
                         </p>
 
-                        <img th:src="'/uploaded-image/' + ${campaign.destination.imageUrl}"
-                             alt="Destination Image"
-                             class="w-full h-40 object-cover rounded-lg mt-4">
+                        <!-- Remaining Seats -->
+                        <p class="mt-2 text-gray-700 font-bold">Оставащи места:
+                            <span th:text="${campaign.destination.remainingPeople}"></span>
+                        </p>
 
-                        <p class="mt-2 text-black-500 font-bold">Оставащи места: <span th:text="${campaign.destination.remainingPeople}"></span></p>
-                        <p class="text-gray-500"><del>Стара цена: <span th:text="${#numbers.formatDecimal(campaign.oldPrice, 2, 2)}"></span> лв.</del></p>
-                        <p class="text-yellow-500 font-bold">Нова цена: <span th:text="${#numbers.formatDecimal(campaign.newPrice, 2, 2)}"></span> лв.</p>
-                        <p class="text-black-500 font-bold">⭐ <span th:text="${campaign.destination.getAverageRating()}"></span></p>
-                        <p class="text-black-500 font-bold">Популярност: <span th:text="${campaign.destination.getPopularity()}"></span> резервирали</p>
 
-                        <th:block th:if="${campaign.destination.remainingPeople == 0 or campaign.destination.dateOfReturn < T(java.time.LocalDate).now()}">
-                            <p class="text-red-500 font-bold">Затворено за резервации</p>
-                        </th:block>
-
+                        <!-- Reserve Button -->
                         <div class="mt-auto pt-4">
+                            <!-- Price -->
+                            <p class="text-gray-500 text-xl mt-2 text-center">
+                                <del>Стара цена: <span th:text="${#numbers.formatDecimal(campaign.oldPrice, 2, 2)}"></span> лв.</del>
+                            </p>
+
+                            <p class="text-red-500 font-extrabold text-xl mt-2 text-center">
+                                Нова цена: <span th:text="${#numbers.formatDecimal(campaign.newPrice, 2, 2)}"></span> лв.
+                            </p>
+
+                            <th:block th:if="${campaign.destination.remainingPeople == 0 or campaign.destination.dateOfReturn < T(java.time.LocalDate).now()}">
+                                <p class="text-red-500 font-bold mt-2 text-center">Затворено за резервации</p>
+                            </th:block>
                             <div sec:authorize="hasAuthority('USER')">
                                 <th:block th:unless="${campaign.destination.remainingPeople == 0 or campaign.destination.dateOfReturn < T(java.time.LocalDate).now()}">
                                     <a th:href="@{/reservation/{id}(id=${campaign.destination.id})}">
-                                        <button class="btn btn-secondary w-full">Направи резервация</button>
+                                        <button class="btn btn-secondary w-full text-lg mt-4">Направи резервация</button>
                                     </a>
                                 </th:block>
                             </div>
                         </div>
+
                     </div>
-                </th:block>
+                </div>
             </th:block>
-        </div>
+        </th:block>
+    </div>
+
     </div>
 <div class="mb-10"></div>
 <script>
