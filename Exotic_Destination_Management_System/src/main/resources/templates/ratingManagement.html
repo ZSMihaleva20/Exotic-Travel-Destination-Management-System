@@ -1,51 +1,90 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="bg">
 <head>
-    <title>Управлявай рейтинги</title>
-    <meta charset="utf-8">
+    <title>Управление на рейтинги</title>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="/css/destinationsPageStyle.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
-<body>
-<h1>Рейтинги по дестинации</h1>
+<body class="bg-gray-100 text-gray-800 pt-20 opacity-0 transition-opacity duration-700 ease-out">
 
-<!-- Display all destinations and their ratings -->
-<th:block th:each="destination : ${allDestinations}">
-    <br>
-    <h2 th:text="${destination.name}"></h2>
-    <p>Дата на заминаване: <span th:text="${#temporals.format(destination.dateOfDeparture, 'dd-MM-yyyy')}"></span></p>
-    <p>Дата на връщаве: <span th:text="${#temporals.format(destination.dateOfReturn, 'dd-MM-yyyy')}"></span></p>
-    <th:block th:if="${ratingsByDestination.containsKey(destination)}">
-        <table>
-            <tr>
-                <th>Потребител</th>
-                <th>Имейл</th>
-                <th>Рейтинг</th>
-                <th>Коментар</th>
-                <th>Дата</th>
-            </tr>
-            <th:block th:each="rating : ${ratingsByDestination.get(destination)}">
-                <tr>
-                    <td th:text="${rating.user.fullName}"></td>
-                    <td th:text="${rating.user.email}"></td>
-                    <td th:utext="${'&#11088;'.repeat(rating.stars)}"></td>
-                    <td th:text="${rating.comment}"></td>
-                    <td th:text="${#temporals.format(rating.timestamp, 'dd-MM-yyyy HH:mm')}"></td>
-                    <td>
-                        <!-- Add a delete button -->
-                        <form th:action="@{/deleteRating/{ratingId}(ratingId=${rating.id})}" method="post">
-                            <button type="submit">Изтрий</button>
-                        </form>
-                    </td>
-                </tr>
-            </th:block>
-        </table>
-    </th:block>
+<!-- Main Layout -->
+<nav class="fixed top-0 w-full bg-white shadow-md backdrop-blur-md z-50">
+    <div class="container mx-auto flex items-center justify-between py-4 px-6">
 
-    <!-- If no ratings exist -->
-    <th:block th:if="${!ratingsByDestination.containsKey(destination)}">
-        <p>Няма налични рейтинги за дестинацията</p>
-    </th:block>
-</th:block>
+        <!-- Left Side: Logo -->
+        <h2 class="text-3xl font-extrabold text-yellow-500"><a href="/">Exotico</a></h2>
 
-<a href="/destinations">Върни се в главната страница</a>
+        <!-- Center: Navigation Links -->
+        <div class="hidden md:flex space-x-8 mx-auto">
+            <a href="/destinations" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Дестинации</a>
+            <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">Промоции и кампании</a>
+            <a href="/statistics" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Статистики</a>
+        </div>
+
+        <!-- Right Side: User Menu -->
+        <div class="relative">
+            <div class="bg-gray-800 text-white px-6 py-2 rounded-lg cursor-pointer flex items-center gap-2" id="userMenu">
+                <span class="material-symbols-outlined">person</span>
+                <span class="font-semibold">Моят акаунт</span>
+            </div>
+
+            <!-- Dropdown Menu -->
+            <div id="dropdownMenu" class="absolute right-0 mt-2 bg-white text-gray-900 p-4 rounded shadow-md w-48 hidden transition">
+                <a href="/profile" class="block py-2">Профил</a>
+                <a href="/destinationManagement" class="block py-2">Управлявай дестинации</a>
+                <a href="/ratingManagement" class="block py-2">Управлявай рейтинги</a>
+                <a href="/reservationManagement" class="block py-2"> Управлявай резервации</a>
+                <th:block th:if="${#strings.equals(user.getRole(), 'ADMIN')}">
+                    <a href="/profilesManagement" class="block py-2">Управлявай профили</a>
+                </th:block>
+                <a href="/logout" class="block py-2 text-red-500">Изход</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container max-w-6xl mx-auto px-4 md:px-6 mt-12 bg-white rounded-lg shadow-lg p-8">
+    <h1 class="text-4xl font-bold text-gray-800 text-center mb-8">Управление на рейтинги</h1>
+
+    <div class="space-y-8">
+        <th:block th:each="destination : ${allDestinations}">
+            <div class="bg-white shadow-lg rounded-2xl p-6">
+                <h2 class="text-2xl font-semibold text-gray-900" th:text="${destination.name}"></h2>
+                <p class="text-gray-600">Дата на заминаване: <span class="font-medium" th:text="${#temporals.format(destination.dateOfDeparture, 'dd-MM-yyyy')}"></span></p>
+                <p class="text-gray-600">Дата на връщане: <span class="font-medium" th:text="${#temporals.format(destination.dateOfReturn, 'dd-MM-yyyy')}"></span></p>
+
+                <th:block th:if="${ratingsByDestination.containsKey(destination)}">
+                    <div class="mt-4 space-y-4">
+                        <th:block th:each="rating : ${ratingsByDestination.get(destination)}">
+                            <div class="bg-gray-100 p-4 rounded-lg flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                                <div>
+                                    <p class="text-lg font-medium text-gray-900" th:text="${rating.user.fullName}"></p>
+                                    <p class="text-sm text-gray-600" th:text="${rating.user.email}"></p>
+                                    <p class="text-yellow-500 text-xl" th:utext="${'&#11088;'.repeat(rating.stars)}"></p>
+                                    <p class="text-gray-700 mt-2" th:text="${rating.comment}"></p>
+                                    <p class="text-sm text-gray-500" th:text="${#temporals.format(rating.timestamp, 'dd-MM-yyyy HH:mm')}"></p>
+                                </div>
+                                <form th:action="@{/deleteRating/{ratingId}(ratingId=${rating.id})}" method="post" class="mt-2 sm:mt-0">
+                                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Изтрий</button>
+                                </form>
+                            </div>
+                        </th:block>
+                    </div>
+                </th:block>
+
+                <th:block th:if="${!ratingsByDestination.containsKey(destination)}">
+                    <p class="text-gray-500 mt-4">Няма налични рейтинги за дестинацията</p>
+                </th:block>
+            </div>
+        </th:block>
+    </div>
+</div>
+
+<div class="mb-10"></div>
+<script type="text/javascript" th:src="@{/js/ratingManagementScript.js}"></script>
 </body>
 </html>

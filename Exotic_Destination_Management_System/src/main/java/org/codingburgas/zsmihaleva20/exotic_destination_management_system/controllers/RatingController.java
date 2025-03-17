@@ -11,6 +11,7 @@ import org.codingburgas.zsmihaleva20.exotic_destination_management_system.reposi
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -83,7 +84,7 @@ public class RatingController {
     }
 
     @GetMapping("/ratingManagement")
-    public String showRatingManagementPage(Model model) {
+    public String showRatingManagementPage(Model model,  @AuthenticationPrincipal User user) {
         List<Destination> allDestinations = destinationRepository.findAll();
         List<Rating> allRatings = ratingRepository.findAll();
 
@@ -97,6 +98,7 @@ public class RatingController {
 
         model.addAttribute("allDestinations", allDestinations);
         model.addAttribute("ratingsByDestination", ratingsByDestination);
+        model.addAttribute("user", user);
 
         return "ratingManagement";
     }
