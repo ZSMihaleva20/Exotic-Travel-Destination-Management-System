@@ -7,14 +7,14 @@ document.addEventListener("DOMContentLoaded", function () {
             returnInput.min = departureInput.value; // Set return date min to departure date
         }
         if (returnInput.value && departureInput.value > returnInput.value) {
-            alert("Датата на тръгване не може да бъде след датата на връщане!");
+            alert("Датата на заминаване не може да бъде след датата на връщане!");
             departureInput.value = ""; // Reset invalid departure date
         }
     });
 
     returnInput.addEventListener("change", function () {
         if (departureInput.value && returnInput.value < departureInput.value) {
-            alert("Датата на връщане трябва да бъде след датата на тръгване!");
+            alert("Датата на връщане трябва да бъде след датата на заминаване!");
             returnInput.value = ""; // Reset invalid return date
         }
     });

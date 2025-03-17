@@ -1,66 +1,119 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="bg">
 <head>
+    <title>Добави дестинация</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Създай дестинация</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <link th:href="@{../static/css/style.css}" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="/css/destinationsPageStyle.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800 pt-20 opacity-0 transition-opacity duration-700 ease-out">
 
-<h1>Създай дестинация</h1>
-<form th:action="@{/addDestination}" method="post" enctype="multipart/form-data">
-    <label for="name">Име на дестинацията:</label>
-    <input type="text" id="name" name="name" required><br><br>
+<!-- Main Layout -->
+<nav class="fixed top-0 w-full bg-white shadow-md backdrop-blur-md z-50">
+    <div class="container mx-auto flex items-center justify-between py-4 px-6">
 
-    <label for="description">Описание:</label>
-    <textarea id="description" name="description" required></textarea><br><br>
+        <!-- Left Side: Logo -->
+        <h2 class="text-3xl font-extrabold text-yellow-500"><a href="/">Exotico</a></h2>
 
-    <label for="dateOfDeparture">Дата на заминаване:</label>
-    <input type="date" id="dateOfDeparture" name="dateOfDeparture" required><br><br>
+        <!-- Center: Navigation Links -->
+        <div class="hidden md:flex space-x-8 mx-auto">
+            <a href="/destinations" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Дестинации</a>
+            <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">Промоции и кампании</a>
+            <a href="/statistics" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Статистики</a>
+        </div>
 
-    <label for="dateOfReturn">Дата на връщане:</label>
-    <input type="date" id="dateOfReturn" name="dateOfReturn" required><br><br>
+        <!-- Right Side: User Menu -->
+        <div class="relative">
+            <div class="bg-gray-800 text-white px-6 py-2 rounded-lg cursor-pointer flex items-center gap-2" id="userMenu">
+                <span class="material-symbols-outlined">person</span>
+                <span class="font-semibold">Моят акаунт</span>
+            </div>
 
-    <label for="price">Цена за 1 човек:</label>
-    <input type="number" step="0.01" id="price" name="price" required><br><br>
+            <!-- Dropdown Menu -->
+            <div id="dropdownMenu" class="absolute right-0 mt-2 bg-white text-gray-900 p-4 rounded shadow-md w-48 hidden transition">
+                <a href="/profile" class="block py-2">Профил</a>
+                <a href="/destinationManagement" class="block py-2">Управлявай дестинации</a>
+                <a href="/ratingManagement" class="block py-2">Управлявай рейтинги</a>
+                <a href="/reservationManagement" class="block py-2"> Управлявай резервации</a>
+                <th:block th:if="${#strings.equals(user.getRole(), 'ADMIN')}">
+                    <a href="/profilesManagement" class="block py-2">Управлявай профили</a>
+                </th:block>
+                <a href="/logout" class="block py-2 text-red-500">Изход</a>
+            </div>
+        </div>
+    </div>
+</nav>
 
-    <label for="limitedPeople">Максимален брой хора:</label>
-    <input type="number" id="limitedPeople" name="limitedPeople" required><br><br>
+<div class="container max-w-6xl mx-auto px-4 md:px-6 mt-12">
+    <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center mt-8">Добави дестинация</h1>
 
-    <label for="image">Качете снимка:</label>
-    <input type="file" id="image" name="image" required><br><br>
+    <form th:action="@{/addDestination}" method="post" enctype="multipart/form-data" class="space-y-6" id="destinationForm">
+        <!-- Destination Name -->
+        <div>
+            <label for="name" class="block text-lg font-semibold text-gray-700 mb-2">Име на дестинацията:</label>
+            <input type="text" id="name" name="name" required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 text-gray-700">
+        </div>
 
-    <button type="submit">Създай дестинацията</button>
-</form>
-<a href="/destinationManagement">Върни се</a>
+        <!-- Description -->
+        <div>
+            <label id="description" class="block text-lg font-semibold text-gray-700 mb-2">Описание:</label>
+            <div id="descriptionContainer">
+                <input type="text" name="description[]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 text-gray-700 mb-2" placeholder="Добавете описание...">
+            </div>
+            <button type="button" id="addDescription" class="mt-2 bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 transition duration-300">Добави описание</button>
+        </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let departureInput = document.getElementById("dateOfDeparture");
-        let returnInput = document.getElementById("dateOfReturn");
+        <!-- Date of Departure -->
+        <div>
+            <label for="dateOfDeparture" class="block text-lg font-semibold text-gray-700 mb-2">Дата на заминаване:</label>
+            <input type="date" id="dateOfDeparture" name="dateOfDeparture" required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 text-gray-700">
+        </div>
 
-        departureInput.addEventListener("change", function () {
-            if (departureInput.value) {
-                returnInput.min = departureInput.value; // Set return date min to departure date
-            }
+        <!-- Date of Return -->
+        <div>
+            <label for="dateOfReturn" class="block text-lg font-semibold text-gray-700 mb-2">Дата на връщане:</label>
+            <input type="date" id="dateOfReturn" name="dateOfReturn" required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 text-gray-700">
+        </div>
 
-            // Check if departure date is after return date
-            if (returnInput.value && departureInput.value > returnInput.value) {
-                alert("Датата на тръгване не може да бъде след датата на връщане!");
-                departureInput.value = ""; // Reset invalid departure date
-            }
-        });
+        <!-- Price per Person -->
+        <div>
+            <label for="price" class="block text-lg font-semibold text-gray-700 mb-2">Цена за 1 човек:</label>
+            <input type="number" step="0.01" id="price" name="price" required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 text-gray-700">
+        </div>
 
-        returnInput.addEventListener("change", function () {
-            if (departureInput.value && returnInput.value < departureInput.value) {
-                alert("Датата на връщане трябва да бъде след датата на тръгване!");
-                returnInput.value = ""; // Reset invalid return date
-            }
-        });
-    });
-</script>
+        <!-- Max Number of People -->
+        <div>
+            <label for="limitedPeople" class="block text-lg font-semibold text-gray-700 mb-2">Максимален брой хора:</label>
+            <input type="number" id="limitedPeople" name="limitedPeople" required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 text-gray-700">
+        </div>
+
+        <!-- Image Upload -->
+        <div>
+            <label for="image" class="block text-lg font-semibold text-gray-700 mb-2">Качете снимка:</label>
+            <input type="file" id="image" name="image" required
+                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 text-gray-700">
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-center">
+            <button type="submit" class="w-full md:w-auto bg-yellow-500 text-white font-semibold py-3 px-6 rounded-lg hover:bg-yellow-600 transition duration-300">
+                Създай дестинацията
+            </button>
+        </div>
+    </form>
+</div>
+
+
+
+<div class="mb-10"></div>
+<script type="text/javascript" th:src="@{/js/addDestinationScript.js}"></script>
 </body>
 </html>
-

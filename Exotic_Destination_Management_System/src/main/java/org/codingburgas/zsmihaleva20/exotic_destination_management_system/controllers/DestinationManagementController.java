@@ -46,8 +46,9 @@ public class DestinationManagementController {
     }
 
     @GetMapping("/addDestination")
-    public String addDestinationForm(Model model) {
+    public String addDestinationForm(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("destination", new Destination());
+        model.addAttribute("user", user);
         return "addDestination";
     }
 
@@ -113,7 +114,7 @@ public class DestinationManagementController {
         destination.setDescription(destinationDetails.getDescription());
         destination.setPrice(destinationDetails.getPrice());
         destination.setLimitedPeople(limitedPeople);
-        destination.setRemainingPeople(limitedPeople);// Update limited persons
+        destination.setRemainingPeople(limitedPeople - destination.getPopularity());// Update limited persons
         destination.setDateOfDeparture(LocalDate.parse(dateOfDeparture));
         destination.setDateOfReturn(LocalDate.parse(dateOfReturn));
 
