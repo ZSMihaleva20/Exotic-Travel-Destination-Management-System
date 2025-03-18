@@ -1,67 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="bg">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Редактирай дестинация</title>
-  <link rel="stylesheet" href="/static/css/style.css">
+  <meta charset="UTF-8">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <link rel="stylesheet" href="/css/destinationsPageStyle.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
-<body>
-<h1>Редактирай дестинация</h1>
+<body class="bg-gray-100 text-gray-800 pt-20 opacity-0 transition-opacity duration-700 ease-out">
 
-<form th:action="@{'/editDestination/' + ${destination.id}}" method="post" enctype="multipart/form-data">
-  <label for="name">Име на дестинацията:</label>
-  <input type="text" id="name" name="name" th:value="${destination.name}" required><br><br>
+<!-- Main Layout -->
+<nav class="fixed top-0 w-full bg-white shadow-md backdrop-blur-md z-50">
+  <div class="container mx-auto flex items-center justify-between py-4 px-6">
 
-  <label for="description">Описание:</label>
-  <textarea id="description" name="description" th:text="${destination.description}" required></textarea><br><br>
+    <!-- Left Side: Logo -->
+    <h2 class="text-3xl font-extrabold text-yellow-500"><a href="/">Exotico</a></h2>
 
-  <label for="dateOfDeparture">Дата на заминаване:</label>
-  <input type="date" id="dateOfDeparture" name="dateOfDeparture" th:value="${destination.dateOfDeparture}" required><br><br>
+    <!-- Center: Navigation Links -->
+    <div class="hidden md:flex space-x-8 mx-auto">
+      <a href="/destinations" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Дестинации</a>
+      <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">Промоции и кампании</a>
+      <a href="/statistics" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Статистики</a>
+    </div>
 
-  <label for="dateOfReturn">Дата на връщане:</label>
-  <input type="date" id="dateOfReturn" name="dateOfReturn" th:value="${destination.dateOfReturn}" required><br><br>
+    <!-- Right Side: User Menu -->
+    <div class="relative">
+      <div class="bg-gray-800 text-white px-6 py-2 rounded-lg cursor-pointer flex items-center gap-2" id="userMenu">
+        <span class="material-symbols-outlined">person</span>
+        <span class="font-semibold">Моят акаунт</span>
+      </div>
 
-  <label for="price">Цена за 1 човек:</label>
-  <input type="number" step="0.01" id="price" name="price" th:value="${destination.price}" required><br><br>
+      <!-- Dropdown Menu -->
+      <div id="dropdownMenu" class="absolute right-0 mt-2 bg-white text-gray-900 p-4 rounded shadow-md w-48 hidden transition">
+        <a href="/profile" class="block py-2">Профил</a>
+        <a href="/destinationManagement" class="block py-2">Управлявай дестинации</a>
+        <a href="/ratingManagement" class="block py-2">Управлявай рейтинги</a>
+        <a href="/reservationManagement" class="block py-2"> Управлявай резервации</a>
+        <th:block th:if="${#strings.equals(user.getRole(), 'ADMIN')}">
+          <a href="/profilesManagement" class="block py-2">Управлявай профили</a>
+        </th:block>
+        <a href="/logout" class="block py-2 text-red-500">Изход</a>
+      </div>
+    </div>
+  </div>
+</nav>
 
-  <label for="limitedPeople">Максимален брой хора:</label>
-  <input type="number" id="limitedPeople" name="limitedPeople" th:value="${destination.limitedPeople}" required><br><br>
+<div class="container max-w-4xl mx-auto px-6 md:px-8 mt-12 bg-white shadow-lg rounded-lg p-8">
+  <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">Редактирай дестинация</h1>
 
-  <label for="image">Промени снимката:</label>
-  <input type="file" id="image" name="image" accept="image/*">
+  <form th:action="@{'/editDestination/' + ${destination.id}}" method="post" enctype="multipart/form-data" class="space-y-6">
+    <div>
+      <label for="name" class="block text-lg font-medium text-gray-700">Име на дестинацията:</label>
+      <input type="text" id="name" name="name" th:value="${destination.name}" required
+             class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+    </div>
 
-  <img th:src="@{'/uploaded-image/' + ${destination.imageUrl}}" width="100" /><br><br>
+    <div>
+      <label for="description" class="block text-lg font-medium text-gray-700">Описание:</label>
+      <textarea id="description" name="description" th:text="${destination.description}" required
+                class="w-full mt-1 p-3 h-56 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"></textarea>
+    </div>
 
-  <button type="submit">Редактирай</button>
-</form>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label for="dateOfDeparture" class="block text-lg font-medium text-gray-700">Дата на заминаване:</label>
+        <input type="date" id="dateOfDeparture" name="dateOfDeparture" th:value="${destination.dateOfDeparture}" required
+               class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+      </div>
 
-<a href="/destinationManagement">Върни се в главната страница</a>
+      <div>
+        <label for="dateOfReturn" class="block text-lg font-medium text-gray-700">Дата на връщане:</label>
+        <input type="date" id="dateOfReturn" name="dateOfReturn" th:value="${destination.dateOfReturn}" required
+               class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+      </div>
+    </div>
 
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label for="price" class="block text-lg font-medium text-gray-700">Цена за 1 човек:</label>
+        <input type="number" step="0.01" id="price" name="price" th:value="${destination.price}" required
+               class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+      </div>
+
+      <div>
+        <label for="limitedPeople" class="block text-lg font-medium text-gray-700">Максимален брой хора:</label>
+        <input type="number" id="limitedPeople" name="limitedPeople" th:value="${destination.limitedPeople}" required
+               class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-4">
+      <div>
+        <label for="image" class="block text-lg font-medium text-gray-700">Промени снимката:</label>
+        <input type="file" id="image" name="image" accept="image/*"
+               class="mt-2 p-2 border border-gray-300 rounded-lg">
+      </div>
+      <div>
+        <img th:src="@{'/uploaded-image/' + ${destination.imageUrl}}" class="w-32 h-32 object-cover rounded-lg border">
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button type="submit"
+              class="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition">
+        Редактирай
+      </button>
+    </div>
+  </form>
+</div>
+
+
+
+
+<div class="mb-10"></div>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    let departureInput = document.getElementById("dateOfDeparture");
-    let returnInput = document.getElementById("dateOfReturn");
 
-    departureInput.addEventListener("change", function () {
-      if (departureInput.value) {
-        returnInput.min = departureInput.value; // Set return date min to departure date
-      }
-
-      // Check if departure date is after return date
-      if (returnInput.value && departureInput.value > returnInput.value) {
-        alert("Датата на тръгване не може да бъде след датата на връщане!");
-        departureInput.value = ""; // Reset invalid departure date
-      }
-    });
-
-    returnInput.addEventListener("change", function () {
-      if (departureInput.value && returnInput.value < departureInput.value) {
-        alert("Датата на връщане трябва да бъде след датата на тръгване!");
-        returnInput.value = ""; // Reset invalid return date
-      }
-    });
-  });
 </script>
+<script type="text/javascript" th:src="@{/js/addDestinationScript.js}"></script>
 </body>
 </html>

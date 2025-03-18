@@ -98,8 +98,9 @@ public class DestinationManagementController {
     }
 
     @GetMapping("/editDestination/{id}")
-    public String editDestinationForm(@PathVariable Long id, Model model) {
+    public String editDestinationForm(@PathVariable Long id, Model model,  @AuthenticationPrincipal User user) {
         model.addAttribute("destination", destinationService.getDestination(id));
+        model.addAttribute("user", user);
         return "editDestination";
     }
 
