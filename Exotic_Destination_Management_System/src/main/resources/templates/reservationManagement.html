@@ -1,106 +1,139 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="bg">
 <head>
     <title>Управление на резервации</title>
     <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="/css/destinationsPageStyle.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
-<body>
-<h1>Управление на резервации</h1>
+<body class="bg-gray-100 text-gray-800 pt-20 opacity-0 transition-opacity duration-700 ease-out">
 
-<!-- Active Reservations -->
-<h2>Активни резервации</h2>
-<table>
-    <tr>
-        <th>Име</th>
-        <th>Имейл</th>
-        <th>Дестинация</th>
-        <th>Дата на заминаване</th>
-        <th>Дата на връщане</th>
-        <th>Брой хора</th>
-        <th>Обща цена</th>
-        <th>Статус</th>
-        <th>Действие</th>
-    </tr>
-    <th:block th:each="reservation : ${activeReservations}">
-        <tr>
-            <td th:text="${reservation.user.fullName}"></td>
-            <td th:text="${reservation.user.email}"></td>
-            <td th:text="${reservation.destination.name}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
-            <td th:text="${reservation.numberOfPeople}"></td>
-            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
-            <td>ПЛАТЕНА</td>
-            <td>
+<!-- Main Layout -->
+<nav class="fixed top-0 w-full bg-white shadow-md backdrop-blur-md z-50">
+    <div class="container mx-auto flex items-center justify-between py-4 px-6">
+
+        <!-- Left Side: Logo -->
+        <h2 class="text-3xl font-extrabold text-yellow-500"><a href="/">Exotico</a></h2>
+
+        <!-- Center: Navigation Links -->
+        <div class="hidden md:flex space-x-8 mx-auto">
+            <a href="/destinations" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Дестинации</a>
+            <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">Промоции и кампании</a>
+            <a href="/statistics" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Статистики</a>
+        </div>
+
+        <!-- Right Side: User Menu -->
+        <div class="relative">
+            <div class="bg-gray-800 text-white px-6 py-2 rounded-lg cursor-pointer flex items-center gap-2" id="userMenu">
+                <span class="material-symbols-outlined">person</span>
+                <span class="font-semibold">Моят акаунт</span>
+            </div>
+
+            <!-- Dropdown Menu -->
+            <div id="dropdownMenu" class="absolute right-0 mt-2 bg-white text-gray-900 p-4 rounded shadow-md w-48 hidden transition">
+                <a href="/profile" class="block py-2">Профил</a>
+                <a href="/destinationManagement" class="block py-2">Управлявай дестинации</a>
+                <a href="/ratingManagement" class="block py-2">Управлявай рейтинги</a>
+                <a href="/reservationManagement" class="block py-2"> Управлявай резервации</a>
+                <th:block th:if="${#strings.equals(user.getRole(), 'ADMIN')}">
+                    <a href="/profilesManagement" class="block py-2">Управлявай профили</a>
+                </th:block>
+                <a href="/logout" class="block py-2 text-red-500">Изход</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container max-w-6xl mx-auto px-4 md:px-6 mt-12 bg-white rounded-lg shadow-lg p-8">
+    <h1 class="text-4xl font-bold text-gray-800 text-center mb-8">Управление на резервации</h1>
+
+    <!-- Active Reservations -->
+    <h2 class="text-2xl font-semibold text-gray-700 mb-4">Активни резервации</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <th:block th:each="reservation : ${activeReservations}">
+            <div class="bg-gray-100 p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold" th:text="${reservation.destination.name}"></h3>
+                <p class="text-sm text-gray-600">
+                    <strong>Потребител:</strong> <span th:text="${reservation.user.fullName}"></span>
+                </p>
+                <p class="text-sm text-gray-600">
+                    <strong>Имейл:</strong> <span th:text="${reservation.user.email}"></span>
+                </p>
+                <p class="text-sm text-gray-600">
+                    <strong>Дата на заминаване:</strong>
+                    <span th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></span>
+                </p>
+                <p class="text-sm text-gray-600">
+                    <strong>Дата на връщане:</strong>
+                    <span th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></span>
+                </p>
+                <p class="text-sm text-gray-600">
+                    <strong>Брой хора:</strong> <span th:text="${reservation.numberOfPeople}"></span>
+                </p>
+                <p class="text-lg font-semibold text-green-600">
+                    Обща цена: <span th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></span>
+                </p>
+                <p class="text-sm font-bold text-green-600">ПЛАТЕНА</p>
                 <form th:action="@{/cancelReservation/{id}(id=${reservation.id})}" method="post">
-                    <button type="submit">Откажи</button>
+                    <button class="mt-4 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700 transition">Откажи</button>
                 </form>
-            </td>
-        </tr>
-    </th:block>
-</table>
+            </div>
+        </th:block>
+    </div>
 
-<!-- Canceled Reservations -->
-<h2>Отказани резервации</h2>
-<table>
-    <tr>
-        <th>Име</th>
-        <th>Имейл</th>
-        <th>Дестинация</th>
-        <th>Дата на заминаване</th>
-        <th>Дата на връщане</th>
-        <th>Брой хора</th>
-        <th>Обща цена</th>
-        <th>Статус</th>
-    </tr>
-    <th:block th:each="reservation : ${canceledReservations}">
-        <tr>
-            <td th:text="${reservation.user.fullName}"></td>
-            <td th:text="${reservation.user.email}"></td>
-            <td th:text="${reservation.destination.name}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
-            <td th:text="${reservation.numberOfPeople}"></td>
-            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
-            <td>ОТКАЗАНА</td>
-        </tr>
+    <!-- Canceled Reservations -->
+    <h2 class="text-2xl font-semibold text-gray-700 mt-10 mb-4">Отказани резервации</h2>
+    <!-- Check if there are canceled reservations -->
+    <th:block th:if="${#lists.isEmpty(canceledReservations)}">
+        <p class="text-gray-500 text-center text-lg">Няма отказани резервации</p>
     </th:block>
-</table>
-
-<!-- Past Reservations -->
-<h2>Отминали резервации</h2>
-<table>
-    <tr>
-        <th>Име</th>
-        <th>Имейл</th>
-        <th>Дестинация</th>
-        <th>Дата на заминаване</th>
-        <th>Дата на връщане</th>
-        <th>Брой хора</th>
-        <th>Обща цена</th>
-        <th>Статус</th>
-    </tr>
-    <th:block th:each="reservation : ${pastReservations}">
-        <tr>
-            <td th:text="${reservation.user.fullName}"></td>
-            <td th:text="${reservation.user.email}"></td>
-            <td th:text="${reservation.destination.name}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></td>
-            <td th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></td>
-            <td th:text="${reservation.numberOfPeople}"></td>
-            <td th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></td>
-            <td>ОТМИНАЛА</td>
-        </tr>
+    <!-- Display canceled reservations if available -->
+    <th:block th:unless="${#lists.isEmpty(canceledReservations)}">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <th:block th:each="reservation : ${canceledReservations}">
+                <div class="bg-red-100 p-6 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold" th:text="${reservation.destination.name}"></h3>
+                    <p class="text-sm text-gray-600"><strong>Потребител:</strong> <span th:text="${reservation.user.fullName}"></span></p>
+                    <p class="text-sm text-gray-600"><strong>Имейл:</strong> <span th:text="${reservation.user.email}"></span></p>
+                    <p class="text-sm text-gray-600"><strong>Дата на заминаване:</strong> <span th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></span></p>
+                    <p class="text-sm text-gray-600"><strong>Дата на връщане:</strong> <span th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></span></p>
+                    <p class="text-lg font-semibold text-red-600">Обща цена: <span th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></span></p>
+                    <p class="text-sm font-bold text-red-600">ОТКАЗАНА</p>
+                </div>
+            </th:block>
+        </div>
     </th:block>
-</table>
 
-<br>
-    <form th:action="@{/downloadDestinationsReservationsPdf}" method="get">
-        <button type="submit">Изтегли PDF отчет</button>
+
+    <!-- Past Reservations
+    <h2 class="text-2xl font-semibold text-gray-700 mt-10 mb-4">Отминали резервации</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <th:block th:each="reservation : ${pastReservations}">
+            <div class="bg-gray-200 p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold" th:text="${reservation.destination.name}"></h3>
+                <p class="text-sm text-gray-600"><strong>Потребител:</strong> <span th:text="${reservation.user.fullName}"></span></p>
+                <p class="text-sm text-gray-600"><strong>Имейл:</strong> <span th:text="${reservation.user.email}"></span></p>
+                <p class="text-sm text-gray-600"><strong>Дата на заминаване:</strong> <span th:text="${#temporals.format(reservation.destination.dateOfDeparture, 'dd-MM-yyyy')}"></span></p>
+                <p class="text-sm text-gray-600"><strong>Дата на връщане:</strong> <span th:text="${#temporals.format(reservation.destination.dateOfReturn, 'dd-MM-yyyy')}"></span></p>
+                <p class="text-lg font-semibold text-gray-800">Обща цена: <span th:text="${#numbers.formatDecimal(reservation.totalPrice, 2, 2)} + ' лв.'"></span></p>
+                <p class="text-sm font-bold text-gray-700">ОТМИНАЛА</p>
+            </div>
+        </th:block>
+    </div> -->
+
+    <br>
+    <form th:action="@{/downloadDestinationsReservationsPdf}" method="get" class="text-center">
+        <button class="bg-blue-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-blue-800 transition">
+            Изтегли PDF отчет
+        </button>
     </form>
-<br>
+</div>
 
-<a href="/destinations">Върни се в главната страница</a>
 
+<div class="mb-10"></div>
+<script type="text/javascript" th:src="@{/js/ratingManagementScript.js}"></script>
 </body>
 </html>

@@ -3,6 +3,7 @@ package org.codingburgas.zsmihaleva20.exotic_destination_management_system.contr
 import jakarta.mail.MessagingException;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Destination;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Reservation;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.User;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.DestinationRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.ReservationRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.services.MailAndPdfService;
@@ -10,6 +11,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +36,7 @@ public class ReservationManagementController {
     }
 
     @GetMapping("/reservationManagement")
-    public String viewAllReservations(Model model) {
+    public String viewAllReservations(Model model, @AuthenticationPrincipal User user) {
         List<Reservation> allReservations = reservationRepository.findAll();
         LocalDate now = LocalDate.now();
 
@@ -63,6 +65,7 @@ public class ReservationManagementController {
         model.addAttribute("activeReservations", activeReservations);
         model.addAttribute("canceledReservations", canceledReservations);
         model.addAttribute("pastReservations", pastReservations);
+        model.addAttribute("user", user);
 
         return "reservationManagement";
     }
