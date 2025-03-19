@@ -27,6 +27,7 @@ public class ReservationNotificationService {
         return allReservations.stream()
                 .filter(reservation -> "BOOKED".equals(reservation.getStatus()) &&
                         !reservation.getDestination().getDateOfDeparture().isBefore(today) &&
+                        !reservation.getDestination().getDateOfDeparture().isEqual(today) &&
                         !reservation.getDestination().getDateOfDeparture().isAfter(urgentThreshold))
                 .collect(Collectors.toList());
     }

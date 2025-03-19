@@ -124,8 +124,8 @@ public class ReservationController {
         List<Reservation> pastReservations = allReservations.stream()
                 .filter(res -> "BOOKED".equals(res.getStatus()) &&
                         (res.getDestination().getDateOfDeparture().isBefore(now) ||
-                                (res.getDestination().getDateOfDeparture().isEqual(now) &&
-                                        res.getDestination().getDateOfReturn().isBefore(now))))
+                                res.getDestination().getDateOfDeparture().isEqual(now) ||
+                                        res.getDestination().getDateOfReturn().isBefore(now)))
                 .toList();
 
         // 🔔 **Urgent Reservations (Departing in 3 days or less)**

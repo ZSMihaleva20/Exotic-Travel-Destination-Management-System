@@ -1,82 +1,154 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="bg">
 <head>
+    <title>Направи резервация</title>
     <meta charset="UTF-8">
-    <title>Резервация</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="/css/rateDestinationStyle.css">
     <script>
-        function updateTotalPrice() {
-            let numberOfPeople = document.getElementById("numberOfPeople").value;
-            let pricePerPerson = document.getElementById("pricePerPerson").value;
-            let totalPrice = numberOfPeople * pricePerPerson;
-            document.getElementById("totalPrice").innerText = totalPrice.toFixed(2) + " лв.";
-        }
+
     </script>
 </head>
-<body>
-<h1>Резервация</h1>
-<br>
-<div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 20px;">
-    <h2 th:text="${destination.name}">Име на дестинацията</h2>
-    <img th:src="'/uploaded-image/' + ${destination.imageUrl}" alt="Destination Image">
-    <p><strong>Описание:</strong>
-    <ul
-        th:utext="'<li>' + ${#strings.listJoin(#strings.arraySplit(destination.description, '\\;'), '</li><li>')} + '</li>'">
-    </ul>
-    </p>
-    <p><strong>Дата на заминаване: </strong><span th:text="${#temporals.format(destination.dateOfDeparture, 'dd-MM-yyyy')}"></span></p>
-    <p><strong>Дата на връщане: </strong><span th:text="${#temporals.format(destination.dateOfReturn, 'dd-MM-yyyy')}"></span></p>
-    <p><strong>Цена за 1 човек:</strong> <span th:text="${destination.price}"></span> лв.</p>
+<body class="bg-gray-100 text-gray-800 pt-20 opacity-0 transition-opacity duration-700 ease-out">
+
+<!-- Main Layout -->
+<nav class="fixed top-0 w-full bg-white shadow-md backdrop-blur-md z-50">
+    <div class="container mx-auto flex items-center justify-between py-4 px-6">
+        <h2 class="text-3xl font-extrabold text-yellow-500"><a href="/">Exotico</a></h2>
+        <div class="hidden md:flex space-x-8 mx-auto">
+            <a href="/destinations" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Дестинации</a>
+            <a href="/promotionsAndCampaigns" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition">Промоции и кампании</a>
+            <a href="/statistics" class="text-lg font-semibold text-gray-700 hover:text-yellow-500 transition"> Статистики</a>
+        </div>
+        <div class="relative">
+            <div class="bg-gray-800 text-white px-6 py-2 rounded-lg cursor-pointer flex items-center gap-2" id="userMenu">
+                <span class="material-symbols-outlined">person</span>
+                <span class="font-semibold">Моят акаунт</span>
+            </div>
+            <div id="dropdownMenu" class="absolute right-0 mt-2 bg-white text-gray-900 p-4 rounded shadow-md w-48 hidden transition">
+                <a href="/profile" class="block py-2">Профил</a>
+                <a href="/myReservations" class="block py-2">Моите резервации</a>
+                <a href="/rateDestination" class="block py-2"> Добави рейтинг</a>
+                <a href="/logout" class="block py-2 text-red-500">Изход</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Content -->
+<div class="container max-w-4xl mx-auto mt-16 p-8 bg-white rounded-lg shadow-lg">
+    <h1 class="text-4xl font-bold text-gray-800 mb-6 text-center">Направи резервация</h1>
+
+    <!-- Destination Card -->
+    <div class="bg-gray-50 p-6 rounded-lg shadow-md mb-8">
+        <h2 class="text-2xl font-semibold text-gray-800" th:text="${destination.name}">Име на дестинацията</h2>
+        <img class="w-full h-64 object-cover rounded-lg mt-4" th:src="'/uploaded-image/' + ${destination.imageUrl}" alt="Destination Image">
+        <p class="mt-4"><strong>Описание:</strong></p>
+        <ul class="list-disc ml-6 text-gray-700"
+            th:utext="'<li>' + ${#strings.listJoin(#strings.arraySplit(destination.description, '\\;'), '</li><li>')} + '</li>'">
+        </ul>
+        <p class="mt-2"><strong>Дата на заминаване:</strong> <span th:text="${#temporals.format(destination.dateOfDeparture, 'dd-MM-yyyy')}"></span></p>
+        <p><strong>Дата на връщане:</strong> <span th:text="${#temporals.format(destination.dateOfReturn, 'dd-MM-yyyy')}"></span></p>
+        <p class="font-bold text-lg mt-2">Цена за 1 човек: <span th:text="${#numbers.formatDecimal(destination.price, 1, 2)}"></span> лв.</p>
+    </div>
+
+    <!-- Reservation Form -->
+    <form th:action="@{/destinations}" method="post">
+        <input type="hidden" name="destinationId" th:value="${destination.id}">
+        <input type="hidden" id="pricePerPerson" th:value="${destination.price}">
+
+        <div class="mb-4">
+            <label class="font-semibold">Име:</label>
+            <input type="text" name="name" th:value="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}" class="w-full p-2 border rounded-md">
+        </div>
+
+        <div class="mb-4">
+            <label class="font-semibold">Имейл:</label>
+            <input type="email" name="email" th:value="${#authentication.principal.email}" class="w-full p-2 border rounded-md">
+        </div>
+
+        <div class="mb-4">
+            <label class="font-semibold">Брой хора:</label>
+            <input type="number" id="numberOfPeople" name="numberOfPeople" required min="1" th:max="${destination.remainingPeople}"
+                   class="w-full p-2 border rounded-md" oninput="updateTotalPrice()">
+        </div>
+
+        <!-- Payment Info -->
+        <h3 class="text-xl font-bold mt-6">Информация за плащането</h3>
+        <div class="mt-4">
+            <label class="font-semibold">Тип карта:</label>
+            <div class="flex gap-4 mt-2">
+                <label>
+                    <input type="radio" name="cardType" value="Visa" required>
+                    <img src="https://cdn.iconscout.com/icon/free/png-256/free-visa-logo-icon-download-in-svg-png-gif-file-formats--payment-method-gateway-logos-pack-icons-675739.png" alt="Visa" width="40">
+                </label>
+                <label>
+                    <input type="radio" name="cardType" value="MasterCard" required>
+                    <img src="https://new.sportal365images.com/process/smp-images-production/profit.bg/24012024/e61bef22-9271-4d5d-9406-6e7ff988f4fe.jpg?operations=autocrop(256:256)" alt="MasterCard" width="40">
+                </label>
+            </div>
+        </div>
+
+        <div class="mb-4 mt-4">
+            <label class="font-semibold">Име на картодържателя:</label>
+            <input type="text" name="cardName" required class="w-full p-2 border rounded-md">
+        </div>
+
+        <div class="mb-4">
+            <label class="font-semibold">Номер на карта:</label>
+            <input type="text" name="cardNumber" required class="w-full p-2 border rounded-md">
+        </div>
+
+        <div class="flex gap-4">
+            <div class="flex-1">
+                <label class="font-semibold">Дата на изтичане:</label>
+                <input type="text" name="expiryDate" required class="w-full p-2 border rounded-md">
+            </div>
+            <div class="flex-1">
+                <label class="font-semibold">CVC:</label>
+                <input type="text" name="cvc" required class="w-full p-2 border rounded-md">
+            </div>
+        </div>
+
+        <h3 class="text-xl font-bold mt-6">Обща цена: <span id="totalPrice">0.00 лв.</span></h3>
+
+        <button type="submit" class="w-full mt-6 bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-md text-lg">Резервирай</button>
+    </form>
 </div>
+<div class="mb-10"></div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let departureInput = document.getElementById("dateOfDeparture");
+        let returnInput = document.getElementById("dateOfReturn");
 
-<form th:action="@{/destinations}" method="post">
-    <input type="hidden" name="destinationId" th:value="${destination.id}">
-    <input type="hidden" id="pricePerPerson" th:value="${destination.price}">
+        departureInput.addEventListener("change", function () {
+            if (departureInput.value) {
+                returnInput.min = departureInput.value; // Set return date min to departure date
+            }
 
-    <label>Име:</label>
-    <input type="text" name="name" th:value="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}">
-    <br><br>
+            // Check if departure date is after return date
+            if (returnInput.value && departureInput.value > returnInput.value) {
+                alert("Датата на тръгване не може да бъде след датата на връщане!");
+                departureInput.value = ""; // Reset invalid departure date
+            }
+        });
 
-    <label>Имейл:</label>
-    <input type="email" name="email" th:value="${#authentication.principal.email}">
-    <br><br>
+        returnInput.addEventListener("change", function () {
+            if (departureInput.value && returnInput.value < departureInput.value) {
+                alert("Датата на връщане трябва да бъде след датата на тръгване!");
+                returnInput.value = ""; // Reset invalid return date
+            }
+        });
+    });
 
-    <label>Брой хора:</label>
-    <input type="number" id="numberOfPeople" name="numberOfPeople" required min="1"
-           th:max="${destination.remainingPeople}" oninput="updateTotalPrice()">
-    <br><br>
-
-    <h3>Информация за плащането</h3>
-    <label>Тип карта:</label>
-    <input type="radio" id="visa" name="cardType" value="Visa" required>
-    <label for="visa">
-        <img src="https://cdn.iconscout.com/icon/free/png-256/free-visa-logo-icon-download-in-svg-png-gif-file-formats--payment-method-gateway-logos-pack-icons-675739.png" alt="Visa" width="40">
-    </label>
-
-    <input type="radio" id="mastercard" name="cardType" value="MasterCard" required>
-    <label for="mastercard">
-        <img src="https://new.sportal365images.com/process/smp-images-production/profit.bg/24012024/e61bef22-9271-4d5d-9406-6e7ff988f4fe.jpg?operations=autocrop(256:256)" alt="MasterCard" width="40">
-    </label>
-    <br><br>
-
-    <label>Име на картодържателя:</label>
-    <input type="text" name="cardName" required>
-
-    <label>Номер на карта:</label>
-    <input type="text" name="cardNumber" required>
-    <br><br>
-
-    <label>Дата на изтичане:</label>
-    <input type="text" name="expiryDate" required>
-
-    <label>CVC:</label>
-    <input type="text" name="cvc" required>
-    <br><br>
-
-    <h3>Обща цена: <span id="totalPrice">0.00 лв.</span></h3>  <!-- Dynamic Price Update -->
-
-    <button type="submit">Резервирай</button>
-</form>
-
-<a href="/destinations">Върни се в главната страница</a>
+    function updateTotalPrice() {
+        let numberOfPeople = document.getElementById("numberOfPeople").value;
+        let pricePerPerson = document.getElementById("pricePerPerson").value;
+        let totalPrice = numberOfPeople * pricePerPerson;
+        document.getElementById("totalPrice").innerText = totalPrice.toFixed(2) + " лв.";
+    }
+</script>
+<script type="text/javascript" th:src="@{/js/rateDestinationScript.js}"></script>
 </body>
 </html>
