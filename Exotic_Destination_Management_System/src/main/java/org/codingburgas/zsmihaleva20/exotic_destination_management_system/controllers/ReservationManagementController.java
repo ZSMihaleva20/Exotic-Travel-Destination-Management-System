@@ -29,12 +29,14 @@ public class ReservationManagementController {
     private final MailAndPdfService mailAndPdfService;
     private final DestinationRepository destinationRepository;
 
+    // Constructor for dependency injection
     public ReservationManagementController(ReservationRepository reservationRepository, MailAndPdfService mailAndPdfService, DestinationRepository destinationRepository) {
         this.reservationRepository = reservationRepository;
         this.mailAndPdfService = mailAndPdfService;
         this.destinationRepository = destinationRepository;
     }
 
+    // Show all reservations with filtering for active, canceled, and past reservations
     @GetMapping("/reservationManagement")
     public String viewAllReservations(Model model, @AuthenticationPrincipal User user) {
         List<Reservation> allReservations = reservationRepository.findAll();
@@ -62,26 +64,31 @@ public class ReservationManagementController {
                                         res.getDestination().getDateOfReturn().isBefore(now))))
                 .toList();
 
+        // Add the filtered lists and user to the model
         model.addAttribute("activeReservations", activeReservations);
         model.addAttribute("canceledReservations", canceledReservations);
         model.addAttribute("pastReservations", pastReservations);
         model.addAttribute("user", user);
 
-        return "reservationManagement";
+        return "reservationManagement"; // Return the reservation management view
     }
 
-
-
+    // Handle cancellation of a reservation
     @PostMapping("/cancelReservation/{id}")
     public String cancelReservationManagement(@PathVariable Long id) {
         Reservation reservation = reservationRepository.findById(id).orElseThrow();
 
         reservation.setStatus("CANCELED");
+        reservationRepository.save(reservation);
         Destination destination = reservation.getDestination();
+
+
+        // Update the destination's remaining people and popularity
         destination.decrementPopularity(reservation.getNumberOfPeople());
         destination.setRemainingPeople(destination.getRemainingPeople() + reservation.getNumberOfPeople());
         destinationRepository.save(destination);
 
+        // Send cancellation email to the user
         try {
             mailAndPdfService.sendCancelationMail(reservation, reservation.getUser());
         } catch (MessagingException e) {
@@ -93,11 +100,13 @@ public class ReservationManagementController {
         return "redirect:/reservationManagement";
     }
 
+    // Download a PDF report of all active reservations
     @GetMapping("/downloadDestinationsReservationsPdf")
     public ResponseEntity<InputStreamResource> downloadDestinationsReservationsPdf() throws IOException {
         List<Reservation> allReservations = reservationRepository.findAll();
         LocalDate now = LocalDate.now();
 
+        // Filter active reservations (both departure and return are in the future)
         List<Reservation> activeReservations = allReservations.stream()
                 .filter(res -> "BOOKED".equals(res.getStatus()) &&
                         res.getDestination().getDateOfDeparture().isAfter(now) &&

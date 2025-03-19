@@ -38,6 +38,7 @@ public class DestinationManagementController {
         this.userService = userService;
     }
 
+    // List all destinations for the admin or user
     @GetMapping("/destinationManagement")
     public String destinationManagementList(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("destinations", destinationService.getAllDestinations());
@@ -45,6 +46,7 @@ public class DestinationManagementController {
         return "destinationManagement";
     }
 
+    // Show form to add a new destination
     @GetMapping("/addDestination")
     public String addDestinationForm(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("destination", new Destination());
@@ -52,6 +54,7 @@ public class DestinationManagementController {
         return "addDestination";
     }
 
+    // Serve image from the server
     @GetMapping(value = "/uploaded-image/{name}")
     public ResponseEntity<Resource> getImage(@PathVariable String name) throws IOException {
         MediaType mediaType = MediaType.IMAGE_JPEG;
@@ -64,6 +67,7 @@ public class DestinationManagementController {
         return ResponseEntity.ok().contentType(mediaType).body(resource);
     }
 
+    // Save new destination with image upload
     @PostMapping("/addDestination")
     public String saveDestination(@ModelAttribute Destination destination,
                                   @RequestParam("image") MultipartFile file,
@@ -79,11 +83,13 @@ public class DestinationManagementController {
             destination.setImageUrl(fileName);
         }
 
+        // Set other destination details
         destination.setLimitedPeople(limitedPeople);
         destination.setRemainingPeople(limitedPeople);
         destination.setDateOfDeparture(LocalDate.parse(dateOfDeparture));
         destination.setDateOfReturn(LocalDate.parse(dateOfReturn));
 
+        // Set status based on user role
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"))) {
@@ -97,6 +103,7 @@ public class DestinationManagementController {
         return "redirect:/destinationManagement";
     }
 
+    // Show form to edit an existing destination
     @GetMapping("/editDestination/{id}")
     public String editDestinationForm(@PathVariable Long id, Model model,  @AuthenticationPrincipal User user) {
         model.addAttribute("destination", destinationService.getDestination(id));
@@ -104,6 +111,7 @@ public class DestinationManagementController {
         return "editDestination";
     }
 
+    // Update existing destination
     @PostMapping("/editDestination/{id}")
     public String updateDestination(@PathVariable Long id, @ModelAttribute Destination destinationDetails,
                                     @RequestParam("image") MultipartFile file,
@@ -111,6 +119,8 @@ public class DestinationManagementController {
                                     @RequestParam("dateOfDeparture") String dateOfDeparture,
                                     @RequestParam("dateOfReturn") String dateOfReturn) throws IOException {
         Destination destination = destinationService.getDestination(id);
+
+        // Update destination fields
         destination.setName(destinationDetails.getName());
         destination.setDescription(destinationDetails.getDescription());
         destination.setPrice(destinationDetails.getPrice());
@@ -119,6 +129,7 @@ public class DestinationManagementController {
         destination.setDateOfDeparture(LocalDate.parse(dateOfDeparture));
         destination.setDateOfReturn(LocalDate.parse(dateOfReturn));
 
+        // Update image if provided
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
             Path uploadPath = Paths.get("photos", fileName);
@@ -132,13 +143,14 @@ public class DestinationManagementController {
         return "redirect:/destinationManagement";
     }
 
+    // Delete a destination
     @PostMapping("/delete/{id}")
     public String deleteDestination(@PathVariable Long id) {
         destinationService.deleteDestination(id);
         return "redirect:/destinationManagement";
     }
 
-
+    // Request to edit a destination
     @PostMapping("/requestEdit/{id}")
     public String requestEditDestination(@PathVariable Long id) {
         Destination destination = destinationService.getDestination(id);
@@ -148,6 +160,7 @@ public class DestinationManagementController {
         return "redirect:/destinationManagement";
     }
 
+    // Request to delete a destination
     @PostMapping("/requestDelete/{id}")
     public String requestDeleteDestination(@PathVariable Long id) {
         Destination destination = destinationService.getDestination(id);
@@ -157,6 +170,7 @@ public class DestinationManagementController {
         return "redirect:/destinationManagement";
     }
 
+    // Approve a request for edit or delete
     @PostMapping("/approveRequest/{id}")
     public String approveRequest(@PathVariable Long id) {
         Destination destination = destinationService.getDestination(id);
@@ -174,6 +188,7 @@ public class DestinationManagementController {
         return "redirect:/destinationManagement";
     }
 
+    // Decline a request for edit or delete
     @PostMapping("/declineRequest/{id}")
     public String declineRequest(@PathVariable Long id) {
         Destination destination = destinationService.getDestination(id);
@@ -189,6 +204,7 @@ public class DestinationManagementController {
         return "redirect:/destinationManagement";
     }
 
+    // View all accepted destinations with filtering and sorting options
     @GetMapping("/destinations")
     public String viewAcceptedDestinations(
             @RequestParam(value = "keyword", required = false) String keyword,

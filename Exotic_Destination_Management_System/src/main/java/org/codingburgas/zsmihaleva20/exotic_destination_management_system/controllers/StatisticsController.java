@@ -12,10 +12,12 @@ public class StatisticsController {
 
     private final StatisticService statisticService;
 
+    // Constructor injection of the StatisticService
     public StatisticsController(StatisticService statisticService) {
         this.statisticService = statisticService;
     }
 
+    // Method to display statistics page with user-related data
     @GetMapping("/statistics")
     public String showStatistics(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("user", user);

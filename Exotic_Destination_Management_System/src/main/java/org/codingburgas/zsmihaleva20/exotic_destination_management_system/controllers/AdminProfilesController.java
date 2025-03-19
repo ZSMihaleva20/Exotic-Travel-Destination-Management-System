@@ -14,17 +14,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Controller
+@Controller // Marks the class as a Spring MVC controller to handle web requests
 public class AdminProfilesController {
+
+    // Declare dependencies
     private final UserService userService;
     private final UserRepository userRepository;
 
+    // Constructor-based dependency injection for UserService and UserRepository
     @Autowired
     public AdminProfilesController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
     }
 
+    // This method handles the GET request for the /profilesManagement endpoint
     @GetMapping("/profilesManagement")
     public String profilesManagement(Model model) {
         model.addAttribute("user", new User());
@@ -39,6 +43,7 @@ public class AdminProfilesController {
         return "profilesManagement";
     }
 
+    // This method handles the POST request for the /createUser endpoint
     @PostMapping("/createUser")
     public String createUser(@ModelAttribute("user") User user) {
         if (user.getRole() == null || user.getRole().isEmpty()) {
@@ -48,7 +53,7 @@ public class AdminProfilesController {
         return "redirect:/profilesManagement";
     }
 
-
+    // This method handles the POST request for the /deleteUser endpoint
     @PostMapping("/deleteUser")
     public String deleteUser(@RequestParam("userId") int userId) {
         userService.deleteUser(userId);

@@ -15,20 +15,26 @@ import java.util.List;
 
 @Controller
 public class PromotionAndCampaignController {
+    // Injecting services to interact with Promotions and Campaigns
     @Autowired
     private PromotionService promotionService;
 
     @Autowired
     private CampaignService campaignService;
 
+    // Handles requests to the "/promotionsAndCampaigns" page
     @GetMapping("/promotionsAndCampaigns")
     public String listPromotionsAndCampaigns(@AuthenticationPrincipal User user, Model model) {
+        // Retrieve all promotions and campaigns
         List<Promotion> promotions = promotionService.getAllPromotions();
         List<Campaign> campaigns = campaignService.getAllCampaigns();
 
+        // Add attributes to the model for rendering in the view
         model.addAttribute("promotions", promotions);
         model.addAttribute("campaigns", campaigns);
         model.addAttribute("user", user);
+
+        // Return the view name that will display the promotions and campaigns
         return "promotionsAndCampaigns";
     }
 }

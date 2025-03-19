@@ -16,8 +16,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 public class SecurityConfig {
 
-    private final InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager();
-
+    //Configures HTTP security for authentication and authorization.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
@@ -49,32 +48,13 @@ public class SecurityConfig {
         return http.build();
     }
 
-
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        userDetailsManager.createUser(User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("user"))
-                .roles("USER")
-                .build());
-        userDetailsManager.createUser(User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN")
-                .build());
-        userDetailsManager.createUser(User.builder()
-                .username("manager")
-                .password(passwordEncoder().encode("manager"))
-                .roles("MANAGER")
-                .build());
-        return userDetailsManager;
-    }
-
+    //Provides a password encoder for encrypting passwords using BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    //Configures the authentication provider using a custom user service.
     @Bean
     public AuthenticationProvider authenticationProvider(UserService userService){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
