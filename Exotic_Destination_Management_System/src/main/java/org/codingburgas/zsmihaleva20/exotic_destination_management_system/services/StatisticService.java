@@ -13,11 +13,13 @@ public class StatisticService {
     private final DestinationRepository destinationRepository;
     private final RatingRepository ratingRepository;
 
+    // Constructor to inject repositories for destination and rating data
     public StatisticService(DestinationRepository destinationRepository, RatingRepository ratingRepository) {
         this.destinationRepository = destinationRepository;
         this.ratingRepository = ratingRepository;
     }
 
+    // Retrieves a list of destinations with their average ratings
     public List<DestinationRatingDto> getDestinationRatings() {
         return destinationRepository.findAll().stream().map(d -> {
             var dto = new DestinationRatingDto();
@@ -28,6 +30,7 @@ public class StatisticService {
         }).toList();
     }
 
+    // Retrieves a list of destinations with their popularity information
     public List<DestinationRatingDto> getDestinationPopularity() {
         return destinationRepository.findAll().stream().map(d -> {
             var dto = new DestinationRatingDto();

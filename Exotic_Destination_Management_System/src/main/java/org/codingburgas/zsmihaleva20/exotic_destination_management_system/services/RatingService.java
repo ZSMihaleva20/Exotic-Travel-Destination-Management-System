@@ -11,11 +11,13 @@ public class RatingService {
     private final RatingRepository ratingRepository;
     private final DestinationRepository destinationRepository;
 
+    // Constructor to inject repositories
     public RatingService(RatingRepository ratingRepository, DestinationRepository destinationRepository) {
         this.ratingRepository = ratingRepository;
         this.destinationRepository = destinationRepository;
     }
 
+    // Saves a new rating for a destination and updates the destination's average rating
     public Rating saveRating(Rating rating) {
         var destination = rating.getDestination();
         destination.addRating(rating);

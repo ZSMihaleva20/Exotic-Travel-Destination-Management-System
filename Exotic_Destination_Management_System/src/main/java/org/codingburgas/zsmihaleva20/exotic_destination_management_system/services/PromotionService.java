@@ -14,11 +14,13 @@ import java.util.List;
 @Service
 public class PromotionService {
     @Autowired
-    private PromotionRepository promotionRepository;
+    private PromotionRepository promotionRepository; // Repository for managing promotions
 
     @Autowired
-    private DestinationRepository destinationRepository;
+    private DestinationRepository destinationRepository; // Repository for managing destinations
 
+     // Creates a new promotion for a given destination.
+     // This method sets the promotion's discount and updates the destination's price.
     @Transactional
     public void createPromotion(Long destinationId, double discountPercentage) {
         Destination destination = destinationRepository.findById(destinationId)
@@ -40,6 +42,7 @@ public class PromotionService {
         destinationRepository.save(destination);
     }
 
+    // Retrieves all active promotions from the database.
     public List<Promotion> getAllPromotions() {
         return promotionRepository.findAll();
     }

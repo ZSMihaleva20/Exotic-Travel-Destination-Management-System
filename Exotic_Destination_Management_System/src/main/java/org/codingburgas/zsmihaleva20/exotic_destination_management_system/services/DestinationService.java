@@ -23,37 +23,45 @@ public class DestinationService {
     @Autowired
     private ReservationRepository reservationRepository;
 
+    // Constructor for dependency injection
     public DestinationService(DestinationRepository destinationRepository) {
         this.destinationRepository = destinationRepository;
     }
 
+    // Save a new destination to the database
     public void saveDestination(Destination destination) {
         destinationRepository.save(destination);
     }
 
+    // Fetch a destination by its ID
     public Destination getDestination(long id) {
         return destinationRepository.findById(id).orElseThrow();
     }
 
+    // Update an existing destination
     public void updateDestination(Destination destination) {
         destinationRepository.save(destination);
     }
 
+    // Delete a destination and all related reservations
     @Transactional
     public void deleteDestination(Long id) {
         reservationRepository.deleteByDestinationId(id); // Изтриване на всички резервации, свързани с дестинацията
         destinationRepository.deleteById(id);
     }
 
+    // Get a list of all destinations
     public List<Destination> getAllDestinations() {
         return destinationRepository.findAll();
     }
 
+    // Filter and sort destinations based on multiple criteria
     public List<Destination> getFilteredAndSortedDestinations(String keyword, Double minPrice, Double maxPrice,
                                                               Double minRating, String sortBy, LocalDate dateOfReturn, LocalDate dateOfDeparture) {
         Specification<Destination> spec = DestinationSpecifications.filterDestinations(keyword, minPrice, maxPrice, minRating, dateOfReturn, dateOfDeparture);
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Sort sort = Sort.by(Sort.Direction.DESC, "id"); // Default sort by ID in descending order
 
+        // Set the sorting criteria based on the provided input
         switch (sortBy) {
             case "popularity":
                 sort = Sort.by(Sort.Direction.DESC, "popularity");
@@ -66,6 +74,7 @@ public class DestinationService {
                 break;
         }
 
+        // If no dates are provided, filter only by keyword, price, and rating
         if (dateOfReturn == null && dateOfDeparture == null) {
             spec = DestinationSpecifications.filterDestinations(keyword, minPrice, maxPrice, minRating, null, null);
         }
@@ -73,7 +82,7 @@ public class DestinationService {
         return destinationRepository.findAll(spec, sort);
     }
 
-
+    // Merge-sort algorithm to sort destinations based on a given criterion
     private List<Destination> mergeSort(List<Destination> list, String sortBy) {
         if (list.size() <= 1) {
             return list;
@@ -89,10 +98,12 @@ public class DestinationService {
         return merge(left, right, sortBy);
     }
 
+    // Merges two sorted lists based on the specified sort criteria
     private List<Destination> merge(List<Destination> left, List<Destination> right, String sortBy) {
         List<Destination> mergedList = new ArrayList<>();
         int i = 0, j = 0;
 
+        // Merge the lists while sorting by the selected criterion
         while (i < left.size() && j < right.size()) {
             boolean condition = false;
 
@@ -108,6 +119,7 @@ public class DestinationService {
                     break;
             }
 
+            // Add the smaller element to the merged list
             if (condition) {
                 mergedList.add(left.get(i));
                 i++;

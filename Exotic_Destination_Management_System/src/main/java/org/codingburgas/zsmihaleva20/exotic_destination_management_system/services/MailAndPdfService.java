@@ -34,6 +34,7 @@ public class MailAndPdfService {
     private final static String MAIL_SERVER_PASSWORD = "i,YFfe7yh=jC";
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.forLanguageTag("bg"));
 
+    // Email session configuration
     Session session = Session.getInstance(getMailProperties(), new Authenticator() {
         @Override
         protected PasswordAuthentication getPasswordAuthentication() {
@@ -41,6 +42,7 @@ public class MailAndPdfService {
         }
     });
 
+    // Send confirmation email for a reservation
     public void sendConfirmationMail(Reservation reservation, User user) throws MessagingException, IOException {
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress("info@justmypart.eu"));
@@ -78,6 +80,7 @@ public class MailAndPdfService {
         Transport.send(message);
     }
 
+    // Send cancellation email for a reservation
     public void sendCancelationMail(Reservation reservation, User user) throws MessagingException, IOException {
 
         Message message = new MimeMessage(session);
@@ -116,7 +119,7 @@ public class MailAndPdfService {
         Transport.send(message);
     }
 
-
+    // Generate a PDF with all active reservations
     public byte[] generateAllActiveReservationsPdf(List<Reservation> activeReservations) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
@@ -191,9 +194,7 @@ public class MailAndPdfService {
         return byteArrayOutputStream.toByteArray();
     }
 
-
-
-
+    // SMTP server configuration
     private Properties getMailProperties() {
         Properties prop = new Properties();
         prop.put("mail.smtp.auth", true);

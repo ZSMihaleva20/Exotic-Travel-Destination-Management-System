@@ -18,6 +18,7 @@ public class CampaignService {
     @Autowired
     private DestinationRepository destinationRepository;
 
+    // Create a campaign with a discount
     @Transactional
     public void createCampaign(Long destinationId, double discountPercentage) {
         Destination destination = destinationRepository.findById(destinationId)
@@ -28,8 +29,10 @@ public class CampaignService {
         campaign.setOldPrice(destination.getPrice());
         campaign.setDiscountPercentage(discountPercentage);
 
+        // Set destination as on promotion
         destination.setOnPromotion(true);
 
+        // Calculate new price
         double newPrice = campaign.getNewPrice();
         destination.setPrice(newPrice);
 
@@ -37,6 +40,7 @@ public class CampaignService {
         destinationRepository.save(destination);
     }
 
+    // Return all campaigns
     public List<Campaign> getAllCampaigns() {
         return campaignRepository.findAll();
     }
