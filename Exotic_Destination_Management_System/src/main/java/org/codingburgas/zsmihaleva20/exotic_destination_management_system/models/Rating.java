@@ -6,15 +6,15 @@ import org.hibernate.annotations.CurrentTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Ratings")
+@Table(name = "Ratings") // Maps this entity to the "Ratings" table in the database
 public class Rating {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generate unique ID for each rating
     private Long id;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false) // Ensures a destination is associated with each rating
     private Destination destination;
 
     @Column(nullable = false)

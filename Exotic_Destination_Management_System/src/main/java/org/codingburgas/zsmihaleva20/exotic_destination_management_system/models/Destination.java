@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Destinations")
+@Table(name = "Destinations") // Maps this entity to the "Destinations" table in the database
 public class Destination {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generate unique ID values
     private Long id;
 
     @Column(nullable = false)

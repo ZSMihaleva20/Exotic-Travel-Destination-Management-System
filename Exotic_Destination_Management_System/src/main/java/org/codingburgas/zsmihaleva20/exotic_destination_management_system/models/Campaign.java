@@ -3,17 +3,17 @@ package org.codingburgas.zsmihaleva20.exotic_destination_management_system.model
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Campaigns")
+@Table(name = "Campaigns") // Maps this entity to the "Campaigns" table in the database
 public class Campaign {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generate ID values
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "destination_id")
+    @OneToOne // One campaign is linked to one destination
+    @JoinColumn(name = "destination_id") // Foreign key reference to the "destination" table
     private Destination destination;
 
-    private double oldPrice;
+    private double oldPrice; // Stores the original price before the discount
     private double discountPercentage;
 
     public Campaign(Long id, Destination destination, double oldPrice, double discountPercentage) {

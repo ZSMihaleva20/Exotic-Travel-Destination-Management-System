@@ -1,5 +1,6 @@
 package org.codingburgas.zsmihaleva20.exotic_destination_management_system.dto;
 
+// DTO representing a destination with its rating and popularity.
 public class DestinationRatingDto {
     private Long id;
     private String name;

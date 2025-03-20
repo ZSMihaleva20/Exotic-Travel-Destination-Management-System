@@ -5,14 +5,14 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Promotions")
+@Table(name = "Promotions") // Maps this entity to the "Promotions" table in the database
 public class Promotion {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generate unique ID values
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "destination_id")
+    @JoinColumn(name = "destination_id") // Links this promotion to a specific destination
     private Destination destination;
 
     private double oldPrice; // Stores the original price before discount

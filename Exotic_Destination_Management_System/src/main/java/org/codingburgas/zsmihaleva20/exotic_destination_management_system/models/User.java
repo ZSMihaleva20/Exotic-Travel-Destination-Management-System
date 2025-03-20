@@ -9,10 +9,10 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "Users") // Mapping this class to the "Users" table in the database
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generates userID for each user
     @Column(name = "UserID")
     private int userID;
 

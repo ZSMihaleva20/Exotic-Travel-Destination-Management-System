@@ -3,15 +3,15 @@ package org.codingburgas.zsmihaleva20.exotic_destination_management_system.model
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Reservations")
+@Table(name = "Reservations") // Maps this class to the "Reservations" table in the database
 public class Reservation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generates a unique ID for each reservation
     private Long id;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false) // A destination must be assigned to a reservation
     private Destination destination;
 
     @Column(nullable = false)
@@ -19,18 +19,6 @@ public class Reservation {
 
     @Column(nullable = false)
     private double totalPrice;
-
-    /*@Column(nullable = false)
-    private String cardName;
-
-    @Column(nullable = false)
-    private String cardNumber;
-
-    @Column(nullable = false)
-    private String expiryDate;
-
-    @Column(nullable = false)
-    private String cvc;*/
 
     @Column(nullable = false)
     private String status = "PENDING";
@@ -58,10 +46,6 @@ public class Reservation {
         this.isDestinationRated = false;
         this.destinationRating = 0;
         this.comment = "";
-        /*this.cardName = "CardName";
-        this.cardNumber = "CardNumber";
-        this.expiryDate = "ExpiryDate";
-        this.cvc = "cvc";*/
     }
 
     public Reservation(Long id, Destination destination, User user, int numberOfPeople, double totalPrice, boolean isDestinationRated, String status, int destinationRating, String comment /*String cardName String cardNumber, String expiryDate, String cvc, String status*/) {
@@ -71,10 +55,6 @@ public class Reservation {
         this.totalPrice = totalPrice;
         this.user = user;
         this.isDestinationRated = isDestinationRated;
-        /*this.cardName = cardName;
-        this.cardNumber = cardNumber;
-        this.expiryDate = expiryDate;
-        this.cvc = cvc;*/
         this.status = status;
         this.destinationRating = destinationRating;
         this.comment = comment;
@@ -125,40 +105,6 @@ public class Reservation {
     public void setUser(User user) {
         this.user = user;
     }
-    /*
-    public String getCardName() {
-        return cardName;
-    }
-
-    public void setCardName(String cardName) {
-        this.cardName = cardName;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public String getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(String expiryDate) {
-        this.expiryDate = expiryDate;
-    }
-
-    public String getCvc() {
-        return cvc;
-    }
-
-    public void setCvc(String cvc) {
-        this.cvc = cvc;
-    }
-
-     */
 
     public String getStatus() {
         return status;
