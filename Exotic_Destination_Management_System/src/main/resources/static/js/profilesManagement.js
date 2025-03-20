@@ -1,3 +1,4 @@
+// Wait for the DOM to be fully loaded before executing the code
 document.addEventListener("DOMContentLoaded", function() {
     const openModalBtn = document.getElementById("openModalBtn");
     const closeModalBtn = document.getElementById("closeModalBtn");
@@ -21,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+// Wait for the DOM to be fully loaded before executing the code for the delete modal
 document.addEventListener("DOMContentLoaded", function() {
     const openDeleteModalBtn = document.getElementById("openDeleteModalBtn");
     const closeDeleteModalBtn = document.getElementById("closeDeleteModalBtn");
@@ -41,10 +43,12 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+// Toggle the dropdown menu when the user menu is clicked
 document.querySelector("#userMenu").addEventListener("click", () => {
     document.getElementById("dropdownMenu").classList.toggle("hidden");
 });
 
+// Wait for the DOM to be fully loaded and remove the 'opacity-0' class to make body visible
 document.addEventListener("DOMContentLoaded", function () {
     document.body.classList.remove("opacity-0");
 });

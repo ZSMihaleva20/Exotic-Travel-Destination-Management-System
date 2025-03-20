@@ -1,15 +1,19 @@
+// Toggle the visibility of the dropdown menu when the user menu is clicked
 document.querySelector("#userMenu").addEventListener("click", () => {
     document.getElementById("dropdownMenu").classList.toggle("hidden");
 });
 
+// Remove opacity class once the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", function () {
     document.body.classList.remove("opacity-0");
 });
 
+// Handle changes to the departure and return date inputs
 document.addEventListener("DOMContentLoaded", function () {
     let departureInput = document.getElementById("dateOfDeparture");
     let returnInput = document.getElementById("dateOfReturn");
 
+    // Set return date minimum value to departure date
     departureInput.addEventListener("change", function () {
         if (departureInput.value) {
             returnInput.min = departureInput.value; // Set return date min to departure date
@@ -30,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// Add a new input field for description when the "Add Description" button is clicked
 document.getElementById("addDescription").addEventListener("click", function() {
     // Create a new input field for description
     var newInput = document.createElement("input");
@@ -42,6 +47,7 @@ document.getElementById("addDescription").addEventListener("click", function() {
     document.getElementById("descriptionContainer").appendChild(newInput);
 });
 
+// Handle form submission and process descriptions before submitting the form
 document.getElementById("destinationForm").addEventListener("submit", function(e) {
     // Prevent default form submission to handle description
     e.preventDefault();

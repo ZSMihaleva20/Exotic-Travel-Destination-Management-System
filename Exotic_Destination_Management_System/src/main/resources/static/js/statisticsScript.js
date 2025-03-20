@@ -18,6 +18,7 @@ const backgroundColors = [
 // Generate colors dynamically if there are more destinations than colors in the array
 const barColors = destinationLabels.map((_, index) => backgroundColors[index % backgroundColors.length]);
 
+// Create the Bar Chart for Destination Rating
 new Chart(ctx, {
     type: 'bar',
     data: {
@@ -67,7 +68,7 @@ new Chart(ctx, {
     }
 });
 
-
+// Create the Pie Chart for Destination Popularity
 new Chart(popularityCtx, {
     type: 'pie',
     data: {

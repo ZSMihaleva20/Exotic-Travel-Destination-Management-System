@@ -47,12 +47,15 @@
     </div>
 </nav>
 
+<!-- Page Content -->
 <div class="w-full px-6">
     <div class="relative mb-8 mt-8">
+        <!-- Section Title -->
         <h1 class="text-4xl font-bold text-gray-800 text-center mb-8">
             Управление на дестинации
         </h1>
 
+        <!-- Button to add new destination -->
         <div class="absolute right-0 top-1/2 transform -translate-y-1/2 mr-4">
             <a href="/addDestination" class="bg-yellow-500 text-white px-5 py-2 rounded-lg shadow-md hover:bg-yellow-600 transition">
                 + Добави нова дестинация
@@ -60,7 +63,7 @@
         </div>
     </div>
 
-
+    <!-- Grid Layout to display destinations -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div th:each="destination : ${destinations}" class="bg-white shadow-md rounded-lg overflow-hidden p-4 flex flex-col">
             <!-- Destination Image -->

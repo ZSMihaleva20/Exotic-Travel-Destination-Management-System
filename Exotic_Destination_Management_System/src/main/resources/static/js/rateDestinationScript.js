@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.classList.remove("opacity-0");
 });
 
+// Function to show reservation details based on selected option in the dropdown
 function showReservationDetails() {
     var select = document.getElementById("reservationSelect");
     var selectedOption = select.options[select.selectedIndex];
@@ -33,10 +34,12 @@ function showReservationDetails() {
     }
 }
 
+// Function to open the rating modal
 function openModal() {
-    document.getElementById("ratingModal").classList.remove("hidden");
+    document.getElementById("ratingModal").classList.remove("hidden"); // Show the rating modal
 }
 
+// Function to close the rating modal
 function closeModal() {
-    document.getElementById("ratingModal").classList.add("hidden");
+    document.getElementById("ratingModal").classList.add("hidden"); // Hide the rating modal
 }

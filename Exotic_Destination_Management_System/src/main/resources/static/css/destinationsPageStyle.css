@@ -1,3 +1,4 @@
+/* Input field styling */
 .input-field {
     width: 100%;
     padding: 10px;
@@ -6,6 +7,7 @@
     font-size: 16px;
 }
 
+/* Primary button styling */
 .btn-primary {
     background-color: #3498db;
     color: white;
@@ -16,10 +18,12 @@
     transition: 0.3s;
 }
 
+/* Primary button hover effect */
 .btn-primary:hover {
     background-color: #2980b9;
 }
 
+/* Secondary button styling */
 .btn-secondary {
     background-color: #1aa61a;
     color: white;
@@ -28,9 +32,12 @@
     border-radius: 8px;
 }
 
+/* Secondary button hover effect */
 .btn-secondary:hover {
     background-color: #1b9813;
 }
+
+/* Chart container styling */
 .chart-container {
     display: flex;
     justify-content: center;
@@ -39,12 +46,15 @@
     width: 100%;
 }
 
+/* Rating chart styling */
 #rating-chart {
     min-width: 600px;
     min-height: 400px;
     max-width: 800px;
     max-height: 600px;
 }
+
+/* Popularity chart styling */
 #popularity-chart {
     min-width: 400px;
     min-height: 350px;

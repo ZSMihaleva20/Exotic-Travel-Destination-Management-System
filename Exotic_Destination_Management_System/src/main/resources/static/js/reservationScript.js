@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// Function to update the total price based on the number of people and price per person
 function updateTotalPrice() {
     let numberOfPeople = document.getElementById("numberOfPeople").value;
     let pricePerPerson = document.getElementById("pricePerPerson").value;
