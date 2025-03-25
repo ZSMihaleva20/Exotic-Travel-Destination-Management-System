@@ -33,6 +33,7 @@ public class DataLoader {
             Destination destinationNine = new Destination();
             Destination destinationTen = new Destination();
             Destination destinationEleven = new Destination();
+            Destination destinationTwelve = new Destination();
 
             Reservation reservationOne = new Reservation();
             Reservation reservationTwo = new Reservation();
@@ -159,18 +160,18 @@ public class DataLoader {
             destinationRepository.save(destinationFour);
 
             // Дестинация 5 - Япония
-            destinationFive.setName("Загадките на Япония: Токио и Фуджи");
+            destinationFive.setName("Екзотично бягство в Занзибар");
             destinationFive.setDescription(
-                    "Потопете се в богатата култура на Япония – от оживен Токио до спокойна Киото;\n" +
-                            "Самолетни билети: Излитане от Летище София (SOF) на 15 юли 2025г. в 11:00 ч.;\n" +
-                            "Кацане на Летище Нарита (NRT) в 20:00ч.;\n" +
-                            "Настаняване: Park Hotel Tokyo, модерен хотел в центъра на Токио;\n" +
-                            "Хранене: Полупансион (закуска и вечеря);\n" +
-                            "Активности: Посещение на Токио Дисниленд, шопинг в квартал Гинза;\n" +
-                            "Екскурзии: Храмове в Киото, планина Фуджи, традиционна чайна церемония;\n" +
-                            "Допълнително: Вечери с суши и сашими, представление на гейши"
+                    "Открийте магията на Занзибар – остров с бели пясъчни плажове, тюркоазени води и богата култура;\n" +
+                            "Самолетни билети: Излитане от Летище София (SOF) на 10 ноември 2025г. в 07:00 ч.;\n" +
+                            "Кацане на Международно летище Абейд Аман Карум (ZNZ) в 18:30 ч.;\n" +
+                            "Настаняване: The Residence Zanzibar, луксозен курорт с частни вили;\n" +
+                            "Хранене: All-Inclusive (закуска, обяд, вечеря и напитки);\n" +
+                            "Активности: Гмуркане с шнорхел, плуване с делфини, разходки с традиционна лодка Dhow;\n" +
+                            "Екскурзии: Разглеждане на Стоун Таун, посещение на Острова на затворниците;\n" +
+                            "Допълнително: Спайс тур (екскурзия из плантации с подправки), вечеря на плажа, масажи и СПА процедури"
             );
-            destinationFive.setImageUrl("japan.jpg");
+            destinationFive.setImageUrl("zanzibar.jpg");
             destinationFive.setPrice(1800);
             destinationFive.setStatus("ACCEPTED");
             destinationFive.setLimitedPeople(30);
@@ -308,6 +309,27 @@ public class DataLoader {
             destinationEleven.setDateOfReturn(LocalDate.parse("2025-09-20"));
 
             destinationRepository.save(destinationEleven);
+
+            destinationTwelve.setName("Тропически рай на остров Боракай");
+            destinationTwelve.setDescription(
+                    "Боракай е известен със своите ослепително бели плажове, кристално чиста вода и вълнуващ нощен живот;\n" +
+                            "Самолетни билети: Излитане от Летище София (SOF) на 15 септември 2025г. в 06:30 ч.;\n" +
+                            "Кацане на Летище Катиклан (MPH) в 18:00 ч.;\n" +
+                            "Настаняване: Shangri-La Boracay, луксозен курорт със собствени плажове;\n" +
+                            "Хранене: All-Inclusive (закуска, обяд, вечеря и напитки);\n" +
+                            "Активности: Гмуркане с шнорхел, парасейлинг, кайтсърфинг, джет ски;\n" +
+                            "Екскурзии: Разходка с лодка до близките острови, вечеря на брега с морски дарове;\n" +
+                            "Допълнително: Спа терапии, йога на плажа, коктейли на залез"
+            );
+            destinationTwelve.setImageUrl("boracay.jpg");
+            destinationTwelve.setPrice(1100);
+            destinationTwelve.setStatus("ACCEPTED");
+            destinationTwelve.setLimitedPeople(25);
+            destinationTwelve.setRemainingPeople(25);
+            destinationTwelve.setDateOfDeparture(LocalDate.parse("2025-09-15"));
+            destinationTwelve.setDateOfReturn(LocalDate.parse("2025-09-29"));
+
+            destinationRepository.save(destinationTwelve);
 
             reservationOne.setDestination(destinationOne);
             reservationOne.setUser(userOne);
