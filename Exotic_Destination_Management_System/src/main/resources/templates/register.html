@@ -21,6 +21,11 @@
 <div class="flex items-center justify-center min-h-screen px-4 mt-8 mb-8">
   <div class="form-container bg-white p-4 rounded-lg shadow-lg w-full max-w-sm" data-aos="fade-up"> <!-- Reduced max-w-lg to max-w-sm for a smaller form -->
     <h1 class="text-2xl font-bold text-gray-800 mb-4 text-center">Регистрация</h1>
+
+    <div th:if="${error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+      <span th:text="${error}"></span>
+    </div>
+
     <form th:action="@{/register}" th:object="${user}" method="post">
 
       <!-- First Name and Last Name on the same row -->

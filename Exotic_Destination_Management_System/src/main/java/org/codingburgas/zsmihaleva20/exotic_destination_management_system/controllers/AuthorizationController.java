@@ -28,13 +28,22 @@ public class AuthorizationController {
 
     // Handles POST requests for user registration at /register
     @PostMapping("/register")
-    public String register(@ModelAttribute User user) {
-        if (userService.getUserByUsername(user.getUsername()) == null) {
-            user.setRole("USER");
-            userService.createUser(user);
+    public String register(@ModelAttribute User user, Model model) {
+        if (userService.getUserByUsername(user.getUsername()) != null) {
+            model.addAttribute("error", "Потребителското име вече съществува.");
+            return "register";
         }
+
+        if (userService.getUserByEmail(user.getEmail()) != null) {
+            model.addAttribute("error", "Има съществуващ акаунт с този имейл.");
+            return "register";
+        }
+
+        user.setRole("USER");
+        userService.createUser(user);
         return "redirect:/login";
     }
+
 
     // Handles GET requests for the homepage ("/")
     @GetMapping("/")
