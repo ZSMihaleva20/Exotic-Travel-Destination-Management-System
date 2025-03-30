@@ -52,7 +52,7 @@ new Chart(ctx, {
             legend: {
                 display: false
             },
-            title: {  // ✅ Added title above the bar chart
+            title: {  // Added title above the bar chart
                 display: true,
                 text: 'Среден рейтинг за всяка дестинация',
                 font: {
@@ -84,7 +84,7 @@ new Chart(popularityCtx, {
     options: {
         responsive: true,
         plugins: {
-            // ✅ Add title above the chart
+            // Add title above the chart
             title: {
                 display: true,
                 text: 'Популярност на дестинациите',
