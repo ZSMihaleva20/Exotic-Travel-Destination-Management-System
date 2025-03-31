@@ -1,90 +1,83 @@
-
-<h1  align = "center">Conversa CMS</h1>
-<!--<p align = "center">
-    <img alt="GitHub top language" src ="https://img.shields.io/github/languages/top/codingburgas/2324-pp-11g-individual-assignment-ZSMihaleva20?style=for-the-badge">
-    <img alt="Github languages count" src="https://img.shields.io/github/languages/count/codingburgas/2324-pp-11g-individual-assignment-ZSMihaleva20?style=for-the-badge">
-    <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/codingburgas/2324-pp-11g-individual-assignment-ZSMihaleva20?style=for-the-badge">
-</p>-->
-
-
+<h1  align = "center">Система за управление на екзотични туристически дестинации</h1>
 <hr>
 
 
 
-# 📖About the web application
+# 📖Относно приложението
 
-<p>The main goal of this web application is to provide a real-time messaging between users, as well as creating and managing group chats. Its back-end was developed by using Java and Spring Booth and its front-end - by using HTML, JavaScript and CSS. The implementation of the real-time communication was made with the help of WebSockets. <br><br>The main functionalities of the application are: registration and managment of user profiles, real-time communication between users, creating group chats and managing the users in the groups, ability to share photos, videos and documents within chats and others</p>
+<p><b>Цел на проекта:</b> Разработване на мащабируемо и сигурно приложение за управление на туристически дестинации, което да предоставя лесен достъп до екзотични места, интегрирано с бекенд система, изградена с Java и Spring Boot</p>
+<p><b>Очаквани резултати:</b> Създаване на ефективна платформа, която улеснява управлението на дестинации, предоставя лесен за използване интерфейс, стабилна бекенд архитектура с използване на Java и Spring Boot</p>
 
-# 📥 Installation
-<p><i>These instructions will help you copy and run my project.</i></p>
+# ⚙️ Основни функционалности
+- Регистрация и автентикация на потребители - използване на Spring Security за защита и управление на потребителски права 
+- Управление на туристически дестинации – възможност за добавяне, редактиране и изтриване на дестинации
+- Онлайн резервации – потребителите могат да правят резервации в реално време с възможност за автоматизирани потвърждения и известия за статусите на резервациите
+- Филтриране и сортиране на дестинации - възможност за сортиране на дестинациите по различни критерии, като цена, популярност и рейтинг
+- Управление на наличности и оферти - платформата предлага информация за наличните дестинации, както и автоматизирани промоционални оферти и кампании
+- Проследяване на резервации и плащания - системата позволява проследяване на направените резервации и плащания, като се интегрира с различни платежни системи
+- Отчети и статистики - генериране на отчети за завършени резервации и анализ на събраните данни
 
-## 🕹️ Compile from source
-- <p>Prerequisites</p>
+# 📥 Инсталация
+<p><i>Тези инструкции ще ви помогнат да стартирате моя проект:</i></p>
+
+## 🕹️ Компилирайте от източника
+- <p>Нужни приложения</p>
 ```
-IntelliJ IDEA 2022.1.4
+IntelliJ IDEA 2024.2.0.2
 Git
 ```
 
-- <p>Installing<p>
-<p>1. Clone the repo</p>
+### 🛠️ Инсталиране
+<p>1. Клонирайте репозиторито</p>
 
 ```
-https://github.com/codingburgas/2324-pp-11g-individual-assignment-ZSMihaleva20.git
+https://github.com/codingburgas/2425-dzi-java-ZSMihaleva20.git
 ```
-<p>2. Open ChatMessagingSystem project</p>
-<p>3. Run ChatMessagingSystemApplication.java</p>
-<p>4. Open your favorite browser and paste the following line</p>
+<p>2. Отворете Exotic_Destination_Management_System проекта</p>
+<p>3. Стартирайте ExoticDestinationManagementSystemApplication.java</p>
+<p>4. Отворете любимия си браузър и поставете следния ред</p>
 
 ```
-http://localhost:8080/index
+http://localhost:8080
 ```
 
-<p>5. If you want to access the database, open a new tab in the current browser and paste the following line</p>
+<p>5. Ако искате да достъпите базата данни, влезте в системата за управление на екзотични туристически дестинации като админ, отворете нов прозорец в текущия браузър и поставете следния ред</p>
 
 ```
 http://localhost:8080/h2-console
 ```
 
+<p>6. След като достъпите началната страница на H2 конзолата, използвайте следното потребителско име и парола, за да влезете в нея</p>
+
 ```
-username: admin
-password: admin123
+Потребителско име: admin
+Парола: admin
 ```
 
-# 💻 Used Technologies
-### Used code editor & collaborative service: 
+# 💻 Използвани технологии
+### Приложения, използвани за разработката на проекта:
+
 <p align="left">
   <p>
-    <img src="https://cdn.worldvectorlogo.com/logos/visual-studio-code-1-1.svg" alt="Visual Studio 2022 logo" width=48px>
-    <img src="https://blog.payara.fish/hubfs/IntelliJ_IDEA_Icon.svg.png" alt="Git" width=48px>
+    <img src="https://blog.payara.fish/hubfs/IntelliJ_IDEA_Icon.svg.png" alt="IntelliJ" width=48px>
     <img src="https://cdn.worldvectorlogo.com/logos/github-icon-2.svg" alt="GitHub logo" width=48px>
     <img src="https://cdn.worldvectorlogo.com/logos/git-bash.svg" alt="Git" width=48px>
   </p>
 </p>
 
-### Used for the database: 
-<p align="left">
-  <p>
-    <img src="https://dbdb.io/media/logos/h2-logo.svg" alt="h2 database" width=48px>
-  </p>
-</p>
 
-### Used for the project design: 
-<p align="left">
-  <p>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Figma-logo.svg/1667px-Figma-logo.svg.png" alt="h2 database" width=48px>
-  </p>
-</p>
+### Технологии, използвани за разработката на приложението:
 
-
-### Used technologies for the project development:
 <p align="left">
     <p>
       <img src="https://cdn.worldvectorlogo.com/logos/java-4.svg" alt="Java" width=48px>
-      <img src="https://seeklogo.com/images/T/thymeleaf-logo-6E4D42A713-seeklogo.com.png" alt="Thymeleaf" width=48px>
+      <img src="https://avatars.githubusercontent.com/u/1492367?s=280&v=4" alt="Thymeleaf" width=48px>
       <img src="https://cdn.worldvectorlogo.com/logos/spring-3.svg" alt="Spring booth" width=48px>
       <img src="https://cdn.worldvectorlogo.com/logos/html-1.svg" alt="HTML" width=48px>
       <img src="https://cdn.worldvectorlogo.com/logos/css-3.svg" alt="CSS" width=48px>
       <img src="https://cdn.worldvectorlogo.com/logos/logo-javascript.svg" alt="JS" width=48px>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/1200px-Tailwind_CSS_Logo.svg.png" alt="Tailwind CSS" width=48px>
+      <img src="https://dbdb.io/media/logos/h2-logo.svg" alt="h2 database" width=48px>
     </p>
 </p>
 
