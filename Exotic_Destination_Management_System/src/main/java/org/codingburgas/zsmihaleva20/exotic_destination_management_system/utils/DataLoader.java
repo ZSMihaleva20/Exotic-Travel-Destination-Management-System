@@ -43,6 +43,11 @@ public class DataLoader {
             Reservation reservationSix = new Reservation();
 
             Rating ratingOne = new Rating();
+            Rating ratingTwo = new Rating();
+            Rating ratingThree = new Rating();
+            Rating ratingFour = new Rating();
+            Rating ratingFive = new Rating();
+            Rating ratingSix = new Rating();
 
             userOne.setFirstName("Жасмина");
             userOne.setLastName("Михалева");
@@ -84,7 +89,7 @@ public class DataLoader {
                             "Допълнително: Спа процедури, йога на плажа, частни вечери"
             );
             destinationOne.setImageUrl("maldivies.jpg");
-            destinationOne.setPrice(1000);
+            destinationOne.setPrice(3000);
             destinationOne.setStatus("ACCEPTED");
             destinationOne.setLimitedPeople(28);
             destinationOne.setRemainingPeople(28);
@@ -128,12 +133,12 @@ public class DataLoader {
                             "Допълнително: Вечери с традиционна музика и танци, ароматен маррокански чай"
             );
             destinationThree.setImageUrl("morocco.jpg");
-            destinationThree.setPrice(1500);
+            destinationThree.setPrice(2750);
             destinationThree.setStatus("ACCEPTED");
             destinationThree.setLimitedPeople(15);
             destinationThree.setRemainingPeople(15);
             destinationThree.setDateOfDeparture(LocalDate.parse("2025-03-19"));
-            destinationThree.setDateOfReturn(LocalDate.parse("2025-05-19"));
+            destinationThree.setDateOfReturn(LocalDate.parse("2025-03-27"));
 
             destinationRepository.save(destinationThree);
 
@@ -150,7 +155,7 @@ public class DataLoader {
                             "Допълнително: Вечери с традиционна египетска кухня, светлинно шоу при пирамидите"
             );
             destinationFour.setImageUrl("egypt.jpg");
-            destinationFour.setPrice(1200);
+            destinationFour.setPrice(2500);
             destinationFour.setStatus("ACCEPTED");
             destinationFour.setLimitedPeople(25);
             destinationFour.setRemainingPeople(25);
@@ -172,7 +177,7 @@ public class DataLoader {
                             "Допълнително: Спайс тур (екскурзия из плантации с подправки), вечеря на плажа, масажи и СПА процедури"
             );
             destinationFive.setImageUrl("zanzibar.jpg");
-            destinationFive.setPrice(1800);
+            destinationFive.setPrice(3500);
             destinationFive.setStatus("ACCEPTED");
             destinationFive.setLimitedPeople(30);
             destinationFive.setRemainingPeople(30);
@@ -194,7 +199,7 @@ public class DataLoader {
                             "Допълнително: Вечери с австралийска кухня, обиколки с хеликоптер"
             );
             destinationSix.setImageUrl("australia.jpg");
-            destinationSix.setPrice(2500);
+            destinationSix.setPrice(3000);
             destinationSix.setStatus("ACCEPTED");
             destinationSix.setLimitedPeople(35);
             destinationSix.setRemainingPeople(35);
@@ -216,7 +221,7 @@ public class DataLoader {
                             "Допълнително: Курсове по тайландска кухня, вечерни шоута"
             );
             destinationSeven.setImageUrl("tailand.jpg");
-            destinationSeven.setPrice(1500);
+            destinationSeven.setPrice(2500);
             destinationSeven.setStatus("ACCEPTED");
             destinationSeven.setLimitedPeople(40);
             destinationSeven.setRemainingPeople(40);
@@ -238,7 +243,7 @@ public class DataLoader {
                             "Допълнително: Вечери с бразилска кухня, обиколки с джип"
             );
             destinationEight.setImageUrl("rio.jpg");
-            destinationEight.setPrice(2200);
+            destinationEight.setPrice(2950);
             destinationEight.setStatus("ACCEPTED");
             destinationEight.setLimitedPeople(20);
             destinationEight.setRemainingPeople(20);
@@ -322,7 +327,7 @@ public class DataLoader {
                             "Допълнително: Спа терапии, йога на плажа, коктейли на залез"
             );
             destinationTwelve.setImageUrl("boracay.jpg");
-            destinationTwelve.setPrice(1100);
+            destinationTwelve.setPrice(3000);
             destinationTwelve.setStatus("ACCEPTED");
             destinationTwelve.setLimitedPeople(25);
             destinationTwelve.setRemainingPeople(25);
@@ -346,7 +351,7 @@ public class DataLoader {
             reservationTwo.setDestination(destinationTwo);
             reservationTwo.setUser(userOne);
             reservationTwo.setNumberOfPeople(7);
-            reservationTwo.setDestinationRated(false);
+            reservationTwo.setDestinationRated(true);
             reservationTwo.setTotalPrice(reservationTwo.getNumberOfPeople() * destinationTwo.getPrice());
             reservationTwo.setStatus("BOOKED");
             destinationTwo.setRemainingPeople(destinationTwo.getRemainingPeople() - reservationTwo.getNumberOfPeople());
@@ -358,49 +363,13 @@ public class DataLoader {
             reservationThree.setDestination(destinationThree);
             reservationThree.setUser(userOne);
             reservationThree.setNumberOfPeople(3);
-            reservationThree.setDestinationRated(false);
+            reservationThree.setDestinationRated(true);
             reservationThree.setTotalPrice(reservationThree.getNumberOfPeople() * destinationThree.getPrice());
             reservationThree.setStatus("BOOKED");
             destinationThree.setRemainingPeople(destinationThree.getRemainingPeople() - reservationThree.getNumberOfPeople());
             destinationThree.setPopularity(destinationThree.getPopularity() + reservationThree.getNumberOfPeople());
 
             reservationRepository.save(reservationThree);
-            destinationRepository.save(destinationThree);
-
-            reservationFour.setDestination(destinationOne);
-            reservationFour.setUser(userOne);
-            reservationFour.setNumberOfPeople(2);
-            reservationFour.setDestinationRated(false);
-            reservationFour.setTotalPrice(reservationFour.getNumberOfPeople() * destinationOne.getPrice());
-            reservationFour.setStatus("BOOKED");
-            destinationOne.setRemainingPeople(destinationOne.getRemainingPeople() - reservationFour.getNumberOfPeople());
-            destinationOne.setPopularity(destinationOne.getPopularity() + reservationFour.getNumberOfPeople());
-
-            reservationRepository.save(reservationFour);
-            destinationRepository.save(destinationOne);
-
-            reservationFive.setDestination(destinationTwo);
-            reservationFive.setUser(userOne);
-            reservationFive.setNumberOfPeople(7);
-            reservationFive.setDestinationRated(false);
-            reservationFive.setTotalPrice(reservationFive.getNumberOfPeople() * destinationTwo.getPrice());
-            reservationFive.setStatus("BOOKED");
-            destinationTwo.setRemainingPeople(destinationTwo.getRemainingPeople() - reservationFive.getNumberOfPeople());
-            destinationTwo.setPopularity(destinationTwo.getPopularity() + reservationFive.getNumberOfPeople());
-
-            reservationRepository.save(reservationFive);
-            destinationRepository.save(destinationTwo);
-
-            reservationSix.setDestination(destinationThree);
-            reservationSix.setUser(userOne);
-            reservationSix.setNumberOfPeople(5);
-            reservationSix.setDestinationRated(false);
-            reservationSix.setTotalPrice(reservationSix.getNumberOfPeople() * destinationThree.getPrice());
-            reservationSix.setStatus("BOOKED");
-            destinationThree.setRemainingPeople(destinationThree.getRemainingPeople() - reservationSix.getNumberOfPeople());
-            destinationThree.setPopularity(destinationThree.getPopularity() + reservationSix.getNumberOfPeople());
-
-            reservationRepository.save(reservationSix);
             destinationRepository.save(destinationThree);
 
             promotionService.createPromotion(destinationSeven.getId(), 20.00);
@@ -414,16 +383,32 @@ public class DataLoader {
             ratingOne.setStars(5);
             ratingOne.setDestination(destinationOne);
             ratingOne.setComment("Чудесно обслужване");
-
             ratingOne.setUser(userOne);
-
             reservationOne.setDestinationRating(ratingOne.getStars());
             reservationOne.setComment(ratingOne.getComment());
 
             reservationRepository.save(reservationOne);
-
-
             ratingService.saveRating(ratingOne);
+
+            ratingTwo.setStars(4);
+            ratingTwo.setDestination(destinationTwo);
+            ratingTwo.setComment("Много активности и добро качество на обслужване");
+            ratingTwo.setUser(userOne);
+            reservationTwo.setDestinationRating(ratingTwo.getStars());
+            reservationTwo.setComment(ratingTwo.getComment());
+
+            reservationRepository.save(reservationTwo);
+            ratingService.saveRating(ratingTwo);
+
+            ratingThree.setStars(3);
+            ratingThree.setDestination(destinationThree);
+            ratingThree.setComment("Нямаше добра организация на активностите!");
+            ratingThree.setUser(userOne);
+            reservationThree.setDestinationRating(ratingThree.getStars());
+            reservationThree.setComment(ratingThree.getComment());
+
+            reservationRepository.save(reservationThree);
+            ratingService.saveRating(ratingThree);
         };
     }
 }
