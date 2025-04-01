@@ -1,4 +1,4 @@
-package org.codingburgas.zsmihaleva20.exotic_destination_management_system.Specifications;
+package org.codingburgas.zsmihaleva20.exotic_destination_management_system.specifications;
 
 import jakarta.persistence.criteria.Predicate;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Destination;

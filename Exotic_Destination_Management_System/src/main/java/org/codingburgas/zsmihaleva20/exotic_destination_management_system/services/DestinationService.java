@@ -1,7 +1,7 @@
 package org.codingburgas.zsmihaleva20.exotic_destination_management_system.services;
 
 import jakarta.transaction.Transactional;
-import org.codingburgas.zsmihaleva20.exotic_destination_management_system.Specifications.DestinationSpecifications;
+import org.codingburgas.zsmihaleva20.exotic_destination_management_system.specifications.DestinationSpecifications;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.models.Destination;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.DestinationRepository;
 import org.codingburgas.zsmihaleva20.exotic_destination_management_system.repositories.ReservationRepository;

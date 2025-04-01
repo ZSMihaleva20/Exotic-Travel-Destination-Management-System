@@ -363,7 +363,7 @@ public class DataLoader {
             reservationThree.setDestination(destinationThree);
             reservationThree.setUser(userOne);
             reservationThree.setNumberOfPeople(3);
-            reservationThree.setDestinationRated(true);
+            reservationThree.setDestinationRated(false);
             reservationThree.setTotalPrice(reservationThree.getNumberOfPeople() * destinationThree.getPrice());
             reservationThree.setStatus("BOOKED");
             destinationThree.setRemainingPeople(destinationThree.getRemainingPeople() - reservationThree.getNumberOfPeople());
@@ -399,16 +399,6 @@ public class DataLoader {
 
             reservationRepository.save(reservationTwo);
             ratingService.saveRating(ratingTwo);
-
-            ratingThree.setStars(3);
-            ratingThree.setDestination(destinationThree);
-            ratingThree.setComment("Нямаше добра организация на активностите!");
-            ratingThree.setUser(userOne);
-            reservationThree.setDestinationRating(ratingThree.getStars());
-            reservationThree.setComment(ratingThree.getComment());
-
-            reservationRepository.save(reservationThree);
-            ratingService.saveRating(ratingThree);
         };
     }
 }
