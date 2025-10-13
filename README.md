@@ -59,7 +59,7 @@ http://localhost:8080/h2-console
 
 <p align="left">
   <p>
-    <img src="https://blog.payara.fish/hubfs/IntelliJ_IDEA_Icon.svg.png" alt="IntelliJ" width=48px>
+    <img src="https://s13emagst.akamaized.net/products/49840/49839323/images/res_adfa7921f80c485d509a03a2419d8b6c.png" alt="IntelliJ" width=48px>
     <img src="https://cdn.worldvectorlogo.com/logos/github-icon-2.svg" alt="GitHub logo" width=48px>
     <img src="https://cdn.worldvectorlogo.com/logos/git-bash.svg" alt="Git" width=48px>
   </p>
