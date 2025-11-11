@@ -1,61 +1,62 @@
-<h1  align = "center">Система за управление на екзотични туристически дестинации</h1>
+<h1 align="center">Exotic Destination Management System</h1>
 <hr>
 
+# 📖 About the Application
 
+<p align="justify"><b>Problem:</b> In the modern tourism sector, managing exotic destinations is a challenge for companies, hotels, and resorts. Fragmented systems, manual bookings, and lack of integration lead to delays, errors, and inconvenience for clients. This complicates both business operations and the booking process itself, decreasing customer satisfaction and missing business opportunities.</p>
 
-# 📖 Относно приложението
+<p align="justify"><b>Solution:</b> Develop a scalable and secure application for managing tourist destinations that provides easy access to exotic locations, integrated with a backend system built using Java and Spring Boot.</p>
 
-<p align = "justify"><b>Проблем:</b>  В съвременния туристически сектор, управлението на екзотични дестинации е предизвикателство за компаниите, хотели и курорти. Разпокъсани системи, ръчни резервации и липса на интеграция водят до забавяния, грешки и неудобства за клиентите. Това затруднява както бизнеса, така и самия процес на резервация, като намалява удовлетвореността на клиентите и пропуска бизнес възможности</p>
-<p align = "justify"><b>Решение:</b> Създаване на мащабируемо и сигурно приложение за управление на туристически дестинации, което да предоставя лесен достъп до екзотични места, интегрирано с бекенд система, изградена с Java и Spring Boot</p>
+# ⚙️ Core Functionalities
 
-# ⚙️ Основни функционалности
-- Регистрация и автентикация на потребители - използване на Spring Security за защита и управление на потребителски права 
-- Управление на туристически дестинации – възможност за добавяне, редактиране и изтриване на дестинации
-- Онлайн резервации – потребителите могат да правят резервации в реално време с възможност за автоматизирани потвърждения и известия за статусите на резервациите
-- Филтриране и сортиране на дестинации - възможност за сортиране на дестинациите по различни критерии, като цена, популярност и рейтинг
-- Управление на наличности и оферти - платформата предлага информация за наличните дестинации, както и автоматизирани промоционални оферти и кампании
-- Проследяване на резервации и плащания - системата позволява проследяване на направените резервации и плащания, като се интегрира с различни платежни системи
-- Отчети и статистики - генериране на отчети за завършени резервации и анализ на събраните данни
+- User registration and authentication – utilizes Spring Security for user protection and access control  
+- Management of tourist destinations – ability to add, edit, and delete destinations  
+- Online reservations – users can make real-time bookings with automated confirmations and status notifications  
+- Filtering and sorting of destinations – sort destinations by price, popularity, or rating  
+- Availability and offer management – displays available destinations and provides automated promotional offers and campaigns  
+- Reservation and payment tracking – allows tracking of bookings and payments, integrated with various payment systems  
+- Reports and analytics – generates reports for completed bookings and analyzes collected data  
 
-# 📥 Инсталация
-<p><i>Тези инструкции ще ви помогнат да стартирате моя проект:</i></p>
+# 📥 Installation
+<p><i>These instructions will help you run my project:</i></p>
 
-## 🕹️ Компилирайте от източника
-- <p>Нужни приложения</p>
+## 🕹️ Compile from Source
+- <p>Required Applications:</p>
+
 ```
 IntelliJ IDEA 2024.2.0.2
 Git
 ```
 
-### 🛠️ Инсталиране
-<p>1. Клонирайте репозиторито</p>
+### 🛠️ Installation
+<p>1. Clone the repository:</p>
 
 ```
 https://github.com/codingburgas/2425-dzi-java-ZSMihaleva20.git
 ```
-<p>2. Отворете Exotic_Destination_Management_System проекта</p>
-<p>3. Стартирайте ExoticDestinationManagementSystemApplication.java</p>
-<p>4. Отворете любимия си браузър и поставете следния ред</p>
+<p>2. Open the <b>Exotic_Destination_Management_System</b> project</p>
+<p>3. Run <b>ExoticDestinationManagementSystemApplication.java</b></p>
+<p>4. Open your favorite browser and navigate to:</p>
 
 ```
 http://localhost:8080
 ```
 
-<p>5. Ако искате да достъпите базата данни, влезте в системата за управление на екзотични туристически дестинации като админ, отворете нов прозорец в текущия браузър и поставете следния ред</p>
+<p>5. If you want to access the database, log in to the Exotic Destination Management System as an admin, open a new browser tab, and go to:</p>
 
 ```
 http://localhost:8080/h2-console
 ```
 
-<p>6. След като достъпите началната страница на H2 конзолата, използвайте следното потребителско име и парола, за да влезете в нея</p>
+<p>6. Once you access the H2 Console homepage, use the following credentials to log in:</p>
 
 ```
-Потребителско име: admin
-Парола: admin
+Username: admin
+Password: admin
 ```
 
-# 💻 Използвани технологии
-### Приложения, използвани за разработката на проекта:
+# 💻 Technologies Used
+### Tools and Applications used in Development:
 
 <p align="left">
   <p>
@@ -66,7 +67,7 @@ http://localhost:8080/h2-console
 </p>
 
 
-### Технологии, използвани за разработката на приложението:
+### Technologies used in the Application:
 
 <p align="left">
     <p>
