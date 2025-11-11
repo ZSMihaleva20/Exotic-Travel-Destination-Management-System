@@ -32,7 +32,7 @@ Git
 <p>1. Clone the repository:</p>
 
 ```
-https://github.com/codingburgas/2425-dzi-java-ZSMihaleva20.git
+https://github.com/ZSMihaleva20/Exotic-Travel-Destination-Management-System.git
 ```
 <p>2. Open the <b>Exotic_Destination_Management_System</b> project</p>
 <p>3. Run <b>ExoticDestinationManagementSystemApplication.java</b></p>
